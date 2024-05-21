@@ -1,7 +1,16 @@
 import streamlit as st
 from PIL import Image
-from pages import Anxiety_Attack_Protocol, Anxiety_protocol
-import os
+import time
+
+def switch_pages(page_name):
+    if page_name == "Anxiety_Attack_Protocol":
+        st.success("Redirecting to Anxiety Attack Protocol page...")
+        time.sleep(2)
+        st.experimental_rerun()
+    elif page_name == "Anxiety_protocol":
+        st.success("Redirecting to Anxiety Protocol page...")
+        time.sleep(2)
+        st.experimental_rerun()
 
 def show():
     st.image("Logo.jpeg", width=600)
@@ -9,40 +18,15 @@ def show():
     
     st.write("Anxiety Assessment:")
     
-    st.write("Do you feel like you're having an Anxiety Attack right now?")
-    if st.button("Yes"):
-        anxiety_attack_protocol()
-    elif st.button("No"):
-        redirect_question_2()
-        if st.button("Yes "):
-            anxiety_protocol()
-        elif st.button("No "):
-            No_2_question()
-
-def switch_page(page_name):
-    if page_name == "Anxiety_protocol":
-        file_path = os.path.join("pages", "Anxiety_protocol.py")
-        if os.path.exists(file_path):
-            os.system("streamlit run pages/Anxiety_protocol.py")
+    answer = st.radio("Do you feel like you're having an Anxiety Attack right now?", ("Yes", "No"))
+    if answer == "Yes":
+        switch_pages("Anxiety_Attack_Protocol")
+    else:
+        answer_2 = st.radio("Are you anxious right now?", ("Yes", "No"))
+        if answer_2 == "Yes":
+            switch_pages("Anxiety_protocol")
         else:
-            st.error("Anxiety_protocol.py file not found.")
-    elif page_name == "anxiety_attack_protocol":
-        # Logik für die Dashboard-Seite
-        st.title("pages", "Anxiety_Attack_protocol")
-        st.write("Switched to Dashboard page.")
-
-
-def anxiety_attack_protocol():
-    st.write("Redirecting to Anxiety Attack Protocol page...")
-
-def redirect_question_2():
-    st.write("Are you anxious right now?")
-
-def anxiety_protocol():
-    st.write("Redirecting to Anxiety Protocol page...")
-
-def No_2_question():
-    st.experimental_rerun()
+            st.write("Reassess your feelings.")
 
 if __name__ == "__main__":
     show()
