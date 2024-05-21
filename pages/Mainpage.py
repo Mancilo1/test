@@ -5,7 +5,7 @@ def show():
     st.title("Main Page")
 
 def main_page():
-    st.image("Logo.jpeg", width=600)  # Adapted logo size
+    st.image("Logo.jpeg", width=600)  # Angepasste Logo-Größe
     st.subheader("Anxiety Tracker Journal")
     st.write("""
         Welcome to FeelNow, your anxiety attack journal.
@@ -25,10 +25,11 @@ def main_page():
     col1, col2 = st.columns([0.8, 0.2])
     with col2:
         if st.button("Login/Register"):
-            # Redirect to login/register page
-            st.write("Redirecting to login/register page...")
-            # Add redirection logic here
+            switch_page("Login.py")  # Hier den Dateinamen der Login-Seite angeben
+
+def switch_page(page_name):
+    st.success("Redirecting to {} page...".format(page_name))  # Erfolgsmeldung anzeigen
+    # Hier können Sie die Logik hinzufügen, um zur angegebenen Seite zu navigieren
 
 if __name__ == "__main__":
     main_page()
-    
