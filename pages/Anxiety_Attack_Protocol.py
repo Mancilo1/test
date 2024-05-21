@@ -4,6 +4,11 @@ import datetime
 def show():
     st.title("Anxiety Attack Protocol")
 
+def save_to_csv(data, filename='anxiety_attack_data.csv'):
+    with open(filename, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(data)
+
 def anxiety_attack_protocol():
     # Check if the session state object exists, if not, initialize it
     if 'button_count' not in st.session_state:
