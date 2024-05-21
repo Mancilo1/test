@@ -1,5 +1,7 @@
 import streamlit as st
 import datetime
+import csv
+import os
 
 def show():
     st.title("Anxiety Protocol")
@@ -76,6 +78,16 @@ def anxiety_protocol():
 def main_page():
     st.title("FeelNow")
     anxiety_protocol()
+    
+ # Display saved data
+    st.header("Saved Data")
+    data = read_csv()
+    if data:
+        st.write("## Anxiety Protocol Data")
+        st.table(data)
+    else:
+        st.write("No data available")
+
 
 if __name__ == "__main__":
     main_page()
