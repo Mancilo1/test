@@ -6,10 +6,17 @@ import os
 def show():
     st.title("Anxiety Attack Protocol")
 
-def save_to_csv(data, filename='anxiety_attack_data.csv'):
+def save_to_csv(data, filename='anxiety_data.csv'):
     with open(filename, mode='a', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(data)
+
+def read_csv(filename='anxiety_data.csv'):
+    if os.path.exists(filename):
+        with open(filename, mode='r') as file:
+            reader = csv.reader(file)
+            return list(reader)
+    return []
 
 def anxiety_attack_protocol():
     # Check if the session state object exists, if not, initialize it
