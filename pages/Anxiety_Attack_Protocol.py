@@ -1,5 +1,7 @@
 import streamlit as st
 import datetime
+import csv
+import os
 
 def show():
     st.title("Anxiety Attack Protocol")
@@ -118,6 +120,16 @@ def add_time_severity():
 def main_page():
     st.title("FeelNow")
     anxiety_attack_protocol()
+    
+ # Display saved data
+    st.header("Saved Data")
+    data = read_csv()
+    if data:
+        st.write("## Anxiety Attack Protocol Data")
+        st.table(data)
+    else:
+        st.write("No data available")
+
 
 if __name__ == "__main__":
     main_page()
