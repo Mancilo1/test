@@ -28,8 +28,8 @@ def main_page():
             switch_page("Login")  # Hier den Dateinamen der Login-Seite angeben
 
 def switch_page(page_name):
-    st.success("Redirecting to {} page...".format(page_name))  # Erfolgsmeldung anzeigen
-    # Hier können Sie die Logik hinzufügen, um zur angegebenen Seite zu navigieren
+    st.success("Redirecting to {} page...".format(page_name))  
+    st.switch_page("Login.py")
 
 if __name__ == "__main__":
     main_page()
