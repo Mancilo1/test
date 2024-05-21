@@ -89,6 +89,20 @@ def anxiety_attack_protocol():
     # Question 5: Did something Help against the attack?
     st.subheader("Did something Help against the attack?")
     help_response = st.text_area("Write your response here", height=100)
+    
+    # Save the data to CSV when the form is submitted
+    if st.button("Save Data"):
+        time_severity_pairs = st.session_state.times
+        data = [
+            date_selected,
+            "; ".join([f"{time.strftime('%H:%M')} - {severity}" for time, severity in time_severity_pairs]),
+            ", ".join(symptoms),
+            ", ".join(triggers),
+            help_response
+        ]
+        save_to_csv(data)
+        st.success("Data saved successfully!")
+
 
 def add_time_severity():
     st.subheader("Time & Severity")
