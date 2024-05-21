@@ -1,6 +1,7 @@
 import streamlit as st
 from PIL import Image
 import time
+import navigation  # Importieren Sie die navigation.py-Datei
 
 def show():
     st.image("Logo.jpeg", width=600)
@@ -10,25 +11,14 @@ def show():
     
     answer = st.radio("Do you feel like you're having an Anxiety Attack right now?", ("Yes", "No"))
     if answer == "Yes":
-        st.write("Redirecting to Anxiety Attack Protocol page...")
-        time.sleep(2)  # Optional: kleine Verzögerung, um die Nachricht anzuzeigen
-        redirect_to_page("Anxiety_Attack_Protocol")
+        navigation.switch_pages("Anxiety_Attack_Protocol")  # Verwenden Sie die switch_pages()-Funktion
     else:
         answer_2 = st.radio("Are you anxious right now?", ("Yes", "No"))
         if answer_2 == "Yes":
-            st.write("Redirecting to Anxiety Protocol page...")
-            time.sleep(2)  # Optional: kleine Verzögerung, um die Nachricht anzuzeigen
-            redirect_to_page("Anxiety_protocol")
+            navigation.switch_pages("Anxiety_protocol")  # Verwenden Sie die switch_pages()-Funktion
         else:
             st.write("Reassess your feelings.")
 
-def redirect_to_page(page_name):
-    if page_name == "Anxiety_Attack_Protocol":
-        st.success("Redirecting to Anxiety Attack Protocol page...")
-        # Fügen Sie hier die Logik hinzu, um zur Seite Anxiety_Attack_Protocol zu wechseln
-    elif page_name == "Anxiety_protocol":
-        st.success("Redirecting to Anxiety Protocol page...")
-        # Fügen Sie hier die Logik hinzu, um zur Seite Anxiety_protocol zu wechseln
-
 if __name__ == "__main__":
     show()
+
