@@ -6,11 +6,11 @@ def switch_pages(page_name):
     if page_name == "Anxiety_Attack_Protocol":
         st.success("Redirecting to Anxiety Attack Protocol page...")
         time.sleep(2)
-        met st.switch_page("Anxiety_Attack_Protocol.py")
+        st.switch_page("Anxiety_Attack_Protocol.py")
     elif page_name == "Anxiety_protocol":
         st.success("Redirecting to Anxiety Protocol page...")
         time.sleep(2)
-        met st.switch_page("Anxiety_Protocol.py")
+        st.switch_page("Anxiety_Protocol.py")
 
 def show():
     st.image("Logo.jpeg", width=600)
