@@ -3,7 +3,6 @@ import binascii
 import streamlit as st
 import pandas as pd
 from github_contents import GithubContents
-import bcrypt
 
 def show():
     st.title("Login/Register")
