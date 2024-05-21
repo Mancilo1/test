@@ -33,5 +33,4 @@ def switch_page(page_name):
 
 if __name__ == "__main__":
     main_page()
-else 
-    Login()
+
