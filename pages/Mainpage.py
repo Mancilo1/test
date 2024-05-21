@@ -27,9 +27,11 @@ def main_page():
         if st.button("Login/Register"):
             redirect_to_login()
 
-def redirect_to_login():
-    # Hier wird die Seite neu geladen, um zur Login-Seite zu navigieren
-    st.experimental_rerun()
+def switch_page(page_name):
+    st.success("Redirecting to {} page...".format(page_name))  
+    st.switch_page()
 
 if __name__ == "__main__":
     main_page()
+else 
+    Login()
