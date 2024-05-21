@@ -29,7 +29,7 @@ def main_page():
 
 def switch_page(page_name):
     st.success("Redirecting to {} page...".format(page_name))  
-    st.switch_page("Login.py")
+    st.switch_page()
 
 if __name__ == "__main__":
     main_page()
