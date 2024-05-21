@@ -15,15 +15,9 @@ def read_csv(filename='anxiety_protocol_data.csv'):
             return list(reader)
     return []
 
-def show():
-    st.title("Anxiety Protocol")
-
 def anxiety_protocol():
     # Check if the session state object exists, if not, initialize it
-    if 'button_count' not in st.session_state:
-        st.session_state.button_count = 0
-        st.session_state.times = []
-        st.session_state.severities = []
+    if 'symptoms' not in st.session_state:
         st.session_state.symptoms = []
 
     st.write("Anxiety Protocol Page")
@@ -35,8 +29,8 @@ def anxiety_protocol():
     st.subheader("Where are you and what is the environment?")
     location_response = st.text_area("Write your response here", key="location", height=100)
     
-    st.subheader("Try to describe your anxiety right now?")
-    anxiety_description_response = st.text_area("Write your response here", key="anxiety_description", height=100)
+    st.subheader("Try to describe your anxiety right now")
+    anxiety_description = st.text_area("Write your response here", key="anxiety_description", height=100)
 
     st.subheader("What do you think could be the cause?")
     cause_response = st.text_area("Write your response here", key="cause", height=100)
@@ -47,55 +41,56 @@ def anxiety_protocol():
     # Question 3: Symptoms
     st.subheader("Symptoms:")
     col1, col2 = st.columns(2)
-    symptoms = []
     with col1:
-        if st.checkbox("Chest Pain"):
-            symptoms.append("Chest Pain")
-        if st.checkbox("Chills"):
-            symptoms.append("Chills")
-        if st.checkbox("Cold"):
-            symptoms.append("Cold")
-        if st.checkbox("Cold Hands"):
-            symptoms.append("Cold Hands")
-        if st.checkbox("Dizziness"):
-            symptoms.append("Dizziness")
-        if st.checkbox("Feeling of danger"):
-            symptoms.append("Feeling of danger")
-        if st.checkbox("Heart racing"):
-            symptoms.append("Heart racing")
-        if st.checkbox("Hot flushes"):
-            symptoms.append("Hot flushes")
+        symptoms_chestpain = st.checkbox("Chest Pain")
+        symptoms_chills = st.checkbox("Chills")
+        symptoms_cold = st.checkbox("Cold")
+        symptoms_coldhands = st.checkbox("Cold Hands")
+        symptoms_dizziness = st.checkbox("Dizziness")
+        symptoms_feelingdanger = st.checkbox("Feeling of danger")
+        symptoms_heartracing = st.checkbox("Heart racing")
+        symptoms_hotflushes = st.checkbox("Hot flushes")
     with col2:
-        if st.checkbox("Nausea"):
-            symptoms.append("Nausea")
-        if st.checkbox("Nervousness"):
-            symptoms.append("Nervousness")
-        if st.checkbox("Numb Hands"):
-            symptoms.append("Numb Hands")
-        if st.checkbox("Numbness"):
-            symptoms.append("Numbness")
-        if st.checkbox("Shortness of Breath"):
-            symptoms.append("Shortness of Breath")
-        if st.checkbox("Sweating"):
-            symptoms.append("Sweating")
-        if st.checkbox("Tense Muscles"):
-            symptoms.append("Tense Muscles")
-        if st.checkbox("Tingly Hands"):
-            symptoms.append("Tingly Hands")
-        if st.checkbox("Trembling"):
-            symptoms.append("Trembling")
-        if st.checkbox("Tremor"):
-            symptoms.append("Tremor")
-        if st.checkbox("Weakness"):
-            symptoms.append("Weakness")
+        symptoms_nausea = st.checkbox("Nausea")
+        symptoms_nervous = st.checkbox("Nervousness")
+        symptoms_numbhands = st.checkbox("Numb Hands")
+        symptoms_numbness = st.checkbox("Numbness")
+        symptoms_shortbreath = st.checkbox("Shortness of Breath")
+        symptoms_sweating = st.checkbox("Sweating")
+        symptoms_tensemuscles = st.checkbox("Tense Muscles")
+        symptoms_tinglyhands = st.checkbox("Tingly Hands")
+        symptoms_trembling = st.checkbox("Trembling")
+        symptoms_tremor = st.checkbox("Tremor")
+        symptoms_weakness = st.checkbox("Weakness")
+    
+    # Gather selected symptoms
+    symptoms = []
+    if symptoms_chestpain: symptoms.append("Chest Pain")
+    if symptoms_chills: symptoms.append("Chills")
+    if symptoms_cold: symptoms.append("Cold")
+    if symptoms_coldhands: symptoms.append("Cold Hands")
+    if symptoms_dizziness: symptoms.append("Dizziness")
+    if symptoms_feelingdanger: symptoms.append("Feeling of danger")
+    if symptoms_heartracing: symptoms.append("Heart racing")
+    if symptoms_hotflushes: symptoms.append("Hot flushes")
+    if symptoms_nausea: symptoms.append("Nausea")
+    if symptoms_nervous: symptoms.append("Nervousness")
+    if symptoms_numbhands: symptoms.append("Numb Hands")
+    if symptoms_numbness: symptoms.append("Numbness")
+    if symptoms_shortbreath: symptoms.append("Shortness of Breath")
+    if symptoms_sweating: symptoms.append("Sweating")
+    if symptoms_tensemuscles: symptoms.append("Tense Muscles")
+    if symptoms_tinglyhands: symptoms.append("Tingly Hands")
+    if symptoms_trembling: symptoms.append("Trembling")
+    if symptoms_tremor: symptoms.append("Tremor")
+    if symptoms_weakness: symptoms.append("Weakness")
     
     new_symptom = st.text_input("Add new symptom:", key="new_symptom")
     if st.button("Add Symptom") and new_symptom:
         st.session_state.symptoms.append(new_symptom)
-        symptoms.append(new_symptom)
 
-    # Question 5: Did something Help against the attack?
-    st.subheader("Did something Help against the Anxiety?")
+    # Question 5: Did something Help against the Anxiety?
+    st.subheader("Did something help against the anxiety?")
     help_response = st.text_area("Write your response here", key="help_response", height=100)
     
     # Save the data to CSV when the form is submitted
@@ -103,10 +98,10 @@ def anxiety_protocol():
         data = [
             date_selected,
             location_response,
-            anxiety_description_response,
+            anxiety_description,
             cause_response,
             triggers_response,
-            ", ".join(symptoms),
+            ", ".join(symptoms + st.session_state.symptoms),
             help_response
         ]
         save_to_csv(data)
@@ -115,7 +110,7 @@ def anxiety_protocol():
 def main_page():
     st.title("FeelNow")
     anxiety_protocol()
-    
+
     # Display saved data
     st.header("Saved Data")
     data = read_csv()
@@ -127,4 +122,5 @@ def main_page():
 
 if __name__ == "__main__":
     main_page()
+
 
