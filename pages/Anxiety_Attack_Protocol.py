@@ -1,7 +1,6 @@
 import streamlit as st
 import datetime
-import csv
-import os
+
 
 def show():
     st.title("Anxiety Attack Protocol")
@@ -64,33 +63,6 @@ def anxiety_attack_protocol():
         symptoms_weakness = st.checkbox("Weakness")
     if 'symptoms' not in st.session_state:
         st.session_state.symptoms = []
-
-     # Gather selected symptoms
-    symptoms = []
-    if symptoms_anxiety: symptoms.append("Anxiety")
-    if symptoms_chestpain: symptoms.append("Chest Pain")
-    if symptoms_chills: symptoms.append("Chills")
-    if symptoms_chocking: symptoms.append("Chocking")
-    if symptoms_cold: symptoms.append("Cold")
-    if symptoms_coldhands: symptoms.append("Cold Hands")
-    if symptoms_dizziness: symptoms.append("Dizziness")
-    if symptoms_feelingdanger: symptoms.append("Feeling of danger")
-    if symptoms_feelingdread: symptoms.append("Feeling of dread")
-    if symptoms_heartracing: symptoms.append("Heart racing")
-    if symptoms_hotflushes: symptoms.append("Hot flushes")
-    if symptoms_irrationalthinking: symptoms.append("Irrational thinking")
-    if symptoms_nausea: symptoms.append("Nausea")
-    if symptoms_nervous: symptoms.append("Nervousness")
-    if symptoms_numbhands: symptoms.append("Numb Hands")
-    if symptoms_numbness: symptoms.append("Numbness")
-    if symptoms_palpitations: symptoms.append("Palpitations")
-    if symptoms_shortbreath: symptoms.append("Shortness of Breath")
-    if symptoms_sweating: symptoms.append("Sweating")
-    if symptoms_tensemuscles: symptoms.append("Tense Muscles")
-    if symptoms_tinglyhands: symptoms.append("Tingly Hands")
-    if symptoms_trembling: symptoms.append("Trembling")
-    if symptoms_tremor: symptoms.append("Tremor")
-    if symptoms_weakness: symptoms.append("Weakness")
 
     # Display existing symptoms
     for symptom in st.session_state.symptoms:
@@ -168,15 +140,6 @@ def add_time_severity():
 def main_page():
     st.title("FeelNow")
     anxiety_attack_protocol()
-    
- # Display saved data
-    st.header("Saved Data")
-    data = read_csv()
-    if data:
-        st.write("## Anxiety Attack Protocol Data")
-        st.table(data)
-    else:
-        st.write("No data available")
 
 
 if __name__ == "__main__":
