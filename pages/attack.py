@@ -7,8 +7,7 @@ import os
 # Adding the parent directory to the system path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-def main():
-    # Get query parameters to determine the page
+def main_attack():
     query_params = st.experimental_get_query_params()
     page = query_params.get("page", ["main"])[0]
 
@@ -29,7 +28,7 @@ def show_main_page():
 
     answer = st.radio("Do you feel like you're having an Anxiety Attack right now?", ("Yes", "No"))
     if answer == "Yes":
-        switch_pages("attack_protocol")
+        switch_pages("anxiety_attack_protocol")
     else:
         answer_2 = st.radio("Are you anxious right now?", ("Yes", "No"))
         if answer_2 == "Yes":
