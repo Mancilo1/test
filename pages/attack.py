@@ -4,8 +4,8 @@ import time
 import sys
 import os
 
-# Adding the pages directory to the system path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'pages'))
+# Adjust the path to include the parent directory
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Importing the pages
 import anxiety_attack_protocol as attack_protocol
@@ -40,10 +40,4 @@ def show_main_page():
             st.write("Reassess your feelings.")
 
 def switch_pages(page_name):
-    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
-    time.sleep(2)
-    st.experimental_set_query_params(page=page_name)
-    st.experimental_rerun()
-
-if __name__ == "__main__":
-    main()
+    st.success(f"Redirecting to {page
