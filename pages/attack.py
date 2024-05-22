@@ -7,7 +7,7 @@ import os
 # Adding the parent directory to the system path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-def main():
+def main_attack():
     # Get query parameters to determine the page
     query_params = st.experimental_get_query_params()
     page = query_params.get("page", ["main"])[0]
@@ -44,4 +44,4 @@ def switch_pages(page_name):
     st.experimental_rerun()
 
 if __name__ == "__main__":
-    show()
+    main_attack()
