@@ -19,4 +19,5 @@ PAGE_TITLE_MAP = {
     "Anxiety Protocol Page": Anxiety_protocol
 }
 
-
+if __name__ == "__main__":
+    Mainpage()
