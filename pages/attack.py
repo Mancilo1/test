@@ -14,10 +14,10 @@ def main():
 
     if page == "anxiety_attack_protocol":
         from pages import anxiety_attack_protocol as attack_protocol
-       st.switch_pages("anxiety_attack_protocol")
+       switch_pages("anxiety_attack_protocol")
     elif page == "anxiety_protocol":
         from pages import anxiety_protocol
-        st.switch_pages("anxiety_protocol")
+        
     else:
         show_main_page()
 
