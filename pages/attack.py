@@ -10,11 +10,11 @@ def show():
     
     answer = st.radio("Do you feel like you're having an Anxiety Attack right now?", ("Yes", "No"))
     if answer == "Yes":
-        st.switch_pages("anxiety_attack_protocol")  # Hier wird der Dateiname als Zeichenkette übergeben
+        st.switch_pages("anxiety_attack_protocol.py")  # Hier wird der Dateiname als Zeichenkette übergeben
     else:
         answer_2 = st.radio("Are you anxious right now?", ("Yes", "No"))
         if answer_2 == "Yes":
-            st.switch_pages("anxiety_protocol")  # Hier wird der Dateiname als Zeichenkette übergeben
+            st.switch_pages("anxiety_protocol.py")  # Hier wird der Dateiname als Zeichenkette übergeben
         else:
             st.write("Reassess your feelings.")
 
