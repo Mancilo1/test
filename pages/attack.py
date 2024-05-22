@@ -4,11 +4,9 @@ import time
 import sys
 import os
 
-# Adding the parent directory to the system path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def main():
-    # Get query parameters to determine the page
     query_params = st.experimental_get_query_params()
     page = query_params.get("page", ["main"])[0]
 
