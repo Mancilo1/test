@@ -36,4 +36,4 @@ def register():
         st.success('Registered successfully!')
 
 if __name__ == "__main__":
-    login()
+    Login()
