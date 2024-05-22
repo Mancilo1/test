@@ -40,4 +40,10 @@ def show_main_page():
             st.write("Reassess your feelings.")
 
 def switch_pages(page_name):
-    st.success(f"Redirecting to {page
+    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
+    time.sleep(2)
+    st.experimental_set_query_params(page=page_name)
+    st.experimental_rerun()
+
+if __name__ == "__main__":
+    main()
