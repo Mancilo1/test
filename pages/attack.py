@@ -10,11 +10,11 @@ def show():
     
     answer = st.radio("Do you feel like you're having an Anxiety Attack right now?", ("Yes", "No"))
     if answer == "Yes":
-        st.switch_pages("pages/anxiety_attack_protocol.py")
+        st.switch_pages("anxiety_attack_protocol.py")
     else:
         answer_2 = st.radio("Are you anxious right now?", ("Yes", "No"))
         if answer_2 == "Yes":
-            st.switch_pages("pages/anxiety_protocol.py")
+            st.switch_pages("anxiety_protocol.py")
         else:
             st.write("Reassess your feelings.")
 
