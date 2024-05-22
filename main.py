@@ -30,7 +30,7 @@ def main_page():
     col1, col2 = st.columns([0.8, 0.2])
     with col2:
         if st.button("Login/Register"):
-            switch_page("login.py")  # Hier den Dateinamen der Login-Seite angeben
+            switch_page("pages/login.py")  # Hier den Dateinamen der Login-Seite angeben
 
 def switch_page(page_name):
     st.success("Redirecting to {} page...".format(page_name))  # Erfolgsmeldung anzeigen
