@@ -4,22 +4,24 @@ import time
 import sys
 import os
 
+# Adding the parent directory to the system path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def main():
+    # Get query parameters to determine the page
     query_params = st.experimental_get_query_params()
     page = query_params.get("page", ["main"])[0]
 
     if page == "anxiety_attack_protocol":
-        from pages import anxiety_attack_protocol
+        from pages import anxiety_attack_protocol as attack_protocol
        
     elif page == "anxiety_protocol":
         from pages import anxiety_protocol
         
     else:
-        show_attack()
+        show_main_page()
 
-def show_attack():
+def show_main_page():
     st.image("Logo.jpeg", width=600)
     st.write("---")
 
@@ -42,4 +44,4 @@ def switch_pages(page_name):
     st.experimental_rerun()
 
 if __name__ == "__main__":
-    main()
+    main() 
