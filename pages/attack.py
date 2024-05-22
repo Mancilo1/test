@@ -4,8 +4,8 @@ import time
 import sys
 import os
 
-# Adding the parent directory to the system path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Adjusting the path to include the parent directory
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def main():
     # Get query parameters to determine the page
@@ -13,27 +13,27 @@ def main():
     page = query_params.get("page", ["main"])[0]
 
     if page == "anxiety_attack_protocol":
-        from pages import anxiety_attack_protocol as attack_protocol
+        import anxiety_attack_protocol as attack_protocol
         attack_protocol.show()
     elif page == "anxiety_protocol":
-        from pages import anxiety_protocol
+        import anxiety_protocol
         anxiety_protocol.show()
     else:
         show_main_page()
 
 def show_main_page():
-    st.image("Logo.jpeg", width=600)
+    st.image(os.path.join(os.path.dirname(__file__), "Logo.jpeg"), width=600)
     st.write("---")
 
     st.write("Anxiety Assessment:")
 
     answer = st.radio("Do you feel like you're having an Anxiety Attack right now?", ("Yes", "No"))
     if answer == "Yes":
-        st.switch_pages("anxiety_attack_protocol")
+        switch_pages("anxiety_attack_protocol")
     else:
         answer_2 = st.radio("Are you anxious right now?", ("Yes", "No"))
         if answer_2 == "Yes":
-            st.switch_pages("anxiety_protocol")
+            switch_pages("anxiety_protocol")
         else:
             st.write("Reassess your feelings.")
 
