@@ -1,7 +1,11 @@
 import streamlit as st
+from PIL import Image
 import time
-from pages import anxiety_attack_protocol as attack_protocol
-from pages import anxiety_protocol
+import sys
+import os
+
+# Adding the parent directory to the system path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def main():
     # Get query parameters to determine the page
@@ -9,8 +13,10 @@ def main():
     page = query_params.get("page", ["main"])[0]
 
     if page == "anxiety_attack_protocol":
+        from pages import anxiety_attack_protocol as attack_protocol
         attack_protocol.show()
     elif page == "anxiety_protocol":
+        from pages import anxiety_protocol
         anxiety_protocol.show()
     else:
         show_main_page()
