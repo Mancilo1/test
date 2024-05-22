@@ -1,9 +1,15 @@
 import streamlit as st
 from PIL import Image
 import time
+import sys
+import os
 
-import pages.anxiety_attack_protocol as attack_protocol
-import pages.anxiety_protocol as anxiety_protocol
+# Adding the pages directory to the system path
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pages'))
+
+# Importing the pages
+import anxiety_attack_protocol as attack_protocol
+import anxiety_protocol
 
 def main():
     # Get query parameters to determine the page
