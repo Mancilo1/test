@@ -18,9 +18,9 @@ def main_attack():
         from pages import anxiety_protocol
         
     else:
-        show_main_page()
+        show()
 
-def show_main_page():
+def show():
     st.image("Logo.jpeg", width=600)
     st.write("---")
 
@@ -38,7 +38,7 @@ def show_main_page():
 
 def switch_pages(page_name):
     st.success("Redirecting to {} page...".format(page_name))
-    time.sleep(2)
+    time.sleep(3)
     st.experimental_set_query_params(page=page_name)
     st.experimental_rerun()
 
