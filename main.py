@@ -11,7 +11,7 @@ github = GithubContents(
     st.secrets["github"]["token"])
 
 PAGE_TITLE_MAP = {
-    "Main Page": Mainpage,
+    "Main Page": main,
     "Login Page": Login,
     "Register Page": Attack,
     "Anxiety Attack Protocol Page": Anxiety_Attack_Protocol,
