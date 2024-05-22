@@ -6,14 +6,6 @@ github = GithubContents(
     st.secrets["github"]["repo"],
     st.secrets["github"]["token"])
 
-PAGE_TITLE_MAP = {
-    "Main Page": main,
-    "Login Page": login,
-    "Register Page": attack,
-    "Anxiety Attack Protocol Page": anxiety_attack_protocol,
-    "Anxiety Protocol Page": anxiety_protocol
-}
-
 def show():
     st.title("Main Page")
 
