@@ -17,9 +17,9 @@ def main():
         from pages import anxiety_protocol
         
     else:
-        show()
+        show_attack()
 
-def show():
+def show_attack():
     st.image("Logo.jpeg", width=600)
     st.write("---")
 
