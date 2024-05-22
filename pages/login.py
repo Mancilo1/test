@@ -1,4 +1,3 @@
-
 import binascii
 import streamlit as st
 import pandas as pd
@@ -37,4 +36,4 @@ def register():
         st.success('Registered successfully!')
 
 if __name__ == "__main__":
-    Login()
+    login()
