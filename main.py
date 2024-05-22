@@ -8,10 +8,10 @@ github = GithubContents(
 
 PAGE_TITLE_MAP = {
     "Main Page": main,
-    "Login Page": Login,
-    "Register Page": Attack,
-    "Anxiety Attack Protocol Page": Anxiety_Attack_Protocol,
-    "Anxiety Protocol Page": Anxiety_protocol
+    "Login Page": login,
+    "Register Page": attack,
+    "Anxiety Attack Protocol Page": anxiety_attack_protocol,
+    "Anxiety Protocol Page": anxiety_protocol
 }
 
 def show():
