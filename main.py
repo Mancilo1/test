@@ -37,4 +37,4 @@ def switch_page(page_name):
     # Hier können Sie die Logik hinzufügen, um zur angegebenen Seite zu navigieren
 
 if __name__ == "__main__":
-    main()
+    main_page()
