@@ -37,7 +37,7 @@ def show_main_page():
             st.write("Reassess your feelings.")
 
 def switch_pages(page_name):
-    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
+    st.success("Redirecting to {} page...".format(page_name))
     time.sleep(2)
     st.experimental_set_query_params(page=page_name)
     st.experimental_rerun()
