@@ -39,6 +39,8 @@ def show_main_page():
 def switch_pages(page_name):
     st.success("Redirecting to {} page...".format(page_name))
     time.sleep(2)
+    st.experimental_set_query_params(page=page_name)
+    st.experimental_rerun()
 
 if __name__ == "__main__":
     main_attack() 
