@@ -1,5 +1,4 @@
 import streamlit as st
-from pages import Mainpage
 from pages import Login
 from pages import Attack 
 from pages import Anxiety_Attack_Protocol
