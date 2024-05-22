@@ -1,8 +1,4 @@
 import streamlit as st
-from pages import Login
-from pages import Attack 
-from pages import Anxiety_Attack_Protocol
-from pages import Anxiety_protocol
 from github_contents import GithubContents
 
 github = GithubContents(
