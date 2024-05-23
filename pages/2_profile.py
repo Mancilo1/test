@@ -2,9 +2,6 @@ import streamlit as st
 import binascii
 import bcrypt
 import time
-import datetime
-import sys
-import os
 import pandas as pd
 from github_contents import GithubContents
 from PIL import Image
@@ -18,11 +15,10 @@ def main_page():
     st.title("Your Anxiety Tracker Journal")
     st.subheader("Profile")
     
-    # Überprüfe, ob der Benutzer eingeloggt ist
     if 'username' in st.session_state:
         username = st.session_state['username']
         
-        # Lade die Benutzerdaten aus dem DataFrame
+        # Load user data
         user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == username]
         
         if not user_data.empty:
@@ -34,44 +30,21 @@ def main_page():
     else:
         st.error("User not logged in.")
         if st.button("Login/Register"):
-            st.switch_page("pages/1_login.py")
-
-def main():
-    init_github()
-    init_credentials()
-
-    if 'authentication' not in st.session_state:
-        st.session_state['authentication'] = False
-
-    if not st.session_state['authentication']:
-        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
-        if options == "Login":
-            login_page()
-        elif options == "Register":
-            register_page()
-    else:
-        st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        main_page()
-        anxiety_assessment()
-        logout_button = st.sidebar.button("Logout")
-        if logout_button:
-            st.session_state['authentication'] = False
-            st.session_state.pop('username', None)
-            st.switch_page("main.py")
-            st.experimental_rerun()
+            switch_page("pages/1_login.py")
 
 def anxiety_assessment():
     st.subheader("Anxiety Assessment:")
     
     st.write("Do you feel like you're having an Anxiety Attack right now?")
     if st.button("Yes"):
-        st.switch_page("pages/4_anxiety_attack_protocol.py")
-    elif st.button("No"):
+        switch_page("pages/4_anxiety_attack_protocol.py")
+    else:
         st.write("Are you anxious right now?")
-        if st.button("Yes "):
-            st.switch_page("pages/5_anxiety_protocol.py")
-        elif st.button("No "):
-            gif_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwifflegif.com%2Fgifs%2F507174-good-luck-hamster-happy-monsters-gif&psig=AOvVaw2asZ4HBXcwyiSXK9Sn7MY_&ust=1716584874098000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPD0hpzXpIYDFQAAAAAdAAAAABAE"
+        if st.button("Yes"):
+            switch_page("pages/5_anxiety_protocol.py")
+        else:
+            gif_url = "https://media.giphy.com/media/ASd0Ukj0y3qMM/giphy.gif"
+            st.image(gif_url, width=400)
 
 def init_github():
     """Initialize the GithubContents object."""
@@ -98,9 +71,8 @@ def login_page():
         password = st.text_input("Password", type="password")
         if st.form_submit_button("Login"):
             authenticate(username, password)
-            # Wenn die Anmeldeinformationen korrekt sind, wird auf die Hauptseite umgeschaltet
             if st.session_state['authentication']:
-                st.switch_page("pages/2_profile.py")
+                switch_page("pages/2_profile.py")
 
 def register_page():
     """ Register a new user. """
@@ -113,26 +85,17 @@ def register_page():
             hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())
             hashed_password_hex = binascii.hexlify(hashed_password).decode()
             
-            # Check if the username already exists
             if new_username in st.session_state.df_users['username'].values:
                 st.error("Username already exists. Please choose a different one.")
-                return
             else:
                 new_user = pd.DataFrame([[new_username, new_name, hashed_password_hex]], columns=DATA_COLUMNS)
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
                 
-                # Writes the updated dataframe to GitHub data repository
                 st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
                 st.success("Registration successful! You can now log in.")
 
 def authenticate(username, password):
-    """
-    Authenticate the user.
-
-    Parameters:
-    username (str): The username to authenticate.
-    password (str): The password to authenticate.
-    """
+    """ Authenticate the user. """
     login_df = st.session_state.df_users
     login_df['username'] = login_df['username'].astype(str)
 
@@ -140,7 +103,6 @@ def authenticate(username, password):
         stored_hashed_password = login_df.loc[login_df['username'] == username, 'password'].values[0]
         stored_hashed_password_bytes = binascii.unhexlify(stored_hashed_password)
         
-        # Check the input password
         if bcrypt.checkpw(password.encode('utf8'), stored_hashed_password_bytes): 
             st.session_state['authentication'] = True
             st.session_state['username'] = username
@@ -151,12 +113,34 @@ def authenticate(username, password):
     else:
         st.error('Username not found')
 
-# Funktion zur Seitenumschaltung
+# Page switching function
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
-    time.sleep(3)
+    time.sleep(2)
     st.experimental_set_query_params(page=page_name)
     st.experimental_rerun()
+
+def main():
+    init_github()
+    init_credentials()
+
+    if 'authentication' not in st.session_state:
+        st.session_state['authentication'] = False
+
+    if not st.session_state['authentication']:
+        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
+        if options == "Login":
+            login_page()
+        elif options == "Register":
+            register_page()
+    else:
+        st.sidebar.write(f"Logged in as {st.session_state['username']}")
+        main_page()
+        anxiety_assessment()
+        if st.sidebar.button("Logout"):
+            st.session_state['authentication'] = False
+            st.session_state.pop('username', None)
+            switch_page("main.py")
 
 if __name__ == "__main__":
     main()
