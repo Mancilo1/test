@@ -41,7 +41,6 @@ def main_page():
             st.write("Username:", username)
             st.write("Name:", user_data['name'].iloc[0])
             st.write("Birthday:", user_data['birthday'].iloc[0])
-            st.sidebar.write(f"Logged in as {st.session_state['username']}")
         else:
             st.error("User data not found.")
     else:
@@ -76,6 +75,7 @@ def main():
             register_page()
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
+        proffile()
         logout_button = st.sidebar.button("Logout")
         if logout_button:
             st.session_state['authentication'] = False
