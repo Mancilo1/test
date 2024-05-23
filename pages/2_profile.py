@@ -39,7 +39,7 @@ def anxiety_assessment():
         st.switch_page("pages/4_anxiety_attack_protocol.py")
     if st.button("No"):
         anxiety_assessment2()
-        if st.button("Yes "):
+        elif st.button("Yes "):
             st.switch_page("pages/5_anxiety_protocol.py")
         elif st.button("No "):
             st.markdown(gif_html, unsafe_allow_html=True)
