@@ -51,6 +51,7 @@ def main_page():
     def switch_page(page_name):
         st.success("Redirecting to {} page...".format(page_name))
 
+ def main():
     init_github()
     init_credentials()
     
@@ -65,7 +66,7 @@ def main_page():
             register_page()
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        anxiety_attack_protocol()
+        profile()
 
         logout_button = st.button("Logout")
         if logout_button:
