@@ -77,9 +77,10 @@ def main():
         main_page()
         logout_button = st.sidebar.button("Logout")
         if logout_button:
-            st.session_state['authentication'] = False :
-                st.switch_page("pages/2_profile.py")
-                st.session_state.pop('username', None)
+            st.session_state['authentication'] = False
+            st.session_state.pop('username', None)
+            st.switch_page("pages/main.py")
+            st.experimental_rerun()
 
 
 def register_page():
