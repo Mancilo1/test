@@ -12,8 +12,10 @@ DATA_COLUMNS = ['username', 'name', 'password']
 def show():
     st.title("Profile")
 
-def profile_page():
-    st.title("Profile")
+def main_page():
+    st.image("Logo.jpeg", width=600)
+    st.title("Your Anxiety Tracker Journal")
+    st.subheader("Profile")
     
     # Lade die Benutzerdaten aus dem DataFrame
     username = st.session_state['username']
@@ -126,10 +128,6 @@ def init_credentials():
             st.session_state.df_users = st.session_state.github.read_df(DATA_FILE)
         else:
             st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
-
-def main_page():
-    st.image("Logo.jpeg", width=600)
-    st.subheader("Your Anxiety Tracker Journal")
 
 def main():
     init_github()
