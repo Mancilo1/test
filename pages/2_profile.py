@@ -46,7 +46,7 @@ def main_page():
     else:
         st.error("User not logged in.")
         if st.button("Login/Register"):
-            st.switch_page("pages/main.py")
+            st.switch_page("pages/1_login.py")
 
     init_github()
     init_credentials()
@@ -67,7 +67,7 @@ def main_page():
         if logout_button:
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
-            st.experimental_rerun()
+            st.switch_page("pages/main.py")
 
 def login_page():
     """ Login an existing user. """
