@@ -4,6 +4,7 @@ import pandas as pd
 import bcrypt
 from github_contents import GithubContents
 import datetime
+from PIL import Image
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
@@ -32,7 +33,18 @@ def main_page():
             st.error("User data not found.")
     else:
         st.error("User not logged in.")
-
+        
+    st.subheader("Profile Picture")
+        profile_picture = st.session_state.profile_picture
+        if profile_picture is None:
+            st.warning("No profile picture uploaded yet.")
+            uploaded_file = st.file_uploader("Upload Profile Picture", type=["jpg", "jpeg", "png"])
+            if uploaded_file is not None:
+                st.session_state.profile_picture = Image.open(uploaded_file)
+        else:
+            st.image(profile_picture, caption="Your Profile Picture", use_column_width=True)
+    else:
+        st.error("User data not found.")
 
 # Deine anderen Funktionen bleiben unverändert
 
