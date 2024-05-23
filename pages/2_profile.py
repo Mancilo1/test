@@ -42,10 +42,6 @@ def main_page():
             st.write("Name:", user_data['name'].iloc[0])
             st.write("Birthday:", user_data['birthday'].iloc[0])
             st.sidebar.write(f"Logged in as {st.session_state['username']}")
-            logout_button = st.sidebar.button("Logout")
-            if logout_button:
-            st.session_state['authentication'] = False
-            st.session_state.pop('username', None)
         else:
             st.error("User data not found.")
     else:
@@ -155,4 +151,4 @@ def init_credentials():
             st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
 
 if __name__ == "__main__":
-    main_page()
+    main()
