@@ -37,7 +37,8 @@ def anxiety_assessment():
     st.write("Do you feel like you're having an Anxiety Attack right now?")
     if st.button("Yes"):
         st.switch_page("pages/4_anxiety_attack_protocol.py")
-    else st.button("No"):
+    else:
+            st.button("No"):
             st.write("Are you anxious right now?")
             if st.button("Yes "):
                 st.switch_page("pages/5_anxiety_protocol.py")
