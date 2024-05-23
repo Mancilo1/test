@@ -10,9 +10,6 @@ github = GithubContents(
 def load_sidebar():
     """Load the sidebar with the logo and navigation options."""
     st.sidebar.image("Logo.jpeg", use_column_width=True)
-    st.sidebar.title("Navigation")
-    page_selection = st.sidebar.selectbox("Select a page", ["Main", "Login/Register"])
-    return page_selection
 
 def main_page():
     # Main page content
