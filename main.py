@@ -10,15 +10,16 @@ def main_sidebar():
     st.sidebar.title("Navigation")
     page = st.sidebar.selectbox("Choose a page", ["Profile", "Anxiety Attack", "Anxiety", "Mainpage"])
     if page == "Profile":
-        st.sidebar.switch_page("pages/2_profile.py")
+        switch_page("profile")
     elif page == "Anxiety Attack":
-        st.sidebar.switch_page("pages/4_anxiety_attack_protocol.py")
+        switch_page("anxiety_attack")
     elif page == "Anxiety":
-        st.sidebar.switch_page("pages/5_anxiety_protocol.py")
+        switch_page("anxiety")
     elif page == "Mainpage":
-        st.sidebar.switch_page("main.py")
+        switch_page("main")
 
 def main_page():
+    main_sidebar()
     st.image("Logo.jpeg", width=600)
     st.subheader("Anxiety Tracker Journal")
     st.write("""
