@@ -9,9 +9,6 @@ import datetime
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'birthday', 'password']
 
-def show():
-    st.title("Login/Register")
-
 def login_page():
     """ Login an existing user. """
     st.image("Logo.jpeg", width=600)
