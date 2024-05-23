@@ -71,8 +71,7 @@ def anxiety_assessment():
         if st.button("Yes "):
             st.switch_page("pages/5_anxiety_protocol.py")
         elif st.button("No "):
-            st.write("Reassess your feelings")
-            st.experimental_rerun()
+            gif_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwifflegif.com%2Fgifs%2F507174-good-luck-hamster-happy-monsters-gif&psig=AOvVaw2asZ4HBXcwyiSXK9Sn7MY_&ust=1716584874098000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPD0hpzXpIYDFQAAAAAdAAAAABAE"
 
 def init_github():
     """Initialize the GithubContents object."""
