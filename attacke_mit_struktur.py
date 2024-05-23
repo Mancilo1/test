@@ -23,9 +23,10 @@ def main():
             login_page()
         elif options == "Register":
             register_page()
+            
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        anxiety_attack_protocol()
+        anxiety_protocol()
 
         logout_button = st.sidebar.button("Logout")
         if logout_button:
@@ -34,108 +35,96 @@ def main():
             st.switch_page("main.py")
             st.experimental_rerun()
 
-def anxiety_attack_protocol():
+def anxiety_protocol():
     username = st.session_state['username']
-    data_file = f"{username}_data.csv"
+    data_file = f"{username}_anxiety_protocol_data.csv"
     
-    if 'data' not in st.session_state:
+    if 'anxiety_data' not in st.session_state:
         if st.session_state.github.file_exists(data_file):
-            st.session_state.data = st.session_state.github.read_df(data_file)
+            st.session_state.anxiety_data = st.session_state.github.read_df(data_file)
         else:
-            st.session_state.data = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
+            st.session_state.anxiety_data = pd.DataFrame(columns=['Date', 'Location', 'Anxiety Description', 'Cause', 'Triggers', 'Symptoms', 'Help'])
 
-    st.title("Anxiety Attack Protocol")
+    st.title("Anxiety Protocol")
 
     # Question 1: Date
     date_selected = st.date_input("Date", value=datetime.date.today())
 
-    # Question 2: Time & Severity
-    add_time_severity()
+    # Question 2: Where are you
+    st.subheader("Where are you and what is the environment?")
+    location = st.text_area("Write your response here", key="location", height=100)
+    
+    st.subheader("Try to describe your anxiety right now?")
+    anxiety_description = st.text_area("Write your response here", key="anxiety_description", height=100)
+
+    st.subheader("What do you think could be the cause?")
+    cause = st.text_area("Write your response here", key="cause", height=100)
+    
+    st.subheader("Any specific triggers? For example Stress, Caffeine, Lack of Sleep, Social Event, Reminder of traumatic event")
+    triggers = st.text_area("Write your response here", key="triggers", height=100)
 
     # Question 3: Symptoms
     st.subheader("Symptoms:")
+    symptoms_list = []
     col1, col2 = st.columns(2)
     with col1:
-        symptoms_anxiety = st.checkbox("Anxiety")
-        symptoms_chestpain = st.checkbox("Chest Pain")
-        symptoms_chills = st.checkbox("Chills")
-        symptoms_chocking = st.checkbox("Chocking")
-        symptoms_cold = st.checkbox("Cold")
-        symptoms_coldhands = st.checkbox("Cold Hands")
-        symptoms_dizziness = st.checkbox("Dizziness")
-        symptoms_feelingdanger = st.checkbox("Feeling of danger")
-        symptoms_feelingdread = st.checkbox("Feeling of dread")
-        symptoms_heartracing = st.checkbox("Heart racing")
-        symptoms_hotflushes = st.checkbox("Hot flushes")
-        symptoms_irrationalthinking = st.checkbox("Irrational thinking")
+        if st.checkbox("Chest Pain"): symptoms_list.append("Chest Pain")
+        if st.checkbox("Chills"): symptoms_list.append("Chills")
+        if st.checkbox("Cold"): symptoms_list.append("Cold")
+        if st.checkbox("Cold Hands"): symptoms_list.append("Cold Hands")
+        if st.checkbox("Dizziness"): symptoms_list.append("Dizziness")
+        if st.checkbox("Feeling of danger"): symptoms_list.append("Feeling of danger")
+        if st.checkbox("Heart racing"): symptoms_list.append("Heart racing")
+        if st.checkbox("Hot flushes"): symptoms_list.append("Hot flushes")
+        if st.checkbox("Nausea"): symptoms_list.append("Nausea")
+        if st.checkbox("Nervousness"): symptoms_list.append("Nervousness")
     with col2:
-        symptoms_nausea = st.checkbox("Nausea")
-        symptoms_nervous = st.checkbox("Nervousness")
-        symptoms_numbhands = st.checkbox("Numb Hands")
-        symptoms_numbness = st.checkbox("Numbness")
-        symptoms_palpitations = st.checkbox("Palpitations")
-        symptoms_shortbreath = st.checkbox("Shortness of Breath")
-        symptoms_sweating = st.checkbox("Sweating")
-        symptoms_tensemuscles = st.checkbox("Tense Muscles")
-        symptoms_tinglyhands = st.checkbox("Tingly Hands")
-        symptoms_trembling = st.checkbox("Trembling")
-        symptoms_tremor = st.checkbox("Tremor")
-        symptoms_weakness = st.checkbox("Weakness")
-    
+        if st.checkbox("Numb Hands"): symptoms_list.append("Numb Hands")
+        if st.checkbox("Numbness"): symptoms_list.append("Numbness")
+        if st.checkbox("Shortness of Breath"): symptoms_list.append("Shortness of Breath")
+        if st.checkbox("Sweating"): symptoms_list.append("Sweating")
+        if st.checkbox("Tense Muscles"): symptoms_list.append("Tense Muscles")
+        if st.checkbox("Tingly Hands"): symptoms_list.append("Tingly Hands")
+        if st.checkbox("Trembling"): symptoms_list.append("Trembling")
+        if st.checkbox("Tremor"): symptoms_list.append("Tremor")
+        if st.checkbox("Weakness"): symptoms_list.append("Weakness")
+
+    # Display existing symptoms
     if 'symptoms' not in st.session_state:
         st.session_state.symptoms = []
-
-    new_symptom = st.text_input("Add new symptom:")
-    if st.button("Add Symptom") and new_symptom:
-        st.session_state.symptoms.append(new_symptom)
 
     for symptom in st.session_state.symptoms:
         st.write(symptom)
 
-    # Question 4: Triggers
-    st.subheader("Triggers:")
-    triggers = st.multiselect("Select Triggers", ["Stress", "Caffeine", "Lack of Sleep", "Social Event", "Reminder of traumatic event", "Alcohol", "Conflict", "Family problems"])
-    
-    if 'triggers' not in st.session_state:
-        st.session_state.triggers = []
-
-    new_trigger = st.text_input("Add new trigger:")
-    if st.button("Add Trigger") and new_trigger:
-        st.session_state.triggers.append(new_trigger)
-
-    for trigger in st.session_state.triggers:
-        st.write(trigger)
+    new_symptom = st.text_input("Add new symptom:", key="new_symptom")
+    if st.button("Add Symptom") and new_symptom:
+        st.session_state.symptoms.append(new_symptom)
 
     # Question 5: Did something Help against the attack?
-    st.subheader("Did something Help against the attack?")
-    help_response = st.text_area("Write your response here", height=100)
+    st.subheader("Did something Help against the Anxiety?")
+    help_response = st.text_area("Write your response here", key="help_response", height=100)
 
     if st.button("Save Entry"):
         new_entry = {
             'Date': date_selected,
-            'Time': [entry['time'] for entry in st.session_state.time_severity_entries],
-            'Severity': [entry['severity'] for entry in st.session_state.time_severity_entries],
-            'Symptoms': st.session_state.symptoms,
+            'Location': location,
+            'Anxiety Description': anxiety_description,
+            'Cause': cause,
             'Triggers': triggers,
+            'Symptoms': ", ".join(symptoms_list),
             'Help': help_response
         }
         
-        # Create a DataFrame from the new entry
         new_entry_df = pd.DataFrame([new_entry])
-        
-        # Append the new entry to the existing data DataFrame
-        st.session_state.data = pd.concat([st.session_state.data, new_entry_df], ignore_index=True)
-        
-        # Save the updated DataFrame to the user's specific CSV file on GitHub
-        st.session_state.github.write_df(data_file, st.session_state.data, "added new entry")
-        st.success("Entry saved successfully!")
 
-        # Clear the severity entries after saving
-        st.session_state.time_severity_entries = []
+        st.session_state.anxiety_data = pd.concat([st.session_state.anxiety_data, new_entry_df], ignore_index=True)
+
+        st.session_state.github.write_df(data_file, st.session_state.anxiety_data, "added new entry")
+        st.success("Entry saved successfully!")
 
     # Display saved entries
     st.subheader("Saved Entries")
-    st.write(st.session_state.data)
+    st.write(st.session_state.anxiety_data)
 
 def add_time_severity():
     if 'time_severity_entries' not in st.session_state:
