@@ -7,7 +7,7 @@ import datetime
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
-DATA_COLUMNS = ['username', 'first_name','last_name', 'birthday', 'password']
+DATA_COLUMNS = ['username', 'name', 'birthday', 'password']
 
 def show():
     st.title("Login/Register")
