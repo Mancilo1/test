@@ -75,7 +75,7 @@ def main():
             register_page()
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        proffile()
+        main_page()
         logout_button = st.sidebar.button("Logout")
         if logout_button:
             st.session_state['authentication'] = False
