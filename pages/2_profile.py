@@ -45,6 +45,11 @@ def main_page():
             st.error("User data not found.")
     else:
         st.error("User not logged in.")
+        if st.button("Login/Register"):
+            st.switch_page("pages/1_login.py")
+
+def switch_page(page_name):
+    st.success("Redirecting to {} page...".format(page_name))
 
 # Deine anderen Funktionen bleiben unverändert
 
