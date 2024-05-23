@@ -6,18 +6,6 @@ github = GithubContents(
     st.secrets["github"]["repo"],
     st.secrets["github"]["token"])
 
-def main_sidebar():
-    st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Choose a page", ["Profile", "Anxiety Attack", "Anxiety", "Mainpage"])
-    if page == "Profile":
-        st.sidebar.switch_page("pages/2_profile.py")
-    elif page == "Anxiety Attack":
-        st.sidebar.switch_page("pages/4_anxiety_attack_protocol.py")
-    elif page == "Anxiety":
-        st.sidebar.switch_page("pages/5_anxiety_protocol.py")
-    elif page == "Mainpage":
-        st.sidebar.switch_page("main.py")
-
 def main_page():
     st.image("Logo.jpeg", width=600)
     st.subheader("Anxiety Tracker Journal")
@@ -40,6 +28,17 @@ def main_page():
     with col2:
         if st.button("Login/Register"):
             st.switch_page("pages/1_login.py")
+            
+    st.sidebar.title("Navigation")
+    page = st.sidebar.selectbox("Choose a page", ["Profile", "Anxiety Attack", "Anxiety", "Mainpage"])
+    if page == "Profile":
+        st.sidebar.switch_page("pages/2_profile.py")
+    elif page == "Anxiety Attack":
+        st.sidebar.switch_page("pages/4_anxiety_attack_protocol.py")
+    elif page == "Anxiety":
+        st.sidebar.switch_page("pages/5_anxiety_protocol.py")
+    elif page == "Mainpage":
+        st.sidebar.switch_page("main.py")
 
 def switch_page(page_name):
     st.success("Redirecting to {} page...".format(page_name))
