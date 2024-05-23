@@ -125,6 +125,7 @@ def main():
     else:
         st.image("Logo.jpeg", width=600)
         st.write("---")
+        st.write("""## You are already logged in""")
         logout_button = st.button("Logout")
         if logout_button:
             st.session_state['authentication'] = False
