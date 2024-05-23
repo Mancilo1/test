@@ -49,12 +49,6 @@ def anxiety_assessment():
 
 def anxiety_assessment2():
     st.write("Are you anxious right now?")
-    if st.button("Yes "):
-        st.switch_page("pages/5_anxiety_protocol.py")
-    elif st.button("No "):
-        st.markdown(gif_html, unsafe_allow_html=True)
-        gif_url = "https://64.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
-        gif_html = f'<img src="{gif_url}" width="400" height="300">'
 
 def init_github():
     """Initialize the GithubContents object."""
