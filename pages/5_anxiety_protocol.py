@@ -204,6 +204,7 @@ def main():
         if logout_button:
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
+            st.switch_page("main.py")
             st.experimental_rerun()
 
 if __name__ == "__main__":
