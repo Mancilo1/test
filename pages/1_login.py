@@ -123,6 +123,8 @@ def main():
         elif options == "Register":
             register_page()
     else:
+        st.image("Logo.jpeg", width=600)
+        st.write("---")
         logout_button = st.button("Logout")
         if logout_button:
             st.session_state['authentication'] = False
