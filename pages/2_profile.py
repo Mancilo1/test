@@ -37,11 +37,11 @@ def anxiety_assessment():
     
     st.write("Do you feel like you're having an Anxiety Attack right now?")
     if st.button("Yes"):
-        switch_page("pages/4_anxiety_attack_protocol.py")
+        st.switch_page("pages/4_anxiety_attack_protocol.py")
     elif st.button("No"):
         st.write("Are you anxious right now?")
         if st.button("Yes "):
-            switch_page("pages/5_anxiety_protocol.py")
+            st.switch_page("pages/5_anxiety_protocol.py")
         elif st.button("No "):
             st.image(gif_url, width=600)
             gif_url = "https://37.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
@@ -116,8 +116,8 @@ def authenticate(username, password):
 # Page switching function
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
-    time.sleep(2)
     st.experimental_set_query_params(page=page_name)
+    time.sleep(3)
     st.experimental_rerun()
 
 def main():
