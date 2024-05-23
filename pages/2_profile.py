@@ -59,6 +59,21 @@ def main():
             st.switch_page("main.py")
             st.experimental_rerun()
 
+def anxiety_assessment():
+    st.image("Logo.jpeg", width=600)
+    st.write("---")
+    st.title("Anxiety Assessment:")
+    
+    st.write("Do you feel like you're having an Anxiety Attack right now?")
+    if st.button("Yes"):
+        st.switch_page("pages/4_anxiety_attack_protocol.py")
+    elif st.button("No"):
+        st.write("Are you anxious right now?")
+        if st.button("Yes "):
+            st.switch_page("pages/5_anxiety_protocol.py")
+        elif st.button("No "):
+            st.write("Reassess your feelings")
+
 def init_github():
     """Initialize the GithubContents object."""
     if 'github' not in st.session_state:
