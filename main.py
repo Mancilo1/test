@@ -10,13 +10,13 @@ def main_sidebar():
     st.sidebar.title("Navigation")
     page = st.sidebar.selectbox("Choose a page", ["Profile", "Anxiety Attack", "Anxiety", "Mainpage"])
     if page == "Profile":
-        switch_page("profile")
+        st.sidebar.switch_page("profile")
     elif page == "Anxiety Attack":
-        switch_page("anxiety_attack")
+        st.sidebar.switch_page("anxiety_attack")
     elif page == "Anxiety":
-        switch_page("anxiety")
+        st.sidebar.switch_page("anxiety")
     elif page == "Mainpage":
-        switch_page("main")
+        st.sidebar.switch_page("main")
 
 def main_page():
     main_sidebar()
