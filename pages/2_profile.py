@@ -1,28 +1,17 @@
 import streamlit as st
-from PIL import Image
+import binascii
+import bcrypt
 import time
+import datetime
 import sys
 import os
-import binascii
 import pandas as pd
-import bcrypt
 from github_contents import GithubContents
-import datetime
-
-
-# Funktion zur Seitenumschaltung
-def switch_page(page_name):
-    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
-    time.sleep(3)
-    st.experimental_set_query_params(page=page_name)
-    st.experimental_rerun()
+from PIL import Image
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'password']
-
-def show():
-    st.title("Profile")
 
 def main_page():
     st.image("Logo.jpeg", width=600)
@@ -47,18 +36,6 @@ def main_page():
         if st.button("Login/Register"):
             st.switch_page("pages/1_login.py")
 
-def login_page():
-    """ Login an existing user. """
-    st.title("Login")
-    with st.form(key='login_form'):
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
-        if st.form_submit_button("Login"):
-            authenticate(username, password)
-            # Wenn die Anmeldeinformationen korrekt sind, wird auf die Hauptseite umgeschaltet
-            if st.session_state['authentication']:
-                st.switch_page("pages/2_profile.py")
-
 def main():
     init_github()
     init_credentials()
@@ -82,6 +59,34 @@ def main():
             st.switch_page("main.py")
             st.experimental_rerun()
 
+def init_github():
+    """Initialize the GithubContents object."""
+    if 'github' not in st.session_state:
+        st.session_state.github = GithubContents(
+            st.secrets["github"]["owner"],
+            st.secrets["github"]["repo"],
+            st.secrets["github"]["token"])
+        print("github initialized")
+    
+def init_credentials():
+    """Initialize or load the dataframe."""
+    if 'df_users' not in st.session_state:
+        if st.session_state.github.file_exists(DATA_FILE):
+            st.session_state.df_users = st.session_state.github.read_df(DATA_FILE)
+        else:
+            st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
+
+def login_page():
+    """ Login an existing user. """
+    st.title("Login")
+    with st.form(key='login_form'):
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if st.form_submit_button("Login"):
+            authenticate(username, password)
+            # Wenn die Anmeldeinformationen korrekt sind, wird auf die Hauptseite umgeschaltet
+            if st.session_state['authentication']:
+                st.switch_page("pages/2_profile.py")
 
 def register_page():
     """ Register a new user. """
@@ -132,23 +137,12 @@ def authenticate(username, password):
     else:
         st.error('Username not found')
 
-def init_github():
-    """Initialize the GithubContents object."""
-    if 'github' not in st.session_state:
-        st.session_state.github = GithubContents(
-            st.secrets["github"]["owner"],
-            st.secrets["github"]["repo"],
-            st.secrets["github"]["token"]
-        )
-        print("github initialized")
-    
-def init_credentials():
-    """Initialize or load the dataframe."""
-    if 'df_users' not in st.session_state:
-        if st.session_state.github.file_exists(DATA_FILE):
-            st.session_state.df_users = st.session_state.github.read_df(DATA_FILE)
-        else:
-            st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
+# Funktion zur Seitenumschaltung
+def switch_page(page_name):
+    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
+    time.sleep(3)
+    st.experimental_set_query_params(page=page_name)
+    st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
