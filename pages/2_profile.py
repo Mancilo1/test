@@ -61,7 +61,7 @@ def main():
             st.experimental_rerun()
 
 def anxiety_assessment():
-    st.title("Anxiety Assessment:")
+    st.subheader("Anxiety Assessment:")
     
     st.write("Do you feel like you're having an Anxiety Attack right now?")
     if st.button("Yes"):
