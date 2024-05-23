@@ -43,7 +43,7 @@ def anxiety_assessment():
         if st.button("Yes "):
             switch_page("pages/5_anxiety_protocol.py")
         else:
-            gif_url = "https://media.giphy.com/media/ASd0Ukj0y3qMM/giphy.gif"
+            gif_url = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwifflegif.com%2Fgifs%2F507174-good-luck-hamster-happy-monsters-gif&psig=AOvVaw2asZ4HBXcwyiSXK9Sn7MY_&ust=1716584874098000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPD0hpzXpIYDFQAAAAAdAAAAABAE"
             st.image(gif_url, width=400)
 
 def init_github():
