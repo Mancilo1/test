@@ -42,8 +42,10 @@ def main_page():
             st.switch_page("pages/1_login.py")
 
 def switch_page(page_name):
-    st.success("Redirecting to {} page...".format(page_name))
-    # Hier können Sie die Logik hinzufügen, um zur angegebenen Seite zu navigieren
+    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
+    time.sleep(3)
+    st.experimental_set_query_params(page=page_name)
+    st.experimental_rerun()
 
 if __name__ == "__main__":
     main_page()
