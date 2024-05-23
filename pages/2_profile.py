@@ -9,12 +9,10 @@ import bcrypt
 from github_contents import GithubContents
 import datetime
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Funktion zur Seitenumschaltung
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
-    st.experimental_set_query_params(page=page_name)
     time.sleep(3)
     st.experimental_rerun()
 
