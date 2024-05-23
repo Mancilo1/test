@@ -24,7 +24,7 @@ def login_page():
         password = st.text_input("Password", type="password")
         if st.form_submit_button("Login"):
             authenticate(username, password)
-            st.switch_page("pages/attack.py")
+            st.switch_page("pages/2_profile.py")
 
 def register_page():
     """ Register a new user. """
@@ -48,7 +48,7 @@ def register_page():
                 try:
                     st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
                     st.success("Registration successful! You can now log in.")
-                    st.switch_page("pages/attack.py")
+                    st.switch_page("pages/2_profile.py")
                 except GithubContents.UnknownError as e:
                     st.error(f"An unexpected error occurred: {e}")
                 except Exception as e:
@@ -73,7 +73,7 @@ def authenticate(username, password):
             st.session_state['authentication'] = True
             st.session_state['username'] = username
             st.success('Login successful')
-            st.switch_page("pages/attack.py")
+            st.switch_page("pages/2_profile.py")
             st.experimental_rerun()
         else:
             st.error('Incorrect password')
