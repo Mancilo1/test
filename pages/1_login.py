@@ -6,7 +6,7 @@ from github_contents import GithubContents
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
-DATA_COLUMNS = ['username', 'name', 'password']
+DATA_COLUMNS = ['username', 'first_name','last_name', 'birthday', 'password']
 
 def show():
     st.title("Login/Register")
@@ -34,7 +34,7 @@ def register_page():
         new_first_name = st.text_input("First Name")
         new_last_name = st.text_input("Last Name")
         new_username = st.text_input("Username")
-        new_birthday = st.date_input("Birthday")
+        new_birthday = st.date_input("Birthday", min_value=datetime.date(1900, 1, 1))
         new_password = st.text_input("Password", type="password")
         if st.form_submit_button("Register"):
             # Check if the username already exists
