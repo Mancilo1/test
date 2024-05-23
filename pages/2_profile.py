@@ -107,7 +107,7 @@ def main():
             
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        anxiety_protocol()
+        profile()
 
         logout_button = st.button("Logout")
         if logout_button:
@@ -116,4 +116,4 @@ def main():
             st.experimental_rerun()
 
 if __name__ == "__main__":
-    main()
+    main_page()
