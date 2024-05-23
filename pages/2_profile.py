@@ -38,10 +38,11 @@ def anxiety_assessment():
     if st.button("Yes"):
         st.switch_page("pages/4_anxiety_attack_protocol.py")
     if st.button("No"):
-        st.experimental_rerun()
         anxiety_assessment2()
 
 def anxiety_assessment2():
+    st.experimental_rerun()
+    st.subheader("Anxiety Assessment:")
     st.write("Are you anxious right now?")
     if st.button("Yes "):
         st.switch_page("pages/5_anxiety_protocol.py")
