@@ -72,6 +72,7 @@ def anxiety_assessment():
             st.switch_page("pages/5_anxiety_protocol.py")
         elif st.button("No "):
             st.write("Reassess your feelings")
+            st.experimental_rerun()
 
 def init_github():
     """Initialize the GithubContents object."""
