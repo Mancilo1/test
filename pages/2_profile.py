@@ -45,9 +45,20 @@ def main_page():
             st.error("User data not found.")
     else:
         st.error("User not logged in.")
-        if st.button("Login/Register"):
-            st.switch_page("pages/1_login.py")
 
+def login_page():
+    """ Login an existing user. """
+    st.title("Login")
+    with st.form(key='login_form'):
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if st.form_submit_button("Login"):
+            authenticate(username, password)
+            # Wenn die Anmeldeinformationen korrekt sind, wird auf die Hauptseite umgeschaltet
+            if st.session_state['authentication']:
+                st.switch_page("pages/2_profile.py")
+
+def main():
     init_github()
     init_credentials()
 
@@ -69,14 +80,6 @@ def main_page():
             st.session_state.pop('username', None)
             st.switch_page("pages/main.py")
 
-def login_page():
-    """ Login an existing user. """
-    st.title("Login")
-    with st.form(key='login_form'):
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
-        if st.form_submit_button("Login"):
-            authenticate(username, password)
 
 def register_page():
     """ Register a new user. """
