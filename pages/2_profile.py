@@ -40,7 +40,7 @@ def anxiety_assessment():
         switch_page("pages/4_anxiety_attack_protocol.py")
     else:
         st.write("Are you anxious right now?")
-        if st.button("Yes"):
+        if st.button("Yes "):
             switch_page("pages/5_anxiety_protocol.py")
         else:
             gif_url = "https://media.giphy.com/media/ASd0Ukj0y3qMM/giphy.gif"
