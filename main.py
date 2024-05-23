@@ -6,9 +6,6 @@ github = GithubContents(
     st.secrets["github"]["repo"],
     st.secrets["github"]["token"])
 
-def show():
-    st.title("Main Page")
-
 def load_sidebar():
     """Load the sidebar with the logo and navigation options."""
     st.sidebar.image("Logo.jpeg", use_column_width=True)
