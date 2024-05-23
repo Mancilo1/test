@@ -1,10 +1,22 @@
-import binascii
 import streamlit as st
+from PIL import Image
+import time
+import sys
+import os
+import binascii
 import pandas as pd
 import bcrypt
 from github_contents import GithubContents
 import datetime
-from PIL import Image
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Funktion zur Seitenumschaltung
+def switch_page(page_name):
+    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
+    st.experimental_set_query_params(page=page_name)
+    time.sleep(3)
+    st.experimental_rerun()
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
