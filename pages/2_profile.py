@@ -48,6 +48,8 @@ def anxiety_assessment_2():
     elif st.button("No "):
        st.image(gif_url, width=600)
        gif_url = "https://37.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
+        gif_html = f'<img src="{gif_url}" width="400" height="300">'
+        st.markdown(gif_html, unsafe_allow_html=True)
 
 def init_github():
     """Initialize the GithubContents object."""
