@@ -61,8 +61,6 @@ def main():
             st.experimental_rerun()
 
 def anxiety_assessment():
-    st.image("Logo.jpeg", width=600)
-    st.write("---")
     st.title("Anxiety Assessment:")
     
     st.write("Do you feel like you're having an Anxiety Attack right now?")
