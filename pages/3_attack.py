@@ -33,20 +33,13 @@ def show_main_page():
             switch_page("anxiety_attack_protocol")
         else:
             st.write("Reassess your feelings")
-            
-# Hauptfunktion zur Steuerung der Navigation
-def main_page():
-    query_params = st.experimental_get_query_params()
-    page = query_params.get("page", ["main"])[0]
 
-    if page == "anxiety_protocol":
-        from pages import anxiety_protocol
-        anxiety_protocol.show()
-    elif page == "anxiety_attack_protocol":
-        from pages import anxiety_attack_protocol
-        anxiety_attack_protocol.show()
-    else:
-        show_main_page()
+# Funktion zur Seitenumschaltung
+def switch_page(page_name):
+    if page_name == "anxiety_protocol":
+        st.experimental_rerun("pages/anxiety_protocol.py")
+    elif page_name == "anxiety_attack_protocol":
+        st.experimental_rerun("pages/anxiety_attack_protocol.py")
 
 def login_page():
     """ Login an existing user. """
