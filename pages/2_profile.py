@@ -54,7 +54,7 @@ def main_page():
  def main():
     init_github()
     init_credentials()
-    
+
     if 'authentication' not in st.session_state:
         st.session_state['authentication'] = False
 
