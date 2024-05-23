@@ -6,20 +6,6 @@ github = GithubContents(
     st.secrets["github"]["repo"],
     st.secrets["github"]["token"])
 
-def load_sidebar():
-    """Load the sidebar with the logo and navigation options."""
-    st.sidebar.image("Logo.jpeg", use_column_width=True)
-    st.markdown(
-    """
-    <style>
-    .sidebar .sidebar-content {
-        background-color: #3399ff;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 def main_page():
     st.image("Logo.jpeg", width=600)
     st.subheader("Anxiety Tracker Journal")
