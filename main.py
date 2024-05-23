@@ -9,12 +9,9 @@ github = GithubContents(
 
 def main_page():
     # Sidebar configuration
-    try:
-        st.sidebar.image("Logo.jpeg", use_column_width=True)
-        st.sidebar.title("Navigation")
-        page_selection = st.sidebar.selectbox("Select a page", ["Main", "Login/Register"])
-    except Exception as e:
-        st.sidebar.error(f"Error loading sidebar content: {e}")
+    st.sidebar.image("Logo.jpeg", use_column_width=True)
+    st.sidebar.title("Navigation")
+    page_selection = st.sidebar.selectbox("Select a page", ["Main", "Login/Register"])
 
     # Main page content
     if page_selection == "Main":
