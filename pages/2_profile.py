@@ -14,6 +14,8 @@ DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'password']
 
 def main_page():
+    main_sidebar()
+    
     st.image("Logo.jpeg", width=600)
     st.title("Your Anxiety Tracker Journal")
     st.subheader("Profile")
