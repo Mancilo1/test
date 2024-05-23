@@ -10,12 +10,6 @@ import pytz  # For timezone handling
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'password']
 
-def show():
-    st.title("Login/Register")
-
-def Login():
-    st.image("Logo.jpeg", width=600)
-
 def login_page():
     """Login an existing user."""
     st.title("Login")
