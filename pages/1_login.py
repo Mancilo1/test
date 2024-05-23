@@ -12,7 +12,7 @@ def show():
     st.title("Login/Register")
 
 def Login():
-    st.image("Logo.jpeg", width=600)
+    st.image("Logo.jpeg", width=500, align='center')
 
 def login_page():
     """ Login an existing user. """
