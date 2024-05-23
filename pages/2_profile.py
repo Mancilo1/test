@@ -127,4 +127,26 @@ def switch_page(page_name):
     st.experimental_rerun()
 
 def main():
-    init_github
+    init_github()
+    init_credentials()
+
+    if 'authentication' not in st.session_state:
+        st.session_state['authentication'] = False
+
+    if not st.session_state['authentication']:
+        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
+        if options == "Login":
+            login_page()
+        elif options == "Register":
+            register_page()
+    else:
+        st.sidebar.write(f"Logged in as {st.session_state['username']}")
+        main_page()
+        anxiety_assessment()
+        if st.sidebar.button("Logout"):
+            st.session_state['authentication'] = False
+            st.session_state.pop('username', None)
+            st.switch_page("main.py")
+
+if __name__ == "__main__":
+    main()
