@@ -41,10 +41,6 @@ def main_page():
         if st.button("Login/Register"):
             st.switch_page("pages/1_login.py")
 
-def main():
-    main_sidebar()
-    main_page()
-
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
     time.sleep(3)
@@ -52,4 +48,4 @@ def switch_page(page_name):
     st.experimental_rerun()
 
 if __name__ == "__main__":
-    main()
+    main_page()
