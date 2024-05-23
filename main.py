@@ -8,14 +8,19 @@ github = GithubContents(
 
 def main_sidebar():
     st.sidebar.title("Navigation")
-    if st.sidebar.button("Profile"):
-        st.switch_page("page/2_profile.py")
-    if st.sidebar.button("Anxiety Attack"):
-        st.switch_page("page/4_anxiety_attack_protocol.py")
-    if st.sidebar.button("Anxiety"):
-        st.switch_page("page/5_anxiety_protocol.py")
-    if st.sidebar.button("Mainpage"):
-        st.switch_page("main.py")
+    profile = st.sidebar.checkbox("Profile")
+    anxiety_attack = st.sidebar.checkbox("Anxiety Attack")
+    anxiety = st.sidebar.checkbox("Anxiety")
+    mainpage = st.sidebar.checkbox("Mainpage")
+
+    if profile:
+        switch_page("profile")
+    elif anxiety_attack:
+        switch_page("anxiety_attack")
+    elif anxiety:
+        switch_page("anxiety")
+    elif mainpage:
+        switch_page("main")
 
 def main_page():
     main_sidebar()
