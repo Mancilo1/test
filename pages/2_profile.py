@@ -88,8 +88,8 @@ def init_credentials():
             st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
 
 def main_page():
-    st.title("FeelNow")
-    profile()
+    st.image("Logo.jpeg", width=600)
+    st.subheader("Your Anxiety Tracker Journal")
 
 def main():
     init_github()
