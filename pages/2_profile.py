@@ -14,6 +14,7 @@ import datetime
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
     time.sleep(3)
+    st.experimental_set_query_params(page=page_name)
     st.experimental_rerun()
 
 # Constants
