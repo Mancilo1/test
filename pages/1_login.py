@@ -1,25 +1,30 @@
 import streamlit as st
-import pandas as pd
 import bcrypt
 import binascii
-from github_contents import GithubContents
 import datetime
+from github_contents import GithubContents
+import pandas as pd
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'birthday', 'password']
 
-def login_page():
-    """ Login an existing user. """
-    st.image("Logo.jpeg", width=600)
-    st.write("---")
-    st.title("Login")
-    with st.form(key='login_form'):
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
-        if st.form_submit_button("Login"):
-            authenticate(username, password)
-            st.switch_page("pages/2_profile.py")
+def init_github():
+    """Initialize the GithubContents object."""
+    if 'github' not in st.session_state:
+        st.session_state.github = GithubContents(
+            st.secrets["github"]["owner"],
+            st.secrets["github"]["repo"],
+            st.secrets["github"]["token"])
+        print("github initialized")
+    
+def init_credentials():
+    """Initialize or load the dataframe."""
+    if 'df_users' not in st.session_state:
+        if st.session_state.github.file_exists(DATA_FILE):
+            st.session_state.df_users = st.session_state.github.read_df(DATA_FILE)
+        else:
+            st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
 
 def register_page():
     """ Register a new user. """
@@ -63,6 +68,18 @@ def register_page():
                 except Exception as e:
                     st.error(f"An unexpected error occurred: {e}")
 
+def login_page():
+    """ Login an existing user. """
+    st.image("Logo.jpeg", width=600)
+    st.write("---")
+    st.title("Login")
+    with st.form(key='login_form'):
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if st.form_submit_button("Login"):
+            authenticate(username, password)
+            st.switch_page("pages/2_profile.py")
+
 def authenticate(username, password):
     """
     Authenticate the user.
@@ -88,23 +105,6 @@ def authenticate(username, password):
             st.error('Incorrect password')
     else:
         st.error('Username not found')
-
-def init_github():
-    """Initialize the GithubContents object."""
-    if 'github' not in st.session_state:
-        st.session_state.github = GithubContents(
-            st.secrets["github"]["owner"],
-            st.secrets["github"]["repo"],
-            st.secrets["github"]["token"])
-        print("github initialized")
-    
-def init_credentials():
-    """Initialize or load the dataframe."""
-    if 'df_users' not in st.session_state:
-        if st.session_state.github.file_exists(DATA_FILE):
-            st.session_state.df_users = st.session_state.github.read_df(DATA_FILE)
-        else:
-            st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
 
 def main():
     init_github()
