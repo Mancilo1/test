@@ -22,21 +22,31 @@ def switch_page(page_name):
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'password']
 
-# Hauptseite anzeigen
-def show_main_page():
+def show():
+    st.title("Profile")
+
+def main_page():
     st.image("Logo.jpeg", width=600)
-    st.write("---")
-    st.write("Anxiety Assessment:")
+    st.title("Your Anxiety Tracker Journal")
+    st.subheader("Profile")
     
-    answer = st.radio("Do you feel like you're having an Anxiety Attack right now?", ("Yes", "No"))
-    if answer == "Yes":
-        switch_page("anxiety_attack_protocol")
-    else:
-        answer_2 = st.radio("Are you anxious right now?", ("Yes", "No"))
-        if answer_2 == "Yes":
-            switch_page("anxiety_protocol")
+    # Überprüfe, ob der Benutzer eingeloggt ist
+    if 'username' in st.session_state:
+        username = st.session_state['username']
+        
+        # Lade die Benutzerdaten aus dem DataFrame
+        user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == username]
+        
+        if not user_data.empty:
+            st.write("Username:", username)
+            st.write("Name:", user_data['name'].iloc[0])
+            st.write("Birthday:", user_data['birthday'].iloc[0])
         else:
-            st.write("Reassess your feelings")
+            st.error("User data not found.")
+    else:
+        st.error("User not logged in.")
+        if st.button("Login/Register"):
+            st.switch_page("pages/1_login.py")
 
 def login_page():
     """ Login an existing user. """
@@ -48,7 +58,7 @@ def login_page():
             authenticate(username, password)
             # Wenn die Anmeldeinformationen korrekt sind, wird auf die Hauptseite umgeschaltet
             if st.session_state['authentication']:
-                st.switch_page("main_page")
+                st.switch_page("pages/2_profile.py")
 
 def main():
     init_github()
@@ -70,7 +80,7 @@ def main():
         if logout_button:
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
-            st.switch_page("main_page")
+            st.switch_page("pages/main.py")
 
 
 def register_page():
@@ -141,4 +151,4 @@ def init_credentials():
             st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
 
 if __name__ == "__main__":
-    show_main_page()
+    main_page()
