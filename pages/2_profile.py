@@ -56,9 +56,6 @@ def switch_page(page_name):
 def main():
     init_github()
     init_credentials()
-
-    # Add the logo to the sidebar
-    st.sidebar.image("Logo.jpeg", use_column_width=True)
     
     if 'authentication' not in st.session_state:
         st.session_state['authentication'] = False
@@ -70,12 +67,14 @@ def main():
         elif options == "Register":
             register_page()
     else:
-        logout_button = st.sidebar.button("Logout")
+        st.sidebar.write(f"Logged in as {st.session_state['username']}")
+        anxiety_attack_protocol()
+
+        logout_button = st.button("Logout")
         if logout_button:
             st.session_state['authentication'] = False
+            st.session_state.pop('username', None)
             st.experimental_rerun()
-        else:
-            profile_page()
 
 def login_page():
     """ Login an existing user. """
