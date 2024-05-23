@@ -48,7 +48,6 @@ def main_page():
         if st.button("Login/Register"):
             st.switch_page("pages/1_login.py")
 
-def main():
     init_github()
     init_credentials()
 
