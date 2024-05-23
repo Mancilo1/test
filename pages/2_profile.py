@@ -52,6 +52,7 @@ def main():
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
         main_page()
+        anxiety_assessment()
         logout_button = st.sidebar.button("Logout")
         if logout_button:
             st.session_state['authentication'] = False
