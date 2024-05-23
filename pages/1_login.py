@@ -30,21 +30,30 @@ def register_page():
     """ Register a new user. """
     st.title("Register")
     with st.form(key='register_form'):
-        new_username = st.text_input("New Username")
-        new_name = st.text_input("Name")
-        new_password = st.text_input("New Password", type="password")
+        st.write("Please fill in the following details:")
+        new_first_name = st.text_input("First Name")
+        new_last_name = st.text_input("Last Name")
+        new_username = st.text_input("Username")
+        new_birthday = st.date_input("Birthday")
+        new_password = st.text_input("Password", type="password")
         if st.form_submit_button("Register"):
-            hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())  # Hash the password
-            hashed_password_hex = binascii.hexlify(hashed_password).decode()  # Convert hash to hexadecimal string
-            
+            # Check if the username already exists
             if new_username in st.session_state.df_users['username'].values:
                 st.error("Username already exists. Please choose a different one.")
                 return
             else:
-                new_user = pd.DataFrame([[new_username, new_name, hashed_password_hex]], columns=DATA_COLUMNS)
+                # Hash the password
+                hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())
+                hashed_password_hex = binascii.hexlify(hashed_password).decode()
+                
+                # Create a new user DataFrame
+                new_user_data = [[new_username, f"{new_first_name} {new_last_name}", new_birthday, hashed_password_hex]]
+                new_user = pd.DataFrame(new_user_data, columns=DATA_COLUMNS)
+                
+                # Concatenate the new user DataFrame with the existing one
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
                 
-                # Writes the updated dataframe to GitHub data repository
+                # Write the updated dataframe to GitHub data repository
                 try:
                     st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
                     st.success("Registration successful! You can now log in.")
