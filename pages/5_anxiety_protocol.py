@@ -178,10 +178,6 @@ def anxiety_protocol():
     st.subheader("Saved Entries")
     st.write(st.session_state.anxiety_data)
 
-def main_page():
-    st.title("FeelNow")
-    anxiety_protocol()
-
 def main():
     init_github()
     init_credentials()
