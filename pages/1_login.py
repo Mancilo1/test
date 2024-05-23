@@ -12,9 +12,6 @@ DATA_COLUMNS = ['username', 'name', 'birthday', 'password']
 def show():
     st.title("Login/Register")
 
-def Login():
-    st.image("Logo.jpeg", width=500, align='center')
-
 def login_page():
     """ Login an existing user. """
     st.image("Logo.jpeg", width=600)
