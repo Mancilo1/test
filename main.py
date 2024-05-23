@@ -14,13 +14,13 @@ def main_sidebar():
     mainpage = st.sidebar.checkbox("Mainpage")
 
     if profile:
-        switch_page("profile")
+        switch_page("pages/2_profile.py")
     elif anxiety_attack:
-        switch_page("anxiety_attack")
+        switch_page("pages/anxiety_attack_protocol.py")
     elif anxiety:
-        switch_page("anxiety")
+        switch_page("pages/anxiety_protocol.py")
     elif mainpage:
-        switch_page("main")
+        switch_page("main.py")
 
 def main_page():
     main_sidebar()
