@@ -16,6 +16,8 @@ def Login():
 
 def login_page():
     """ Login an existing user. """
+    st.image("Logo.jpeg", width=600)
+    st.write("---")
     st.title("Login")
     with st.form(key='login_form'):
         username = st.text_input("Username")
