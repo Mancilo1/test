@@ -46,7 +46,7 @@ def main_page():
     else:
         st.error("User not logged in.")
         if st.button("Login/Register"):
-            st.switch_page("pages/1_login.py")
+            st.switch_page("pages/main.py")
 
     init_github()
     init_credentials()
