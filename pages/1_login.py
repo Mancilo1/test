@@ -130,7 +130,7 @@ def main():
         if logout_button:
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
-            st.switch_page("pages/main.py")
+            st.experimental_rerun()
 
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
