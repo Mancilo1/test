@@ -7,10 +7,14 @@ github = GithubContents(
     st.secrets["github"]["repo"],
     st.secrets["github"]["token"])
 
-def main_page():
-    # Sidebar configuration
+def load_sidebar():
+    """Load the sidebar with the logo and navigation options."""
     st.sidebar.image("Logo.jpeg", use_column_width=True)
+    st.sidebar.title("Navigation")
+    page_selection = st.sidebar.selectbox("Select a page", ["Main", "Login/Register"])
+    return page_selection
 
+def main_page():
     # Main page content
     if page_selection == "Main":
         st.image("Logo.jpeg", width=600)  # Adjusted logo size
