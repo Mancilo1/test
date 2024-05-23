@@ -53,7 +53,7 @@ def register_page():
                 hashed_password_hex = binascii.hexlify(hashed_password).decode()
                 
                 # Create a new user DataFrame
-                new_user_data = [[new_username, f"{new_first_name} {new_last_name}", new_birthday, hashed_password_hex]]
+                new_user_data = [[new_username, f"{new_first_name} {new_last_name}", hashed_password_hex]]
                 new_user = pd.DataFrame(new_user_data, columns=DATA_COLUMNS)
                 
                 # Concatenate the new user DataFrame with the existing one
