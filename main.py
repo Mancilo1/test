@@ -8,7 +8,7 @@ github = GithubContents(
 
 def main_sidebar():
     st.sidebar.title("Navigation")
-    page = st.sidebar.selectbox("Choose a page", ["Profile", "Anxiety Attack", "Anxiety", "Mainpage"])
+    page = st.sidebar.button("Choose a page", ["Profile", "Anxiety Attack", "Anxiety", "Mainpage"])
     if page == "Profile":
         st.sidebar.switch_page("page/2_profile.py")
     elif page == "Anxiety Attack":
