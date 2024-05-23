@@ -43,9 +43,14 @@ def register_page():
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
                 
                 # Writes the updated dataframe to GitHub data repository
-                st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
-                st.success("Registration successful! You can now log in.")
-                st.switch_page("pages/attack.py")
+                try:
+                    st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
+                    st.success("Registration successful! You can now log in.")
+                    st.switch_page("pages/attack.py")
+                except KeyError as e:
+                    st.error(f"KeyError: {e}")
+                except Exception as e:
+                    st.error(f"An unexpected error occurred: {e}")
 
 def authenticate(username, password):
     """
