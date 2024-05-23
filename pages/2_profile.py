@@ -36,15 +36,18 @@ def anxiety_assessment():
     st.subheader("Anxiety Assessment:")
     st.write("Do you feel like you're having an Anxiety Attack right now?")
     if st.button("Yes"):
-        st.switch_page("pages/4_anxiety_attack_protocol.py")
+        st.session_state.assessment_selection = "attack"
+        st.experimental_rerun()
     if st.button("No"):
-        anxiety_assessment2()
+        st.session_state.assessment_selection = "anxiety"
+        st.experimental_rerun()
 
 def anxiety_assessment2():
     st.write("Are you anxious right now?")
-    if st.button("Yes "):
-        st.switch_page("pages/5_anxiety_protocol.py")
-    elif st.button("No "):
+    if st.button("Yes"):
+        st.session_state.assessment_selection = "protocol"
+        st.experimental_rerun()
+    elif st.button("No"):
         st.markdown(gif_html, unsafe_allow_html=True)
         gif_url = "https://64.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
         gif_html = f'<img src="{gif_url}" width="400" height="300">'
@@ -124,26 +127,4 @@ def switch_page(page_name):
     st.experimental_rerun()
 
 def main():
-    init_github()
-    init_credentials()
-
-    if 'authentication' not in st.session_state:
-        st.session_state['authentication'] = False
-
-    if not st.session_state['authentication']:
-        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
-        if options == "Login":
-            login_page()
-        elif options == "Register":
-            register_page()
-    else:
-        st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        main_page()
-        anxiety_assessment()
-        if st.sidebar.button("Logout"):
-            st.session_state['authentication'] = False
-            st.session_state.pop('username', None)
-            st.switch_page("main.py")
-
-if __name__ == "__main__":
-    main()
+    init_github
