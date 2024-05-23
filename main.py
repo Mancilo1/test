@@ -23,8 +23,6 @@ def main_sidebar():
         switch_page("main.py")
 
 def main_page():
-    main_sidebar()
-    
     st.image("Logo.jpeg", width=600)
     st.subheader("Anxiety Tracker Journal")
     st.write("""
