@@ -80,6 +80,7 @@ def main():
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
             st.switch_page("pages/main.py")
+            st.experimental_rerun()
 
 
 def register_page():
