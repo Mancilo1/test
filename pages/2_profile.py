@@ -34,21 +34,18 @@ def main_page():
 
 def anxiety_assessment():
     st.subheader("Anxiety Assessment:")
-    
     st.write("Do you feel like you're having an Anxiety Attack right now?")
     if st.button("Yes"):
-        st.switch_page("pages/4_anxiety_attack_protocol.py")
-    if st.button("No"):
-        anxiety_assessment_2()
-
-def anxiety_assessment_2():
-    st.write("Are you anxious right now?")
-    if st.button("Yes "):
-        st.switch_page("pages/5_anxiety_protocol.py")
-    elif st.button("No "):
-        gif_url = "https://37.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
-        gif_html = f'<img src="{gif_url}" width="600">'
-        st.markdown(gif_html, unsafe_allow_html=True)
+        switch_page("pages/4_anxiety_attack_protocol.py")
+    else:
+        if st.button("No"):
+            st.write("Are you anxious right now?")
+            if st.button("Yes, I am anxious"):
+                switch_page("pages/5_anxiety_protocol.py")
+            elif st.button("No, I am not anxious"):
+                gif_url = "https://media.giphy.com/media/ASd0Ukj0y3qMM/giphy.gif"
+                gif_html = f'<img src="{gif_url}" width="400" height="300">'
+                st.markdown(gif_html, unsafe_allow_html=True)
 
 def init_github():
     """Initialize the GithubContents object."""
