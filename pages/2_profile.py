@@ -38,9 +38,9 @@ def main_page():
         user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == username]
         
         if not user_data.empty:
-            st.write("Username:    ", username)
-            st.write("Name:        ", user_data['name'].iloc[0])
-            st.write("Birthday:    ", user_data['birthday'].iloc[0])
+            st.write("Username:", username)
+            st.write("Name:", user_data['name'].iloc[0])
+            st.write("Birthday:", user_data['birthday'].iloc[0])
         else:
             st.error("User data not found.")
     else:
