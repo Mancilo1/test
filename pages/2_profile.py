@@ -8,7 +8,7 @@ from PIL import Image
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
-DATA_COLUMNS = ['username', 'name', 'birthday', 'password']
+DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'additional_data']
 
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
@@ -23,15 +23,35 @@ def main_page():
         user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == username]
         
         if not user_data.empty:
-            st.write("Username:", username)
-            name = st.text_input("Name:", value=user_data['name'].iloc[0])
-            birthday = st.date_input("Birthday:", value=pd.to_datetime(user_data['birthday'].iloc[0]))
+            if 'edit_profile' not in st.session_state:
+                st.session_state.edit_profile = False
 
-            if st.button("Save Changes"):
-                st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'name'] = name
-                st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'birthday'] = birthday
-                st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "updated user data")
-                st.success("Profile updated successfully!")
+            if st.session_state.edit_profile:
+                name = st.text_input("Name:", value=user_data['name'].iloc[0])
+                birthday = st.date_input("Birthday:", value=pd.to_datetime(user_data['birthday'].iloc[0]))
+                additional_data = st.text_area("Additional Data:", value=user_data.get('additional_data', '').iloc[0])
+
+                if st.button("Save Changes"):
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'name'] = name
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'birthday'] = birthday
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'additional_data'] = additional_data
+                    st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "updated user data")
+                    st.success("Profile updated successfully!")
+                    st.session_state.edit_profile = False
+                    st.experimental_rerun()
+                
+                if st.button("Cancel"):
+                    st.session_state.edit_profile = False
+                    st.experimental_rerun()
+            else:
+                st.write("Username:", username)
+                st.write("Name:", user_data['name'].iloc[0])
+                st.write("Birthday:", user_data['birthday'].iloc[0])
+                st.write("Additional Data:", user_data.get('additional_data', '').iloc[0])
+
+                if st.button("Edit Profile"):
+                    st.session_state.edit_profile = True
+                    st.experimental_rerun()
         else:
             st.error("User data not found.")
     else:
