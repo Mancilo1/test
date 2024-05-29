@@ -31,22 +31,30 @@ def main_page():
         st.error("User not logged in.")
         if st.button("Login/Register"):
             st.switch_page("pages/1_login.py")
-
+            
 def anxiety_assessment():
     st.subheader("Anxiety Assessment:")
     st.write("Do you feel like you're having an Anxiety Attack right now?")
-    
-    if st.button("Yes"):
-        st.experimental_rerun("pages/4_anxiety_attack_protocol.py")
-    elif st.button("No"):
-        further_assessment()
 
-def further_assessment():
-    st.write("Are you anxious right now?")
-    
-    if st.button("Yes "):
-        st.experimental_rerun("pages/5_anxiety_protocol.py")
-    elif st.button("No "):
+    if "step" not in st.session_state:
+        st.session_state.step = 1
+
+    if st.session_state.step == 1:
+        if st.button("Yes"):
+            st.experimental_rerun("pages/4_anxiety_attack_protocol.py")
+        if st.button("No"):
+            st.session_state.step = 2
+            st.experimental_rerun()
+
+    if st.session_state.step == 2:
+        st.write("Are you anxious right now?")
+        if st.button("Yes "):
+            st.experimental_rerun("pages/5_anxiety_protocol.py")
+        if st.button("No "):
+            st.session_state.step = 3
+            st.experimental_rerun()
+
+    if st.session_state.step == 3:
         show_gif()
 
 def show_gif():
