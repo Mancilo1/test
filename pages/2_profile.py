@@ -57,7 +57,7 @@ def anxiety_assessment():
     if st.session_state.step == 3:
         show_gif()
         if st.button("Reasses your feelings"):
-            st.experimental_rerun()
+            st.rerun("2_profile.py")
         
 
 def show_gif():
