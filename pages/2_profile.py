@@ -1,108 +1,37 @@
 import streamlit as st
+import binascii
+import bcrypt
+import time
 import pandas as pd
-from io import BytesIO
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
+from github_contents import GithubContents
+from PIL import Image
+
+# Constants
+DATA_FILE = "MyLoginTable.csv"
+DATA_COLUMNS = ['username', 'name', 'password']
 
 def main_page():
     st.image("Logo.jpeg", width=600)
     st.title("Your Anxiety Tracker Journal")
+    st.subheader("Profile")
     
-    if 'username' not in st.session_state:
+    if 'username' in st.session_state:
+        username = st.session_state['username']
+        
+        # Load user data
+        user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == username]
+        
+        if not user_data.empty:
+            st.write("Username:", username)
+            st.write("Name:", user_data['name'].iloc[0])
+            st.write("Birthday:", user_data['birthday'].iloc[0])
+        else:
+            st.error("User data not found.")
+    else:
         st.error("User not logged in.")
         if st.button("Login/Register"):
             st.switch_page("pages/1_login.py")
-        return
-
-    anxiety_assessment()  # Call assessment first
-    
-    username = st.session_state['username']
-    
-    # Display user profile information
-    st.subheader("Profile")
-    user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == username]
-    if not user_data.empty:
-        st.write("Username:", username)
-        st.write("Name:", user_data['name'].iloc[0])
-        st.write("Birthday:", user_data['birthday'].iloc[0])
-    else:
-        st.error("User data not found.")
-    
-    # Display saved entries
-    st.subheader("Anxiety Attack Protocol Entries")
-    display_saved_entries(f"{username}_anxiety_attack_protocol.csv")
-    
-    st.subheader("Anxiety Protocol Entries")
-    display_saved_entries(f"{username}_anxiety_protocol.csv")
-
-def display_saved_entries(data_file):
-    if 'github' not in st.session_state:
-        init_github()
-        
-    if st.session_state.github.file_exists(data_file):
-        data = st.session_state.github.read_df(data_file)
-        if data.empty:
-            st.write("No entries found.")
-        else:
-            st.write("Entries loaded successfully!")
-            st.dataframe(data)
-
-            # Download entries as CSV
-            buffer = BytesIO()
-            data.to_csv(buffer, index=False)
-            buffer.seek(0)
-            st.download_button(
-                label="Download Entries as CSV",
-                data=buffer,
-                file_name=data_file,
-                mime="text/csv",
-            )
-
-            # Send entries via email
-            email = st.text_input(f"Email to send {data_file}", key=f"email_{data_file}")
-            if st.button(f"Send {data_file} via Email"):
-                if not email:
-                    st.error("Please enter an email address.")
-                else:
-                    send_email(email, data, data_file)
-                    st.success(f"Entries sent to {email}")
-    else:
-        st.write("No entries found.")
-
-def send_email(to_email, dataframe, filename):
-    from_email = st.secrets["email"]["username"]
-    from_password = st.secrets["email"]["password"]
-    subject = "Your Saved Entries"
-
-    # Create email message
-    msg = MIMEMultipart()
-    msg['From'] = from_email
-    msg['To'] = to_email
-    msg['Subject'] = subject
-
-    body = "Please find attached your saved entries."
-    msg.attach(MIMEText(body, 'plain'))
-
-    # Attach CSV file
-    attachment = BytesIO()
-    dataframe.to_csv(attachment, index=False)
-    attachment.seek(0)
-    part = MIMEBase('application', 'octet-stream')
-    part.set_payload(attachment.read())
-    encoders.encode_base64(part)
-    part.add_header('Content-Disposition', f"attachment; filename={filename}")
-    msg.attach(part)
-
-    # Send email
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(from_email, from_password)
-    server.sendmail(from_email, to_email, msg.as_string())
-    server.quit()
-
+            
 def anxiety_assessment():
     st.subheader("Anxiety Assessment:")
     
@@ -144,7 +73,7 @@ def init_github():
             st.secrets["github"]["repo"],
             st.secrets["github"]["token"])
         print("github initialized")
-
+    
 def init_credentials():
     """Initialize or load the dataframe."""
     if 'df_users' not in st.session_state:
@@ -226,6 +155,7 @@ def main():
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
         main_page()
+        anxiety_assessment()
         if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
