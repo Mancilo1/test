@@ -1,16 +1,36 @@
 import streamlit as st
+import binascii
+import bcrypt
+import time
+import pandas as pd
 from github_contents import GithubContents
 from deep_translator import GoogleTranslator  # Import the GoogleTranslator class from the deep_translator library
-import time 
+from PIL import Image
 
-github = GithubContents(
-    st.secrets["github"]["owner"],
-    st.secrets["github"]["repo"],
-    st.secrets["github"]["token"])
+# Initialize session state if not already done
+if 'language' not in st.session_state:
+    st.session_state.language = "English"  # Default language
+
+# Initialize the GithubContents object
+if 'github' not in st.session_state:
+    st.session_state.github = GithubContents(
+        st.secrets["github"]["owner"],
+        st.secrets["github"]["repo"],
+        st.secrets["github"]["token"])
+    print("github initialized")
+
+# Initialize user credentials dataframe if not already done
+if 'df_users' not in st.session_state:
+    if st.session_state.github.file_exists("MyLoginTable.csv"):
+        st.session_state.df_users = st.session_state.github.read_df("MyLoginTable.csv")
+    else:
+        st.session_state.df_users = pd.DataFrame(columns=['username', 'name', 'password'])
 
 def main_page():
+    # Display the logo image with responsive width
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
+
     languages = {
         "English": "en",
         "German": "de",
@@ -45,10 +65,6 @@ def main_page():
     with col2:
         if st.button("Login/Register"):
             st.switch_page("pages/1_login.py")
-
-# Initialize session state if not already done
-if 'language' not in st.session_state:
-    st.session_state.language = "English"  # Default language
 
 def translate_text(text, target_language):
     translator = GoogleTranslator(target=target_language)  # Initialize the GoogleTranslator object
