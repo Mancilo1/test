@@ -11,7 +11,8 @@ DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'password']
 
 def main_page():
-    st.image("Logo.jpeg", width=600)
+    logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
+    st.image(logo_path, use_column_width=True)
     st.title("Your Anxiety Tracker Journal")
     st.subheader("Profile")
     
