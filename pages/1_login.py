@@ -120,7 +120,8 @@ def main():
         elif options == "Register":
             register_page()
     else:
-        st.image("Logo.jpeg", width=600)
+        logo_path = "Logo.jpeg"  
+        st.image(logo_path, use_column_width=True)
         st.write("---")
         st.write("### You are already logged in")
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
