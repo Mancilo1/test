@@ -5,6 +5,12 @@ import time
 import pandas as pd
 from github_contents import GithubContents
 from PIL import Image
+from io import BytesIO
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
@@ -31,6 +37,84 @@ def main_page():
         st.error("User not logged in.")
         if st.button("Login/Register"):
             st.switch_page("pages/1_login.py")
+        return
+
+    # Display saved entries with editing functionality
+    st.subheader("Saved Entries")
+    data_file = f"{username}_data.csv"
+    
+    if 'data' not in st.session_state:
+        if st.session_state.github.file_exists(data_file):
+            st.session_state.data = st.session_state.github.read_df(data_file)
+        else:
+            st.session_state.data = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
+    
+    if st.session_state.data.empty:
+        st.write("No entries found.")
+    else:
+        edited_data = st.session_state.data.copy()
+        for i in range(len(edited_data)):
+            with st.expander(f"Entry {i+1}"):
+                for col in edited_data.columns:
+                    edited_data.at[i, col] = st.text_area(f"{col}", value=str(edited_data.at[i, col]), key=f"{col}_{i}")
+
+        if st.button("Save Changes"):
+            st.session_state.data = edited_data
+            st.session_state.github.write_df(data_file, st.session_state.data, "updated entries")
+            st.success("Entries updated successfully!")
+
+    # Download entries as CSV
+    if st.button("Download Entries as CSV"):
+        buffer = BytesIO()
+        st.session_state.data.to_csv(buffer, index=False)
+        buffer.seek(0)
+        st.download_button(
+            label="Download CSV",
+            data=buffer,
+            file_name="entries.csv",
+            mime="text/csv",
+        )
+
+    # Send entries via email
+    st.subheader("Send Entries via Email")
+    email = st.text_input("Email")
+    if st.button("Send Email"):
+        if not email:
+            st.error("Please enter an email address.")
+        else:
+            send_email(email, st.session_state.data)
+            st.success(f"Entries sent to {email}")
+
+def send_email(to_email, dataframe):
+    from_email = st.secrets["email"]["username"]
+    from_password = st.secrets["email"]["password"]
+    subject = "Your Saved Entries"
+
+    # Create email message
+    msg = MIMEMultipart()
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    body = "Please find attached your saved entries."
+    msg.attach(MIMEText(body, 'plain'))
+
+    # Attach CSV file
+    attachment = BytesIO()
+    dataframe.to_csv(attachment, index=False)
+    attachment.seek(0)
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', f"attachment; filename=entries.csv")
+    msg.attach(part)
+
+    # Send email
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(from_email, from_password)
+    server.sendmail(from_email, to_email, msg.as_string())
+    server.quit()
             
 def anxiety_assessment():
     st.subheader("Anxiety Assessment:")
