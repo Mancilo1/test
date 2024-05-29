@@ -48,7 +48,7 @@ def anxiety_assessment2():
         gif_url = "https://64.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
         gif_html = f'<img src="{gif_url}" width="400" height="300">'
         st.markdown(gif_html, unsafe_allow_html=True)
-        if st.button("Reassessment"):
+        if st.button("Reasses your Feelings💫"):
             st.experimental_rerun()
         
 
