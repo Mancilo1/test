@@ -37,13 +37,16 @@ def anxiety_assessment():
     st.write("Do you feel like you're having an Anxiety Attack right now?")
     if st.button("Yes"):
         st.session_state.assessment_step = "anxiety_attack_protocol"
+        st.experimental_rerun()
     elif st.button("No"):
         st.session_state.assessment_step = "anxiety_assessment2"
+        st.experimental_rerun()
 
 def anxiety_assessment2():
     st.write("Are you anxious right now?")
     if st.button("Yes"):
         st.session_state.assessment_step = "anxiety_protocol"
+        st.experimental_rerun()
     elif st.button("No"):
         gif_url = "https://64.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
         gif_html = f'<img src="{gif_url}" width="400" height="300">'
@@ -138,19 +141,12 @@ def main():
         st.session_state.assessment_step = "first_assessment"
 
     if not st.session_state['authentication']:
-        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
-        if options == "Login":
+        if st.session_state.current_page == "login":
             login_page()
-        elif options == "Register":
+        elif st.session_state.current_page == "register":
             register_page()
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        page = st.sidebar.selectbox("Navigate to", ["Profile", "Assessment"])
-        if page == "Profile":
-            set_page("profile")
-        elif page == "Assessment":
-            set_page("assessment")
-
         if st.session_state.current_page == "profile":
             main_page()
         elif st.session_state.current_page == "assessment":
@@ -162,6 +158,11 @@ def main():
                 st.switch_page("pages/4_anxiety_attack_protocol.py")
             elif st.session_state.assessment_step == "anxiety_protocol":
                 st.switch_page("pages/5_anxiety_protocol.py")
+
+        if st.sidebar.button("Go to Profile"):
+            set_page("profile")
+        if st.sidebar.button("Start Assessment"):
+            set_page("assessment")
 
         if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
