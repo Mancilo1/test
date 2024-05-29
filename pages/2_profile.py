@@ -118,9 +118,7 @@ def authenticate(username, password):
 
 # Page switching function
 def switch_page(page_name):
-    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
     st.experimental_set_query_params(page=page_name)
-    time.sleep(3)
     st.experimental_rerun()
 
 def main():
@@ -147,6 +145,10 @@ def main():
             anxiety_assessment()
         elif st.session_state.assessment_step == "anxiety_assessment2":
             anxiety_assessment2()
+        elif st.session_state.assessment_step == "anxiety_attack_protocol":
+            st.write("Navigating to Anxiety Attack Protocol page...")  # Replace with actual page navigation logic
+        elif st.session_state.assessment_step == "anxiety_protocol":
+            st.write("Navigating to Anxiety Protocol page...")  # Replace with actual page navigation logic
 
         if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
