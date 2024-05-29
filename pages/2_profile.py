@@ -42,15 +42,14 @@ def anxiety_assessment():
 
 def anxiety_assessment2():
     st.write("Are you anxious right now?")
-    if st.button("Yes "):
+    if st.button("Yes"):
         st.session_state.assessment_step = "anxiety_protocol"
-    elif st.button("No "):
+    elif st.button("No"):
         gif_url = "https://64.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
         gif_html = f'<img src="{gif_url}" width="400" height="300">'
         st.markdown(gif_html, unsafe_allow_html=True)
-        if st.button("Reasses your Feelings💫"):
+        if st.button("Reassess your Feelings💫"):
             st.experimental_rerun()
-        
 
 def init_github():
     """Initialize the GithubContents object."""
@@ -121,9 +120,7 @@ def authenticate(username, password):
 
 # Page switching function
 def switch_page(page_name):
-    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
     st.experimental_set_query_params(page=page_name)
-    time.sleep(3)
     st.experimental_rerun()
 
 def main():
@@ -158,6 +155,7 @@ def main():
         if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
+            st.session_state.assessment_step = "first_assessment"  # Reset assessment step
             switch_page("main.py")
 
 if __name__ == "__main__":
