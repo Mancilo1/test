@@ -147,10 +147,6 @@ def main():
             anxiety_assessment()
         elif st.session_state.assessment_step == "anxiety_assessment2":
             anxiety_assessment2()
-        elif st.session_state.assessment_step == "anxiety_attack_protocol":
-            st.switch_page("pages/4_anxiety_attack_protocol.py")  # Replace with actual page navigation logic
-        elif st.session_state.assessment_step == "anxiety_protocol":
-            st.switch_page("pages/5_anxiety_protocol.py") # Replace with actual page navigation logic
 
         if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
