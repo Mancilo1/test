@@ -23,7 +23,8 @@ def main_sidebar():
         switch_page("main.py")
 
 def main_page():
-    st.image("Logo.jpeg", width=600)
+    logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
+    st.image(logo_path, use_column_width=True)
     st.subheader("Anxiety Tracker Journal")
     st.write("""
         Welcome to FeelNow, your anxiety attack journal.
