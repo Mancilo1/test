@@ -27,15 +27,19 @@ def main_page():
                 st.session_state.edit_profile = False
 
             if st.session_state.edit_profile:
-                name = st.text_input("Name:", value=user_data['name'].iloc[0])
-                birthday = st.date_input("Birthday:", value=pd.to_datetime(user_data['birthday'].iloc[0]))
-                phone_number = st.text_input("Phone Number:", value=user_data['phone_number'].iloc[0] if 'phone_number' in user_data.columns else '')
-                address = st.text_area("Address:", value=user_data['address'].iloc[0] if 'address' in user_data.columns else '')
-                occupation = st.text_input("Occupation:", value=user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
-                emergency_contact_name = st.text_input("Emergency Contact Name:", value=user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
-                emergency_contact_number = st.text_input("Emergency Contact Number:", value=user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
-                email = st.text_input("Email:", value=user_data['email'].iloc[0] if 'email' in user_data.columns else '')
-                doctor_email = st.text_input("Doctor's Email:", value=user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
+                col1, col2 = st.columns(2)
+                with col1:
+                    name = st.text_input("Name:", value=user_data['name'].iloc[0])
+                    phone_number = st.text_input("Phone Number:", value=user_data['phone_number'].iloc[0] if 'phone_number' in user_data.columns else '')
+                    occupation = st.text_input("Occupation:", value=user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
+                    emergency_contact_name = st.text_input("Emergency Contact Name:", value=user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
+                    doctor_email = st.text_input("Doctor's Email:", value=user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
+
+                with col2:
+                    birthday = st.date_input("Birthday:", value=pd.to_datetime(user_data['birthday'].iloc[0]))
+                    address = st.text_area("Address:", value=user_data['address'].iloc[0] if 'address' in user_data.columns else '')
+                    email = st.text_input("Email:", value=user_data['email'].iloc[0] if 'email' in user_data.columns else '')
+                    emergency_contact_number = st.text_input("Emergency Contact Number:", value=user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
 
                 if st.button("Save Changes"):
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'name'] = name
@@ -56,16 +60,19 @@ def main_page():
                     st.session_state.edit_profile = False
                     st.experimental_rerun()
             else:
-                st.write("Username:", username)
-                st.write("Name:", user_data['name'].iloc[0])
-                st.write("Birthday:", user_data['birthday'].iloc[0])
-                st.write("Phone Number:", user_data['phone_number'].iloc[0] if 'phone_number' in user_data.columns else '')
-                st.write("Address:", user_data['address'].iloc[0] if 'address' in user_data.columns else '')
-                st.write("Occupation:", user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
-                st.write("Emergency Contact Name:", user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
-                st.write("Emergency Contact Number:", user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
-                st.write("Email:", user_data['email'].iloc[0] if 'email' in user_data.columns else '')
-                st.write("Doctor's Email:", user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.write("Name:", user_data['name'].iloc[0])
+                    st.write("Phone Number:", user_data['phone_number'].iloc[0] if 'phone_number' in user_data.columns else '')
+                    st.write("Occupation:", user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
+                    st.write("Emergency Contact Name:", user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
+                    st.write("Doctor's Email:", user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
+
+                with col2:
+                    st.write("Birthday:", user_data['birthday'].iloc[0])
+                    st.write("Address:", user_data['address'].iloc[0] if 'address' in user_data.columns else '')
+                    st.write("Email:", user_data['email'].iloc[0] if 'email' in user_data.columns else '')
+                    st.write("Emergency Contact Number:", user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
 
                 if st.button("Edit Profile"):
                     st.session_state.edit_profile = True
@@ -164,13 +171,6 @@ def register_page():
         new_username = st.text_input("New Username")
         new_name = st.text_input("Name")
         new_birthday = st.date_input("Birthday", min_value=datetime.date(1900, 1, 1))
-        new_phone_number = st.text_input("Phone Number")
-        new_address = st.text_area("Address")
-        new_occupation = st.text_input("Occupation")
-        new_emergency_contact_name = st.text_input("Emergency Contact Name")
-        new_emergency_contact_number = st.text_input("Emergency Contact Number")
-        new_email = st.text_input("Email")
-        new_doctor_email = st.text_input("Doctor's Email")
         new_password = st.text_input("New Password", type="password")
         if st.form_submit_button("Register"):
             hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())
@@ -179,7 +179,7 @@ def register_page():
             if new_username in st.session_state.df_users['username'].values:
                 st.error("Username already exists. Please choose a different one.")
             else:
-                new_user = pd.DataFrame([[new_username, new_name, new_birthday, hashed_password_hex, new_phone_number, new_address, new_occupation, new_emergency_contact_name, new_emergency_contact_number, new_email, new_doctor_email]], columns=DATA_COLUMNS)
+                new_user = pd.DataFrame([[new_username, new_name, new_birthday, hashed_password_hex, '', '', '', '', '', '', '']], columns=DATA_COLUMNS)
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
                 
                 st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
