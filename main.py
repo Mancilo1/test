@@ -16,9 +16,9 @@ def main_sidebar():
     if profile:
         switch_page("pages/2_profile.py")
     elif anxiety_attack:
-        switch_page("pages/anxiety_attack_protocol.py")
+        switch_page("pages/4_anxiety_attack_protocol.py")
     elif anxiety:
-        switch_page("pages/anxiety_protocol.py")
+        switch_page("pages/5_anxiety_protocol.py")
     elif mainpage:
         switch_page("main.py")
 
