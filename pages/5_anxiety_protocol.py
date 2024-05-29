@@ -144,6 +144,7 @@ def add_time_severity():
                 'time': current_time,
                 'severity': severity
             }
+            st.switch_page("pages/2_profile.py")
             st.session_state.time_severity_entries.append(new_entry)
             st.success(f"Added entry: Time: {current_time}, Severity: {severity}")
 
