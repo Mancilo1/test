@@ -42,12 +42,15 @@ def display_saved_entries(data_file):
     if 'github' not in st.session_state:
         init_github()
         
+    st.write(f"Checking for data file: {data_file}")
     if st.session_state.github.file_exists(data_file):
+        st.write(f"Loading data from {data_file}")
         data = st.session_state.github.read_df(data_file)
         if data.empty:
             st.write("No entries found.")
         else:
-            st.write(data)
+            st.write("Entries loaded successfully!")
+            st.dataframe(data)
 
             # Download entries as CSV
             buffer = BytesIO()
