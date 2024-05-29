@@ -11,8 +11,6 @@ github = GithubContents(
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
-    st.subheader("Anxiety Tracker Journal")
-    
     languages = {
         "English": "en",
         "German": "de",
@@ -25,6 +23,7 @@ def main_page():
     selected_language = st.selectbox("Choose your language", list(languages.keys()), index=list(languages.keys()).index(st.session_state.language))
     st.session_state.language = selected_language
     target_language = languages[selected_language]
+    st.subheader("Anxiety Tracker Journal")
 
     original_text = (
         "Welcome to FeelNow, your anxiety attack journal. "
