@@ -20,7 +20,7 @@ def main_page():
     }
 
     # Language selection
-    selected_language = st.selectbox("Choose your language", list(languages.keys()), index=list(languages.keys()).index(st.session_state.language))
+    selected_language = st.sidebar.selectbox("Choose your language", list(languages.keys()), index=list(languages.keys()).index(st.session_state.language))
     st.session_state.language = selected_language
     target_language = languages[selected_language]
     st.subheader("Anxiety Tracker Journal")
