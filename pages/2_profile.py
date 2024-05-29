@@ -34,12 +34,12 @@ def main_page():
             
 def anxiety_assessment():
     st.subheader("Anxiety Assessment:")
-    st.write("Do you feel like you're having an Anxiety Attack right now?")
-
+    
     if "step" not in st.session_state:
         st.session_state.step = 1
 
     if st.session_state.step == 1:
+        st.write("Do you feel like you're having an Anxiety Attack right now?")
         if st.button("Yes"):
             st.switch_page("pages/4_anxiety_attack_protocol.py")
         if st.button("No"):
