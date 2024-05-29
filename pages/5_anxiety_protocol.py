@@ -1,19 +1,13 @@
 import streamlit as st
-import bcrypt
-import binascii
-import pytz
-import datetime
 import pandas as pd
-from github_contents import GithubContents
+import datetime
+import pytz
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'password']
 
 def main():
-    init_github()
-    init_credentials()
-
     if 'authentication' not in st.session_state:
         st.session_state['authentication'] = False
 
@@ -23,16 +17,13 @@ def main():
             login_page()
         elif options == "Register":
             register_page()
-            
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
         anxiety_protocol()
 
-        logout_button = st.sidebar.button("Logout")
-        if logout_button:
+        if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
-            st.switch_page("main.py")
             st.experimental_rerun()
 
 def anxiety_protocol():
@@ -114,7 +105,6 @@ def anxiety_protocol():
             'Symptoms': ", ".join(symptoms_list),
             'Help': help_response
         }
-        st.switch_page("pages/2_profile.py")
         new_entry_df = pd.DataFrame([new_entry])
 
         st.session_state.anxiety_data = pd.concat([st.session_state.anxiety_data, new_entry_df], ignore_index=True)
@@ -144,30 +134,12 @@ def add_time_severity():
                 'time': current_time,
                 'severity': severity
             }
-            st.switch_page("pages/2_profile.py")
             st.session_state.time_severity_entries.append(new_entry)
             st.success(f"Added entry: Time: {current_time}, Severity: {severity}")
 
     # Display all time-severity entries
     for entry in st.session_state.time_severity_entries:
         st.write(f"Time: {entry['time']}, Severity: {entry['severity']}")
-
-def init_github():
-    """Initialize the GithubContents object."""
-    if 'github' not in st.session_state:
-        st.session_state.github = GithubContents(
-            st.secrets["github"]["owner"],
-            st.secrets["github"]["repo"],
-            st.secrets["github"]["token"])
-        print("github initialized")
-    
-def init_credentials():
-    """Initialize or load the dataframe."""
-    if 'df_users' not in st.session_state:
-        if st.session_state.github.file_exists(DATA_FILE):
-            st.session_state.df_users = st.session_state.github.read_df(DATA_FILE)
-        else:
-            st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
 
 def login_page():
     """Login an existing user."""
@@ -226,12 +198,6 @@ def authenticate(username, password):
             st.error('Incorrect password')
     else:
         st.error('Username not found')
-
-def switch_page(page_name):
-    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
-    time.sleep(3)
-    st.experimental_set_query_params(page=page_name)
-    st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
