@@ -38,7 +38,7 @@ def anxiety_assessment():
     if st.button("Yes"):
         st.experimental_rerun("pages/4_anxiety_attack_protocol.py")
     if st.button("No"):
-        anxiety_assessment2()
+        set_step(anxiety_assessment2)
 
 def anxiety_assessment2():
     st.write("Are you anxious right now?")
