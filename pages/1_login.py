@@ -69,8 +69,8 @@ def register_page():
                     st.error(f"An unexpected error occurred: {e}")
 
 def login_page():
-    """ Login an existing user. """
-    st.image("Logo.jpeg", width=600)
+    logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
+    st.image(logo_path, use_column_width=True)
     st.write("---")
     st.title("Login")
     with st.form(key='login_form'):
