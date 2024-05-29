@@ -52,8 +52,7 @@ def anxiety_assessment2():
         gif_html = f'<img src="{gif_url}" width="400" height="300">'
         st.markdown(gif_html, unsafe_allow_html=True)
         if st.button("Reassess your Feelings💫"):
-            st.session_state.assessment_step = "profile"
-            st.experimental_rerun()
+            st.experimental_rerun("pages/2_profile.py")
 
 def init_github():
     """Initialize the GithubContents object."""
