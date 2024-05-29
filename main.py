@@ -7,7 +7,11 @@ github = GithubContents(
     st.secrets["github"]["token"])
 
 def main_sidebar():
-    st.image("Logo.jpeg")
+    st.sidebar.title("Navigation")
+    profile = st.sidebar.checkbox("Profile")
+    anxiety_attack = st.sidebar.checkbox("Anxiety Attack")
+    anxiety = st.sidebar.checkbox("Anxiety")
+    mainpage = st.sidebar.checkbox("Mainpage")
 
     if profile:
         switch_page("pages/2_profile.py")
@@ -19,7 +23,6 @@ def main_sidebar():
         switch_page("main.py")
 
 def main_page():
-    main_sidebar()
     st.image("Logo.jpeg", width=600)
     st.subheader("Anxiety Tracker Journal")
     st.write("""
