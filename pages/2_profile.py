@@ -15,7 +15,7 @@ def main_page():
     st.image(logo_path, use_column_width=True)
     st.title("Your Anxiety Tracker Journal")
     st.subheader("Profile")
-    
+
     if 'username' in st.session_state:
         username = st.session_state['username']
         
@@ -24,8 +24,14 @@ def main_page():
         
         if not user_data.empty:
             st.write("Username:", username)
-            st.write("Name:", user_data['name'].iloc[0])
-            st.write("Birthday:", user_data['birthday'].iloc[0])
+            name = st.text_input("Name:", value=user_data['name'].iloc[0])
+            birthday = st.date_input("Birthday:", value=pd.to_datetime(user_data['birthday'].iloc[0]))
+
+            if st.button("Save Changes"):
+                st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'name'] = name
+                st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'birthday'] = birthday
+                st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "updated user data")
+                st.success("Profile updated successfully!")
         else:
             st.error("User data not found.")
     else:
@@ -65,6 +71,25 @@ def show_gif():
     gif_url = "https://64.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
     gif_html = f'<img src="{gif_url}" width="400" height="300">'
     st.markdown(gif_html, unsafe_allow_html=True)
+
+def show_saved_entries():
+    st.subheader("Saved Entries from Anxiety Attack Protocol")
+    username = st.session_state['username']
+    data_file_attack = f"{username}_data.csv"
+    data_file_anxiety = f"{username}_anxiety_protocol_data.csv"
+    
+    if st.session_state.github.file_exists(data_file_attack):
+        attack_data = st.session_state.github.read_df(data_file_attack)
+        st.write(attack_data)
+    else:
+        st.write("No saved entries from Anxiety Attack Protocol.")
+    
+    st.subheader("Saved Entries from Anxiety Protocol")
+    if st.session_state.github.file_exists(data_file_anxiety):
+        anxiety_data = st.session_state.github.read_df(data_file_anxiety)
+        st.write(anxiety_data)
+    else:
+        st.write("No saved entries from Anxiety Protocol.")
 
 def init_github():
     """Initialize the GithubContents object."""
@@ -141,7 +166,7 @@ def switch_page(page_name):
     st.experimental_rerun()
 
 def main():
-    init_github()
+   init_github()
     init_credentials()
 
     if 'authentication' not in st.session_state:
@@ -157,6 +182,7 @@ def main():
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
         main_page()
         anxiety_assessment()
+        show_saved_entries()
         if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
