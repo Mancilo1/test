@@ -41,7 +41,7 @@ def anxiety_assessment():
 
     if st.session_state.step == 1:
         if st.button("Yes"):
-            st.experimental_rerun("pages/4_anxiety_attack_protocol.py")
+            st.switch_page("pages/4_anxiety_attack_protocol.py")
         if st.button("No"):
             st.session_state.step = 2
             st.experimental_rerun()
@@ -49,7 +49,7 @@ def anxiety_assessment():
     if st.session_state.step == 2:
         st.write("Are you anxious right now?")
         if st.button("Yes "):
-            st.experimental_rerun("pages/5_anxiety_protocol.py")
+            st.switch_page("pages/5_anxiety_protocol.py")
         if st.button("No "):
             st.session_state.step = 3
             st.experimental_rerun()
