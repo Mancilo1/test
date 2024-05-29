@@ -65,11 +65,6 @@ def show_gif():
     gif_html = f'<img src="{gif_url}" width="400" height="300">'
     st.markdown(gif_html, unsafe_allow_html=True)
 
-def set_page(page_name):
-    """Set the current page and trigger rerun."""
-    st.session_state.current_page = page_name
-    st.experimental_rerun()
-
 def init_github():
     """Initialize the GithubContents object."""
     if 'github' not in st.session_state:
