@@ -7,6 +7,7 @@ github = GithubContents(
     st.secrets["github"]["token"])
 
 def main_sidebar():
+    st.image("Logo.jpeg")
     st.sidebar.title("Navigation")
     profile = st.sidebar.checkbox("Profile")
     anxiety_attack = st.sidebar.checkbox("Anxiety Attack")
