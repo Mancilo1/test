@@ -8,7 +8,7 @@ from PIL import Image
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
-DATA_COLUMNS = ['username', 'name', 'password']
+DATA_COLUMNS = ['username', 'name', 'birthday', 'password']
 
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
@@ -38,7 +38,7 @@ def main_page():
         st.error("User not logged in.")
         if st.button("Login/Register"):
             st.switch_page("pages/1_login.py")
-            
+
 def anxiety_assessment():
     st.subheader("Anxiety Assessment:")
     
@@ -55,15 +55,15 @@ def anxiety_assessment():
 
     if st.session_state.step == 2:
         st.write("Are you anxious right now?")
-        if st.button("Yes "):
+        if st.button("Yes"):
             st.switch_page("pages/5_anxiety_protocol.py")
-        if st.button("No "):
+        if st.button("No"):
             st.session_state.step = 3
             st.experimental_rerun()
 
     if st.session_state.step == 3:
         show_gif()
-        if st.button("Reasses your feelings"):
+        if st.button("Reassess your feelings"):
             st.session_state.step = 1
             st.experimental_rerun()
 
@@ -158,7 +158,6 @@ def authenticate(username, password):
     else:
         st.error('Username not found')
 
-# Page switching function
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
     st.experimental_set_query_params(page=page_name)
@@ -166,7 +165,7 @@ def switch_page(page_name):
     st.experimental_rerun()
 
 def main():
-   init_github()
+    init_github()
     init_credentials()
 
     if 'authentication' not in st.session_state:
