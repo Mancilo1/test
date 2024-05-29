@@ -44,9 +44,9 @@ def anxiety_assessment():
 def further_assessment():
     st.write("Are you anxious right now?")
     
-    if st.button("Yes"):
+    if st.button("Yes "):
         st.experimental_rerun("pages/5_anxiety_protocol.py")
-    elif st.button("No"):
+    elif st.button("No "):
         show_gif()
 
 def show_gif():
