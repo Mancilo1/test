@@ -146,7 +146,11 @@ def main():
         elif st.session_state.current_page == "register":
             register_page()
     else:
-        st.sidebar.write(f"Logged in as {st.session_state['username']}")
+        if st.sidebar.button("Profile"):
+            set_page("profile")
+        if st.sidebar.button("Start Assessment"):
+            set_page("assessment")
+
         if st.session_state.current_page == "profile":
             main_page()
         elif st.session_state.current_page == "assessment":
@@ -158,11 +162,6 @@ def main():
                 st.switch_page("pages/4_anxiety_attack_protocol.py")
             elif st.session_state.assessment_step == "anxiety_protocol":
                 st.switch_page("pages/5_anxiety_protocol.py")
-
-        if st.sidebar.button("Go to Profile"):
-            set_page("profile")
-        if st.sidebar.button("Start Assessment"):
-            set_page("assessment")
 
         if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
