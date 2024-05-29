@@ -8,7 +8,7 @@ from PIL import Image
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
-DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'address', 'occupation', 'emergency_contact', 'email', 'doctor_email']
+DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'address', 'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email']
 
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
@@ -32,7 +32,8 @@ def main_page():
                 phone_number = st.text_input("Phone Number:", value=user_data['phone_number'].iloc[0] if 'phone_number' in user_data.columns else '')
                 address = st.text_area("Address:", value=user_data['address'].iloc[0] if 'address' in user_data.columns else '')
                 occupation = st.text_input("Occupation:", value=user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
-                emergency_contact = st.text_input("Emergency Contact:", value=user_data['emergency_contact'].iloc[0] if 'emergency_contact' in user_data.columns else '')
+                emergency_contact_name = st.text_input("Emergency Contact Name:", value=user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
+                emergency_contact_number = st.text_input("Emergency Contact Number:", value=user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
                 email = st.text_input("Email:", value=user_data['email'].iloc[0] if 'email' in user_data.columns else '')
                 doctor_email = st.text_input("Doctor's Email:", value=user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
 
@@ -42,7 +43,8 @@ def main_page():
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'phone_number'] = phone_number
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'address'] = address
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'occupation'] = occupation
-                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact'] = emergency_contact
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_name'] = emergency_contact_name
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_number'] = emergency_contact_number
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'email'] = email
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'doctor_email'] = doctor_email
                     st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "updated user data")
@@ -60,7 +62,8 @@ def main_page():
                 st.write("Phone Number:", user_data['phone_number'].iloc[0] if 'phone_number' in user_data.columns else '')
                 st.write("Address:", user_data['address'].iloc[0] if 'address' in user_data.columns else '')
                 st.write("Occupation:", user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
-                st.write("Emergency Contact:", user_data['emergency_contact'].iloc[0] if 'emergency_contact' in user_data.columns else '')
+                st.write("Emergency Contact Name:", user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
+                st.write("Emergency Contact Number:", user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
                 st.write("Email:", user_data['email'].iloc[0] if 'email' in user_data.columns else '')
                 st.write("Doctor's Email:", user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
 
@@ -164,7 +167,8 @@ def register_page():
         new_phone_number = st.text_input("Phone Number")
         new_address = st.text_area("Address")
         new_occupation = st.text_input("Occupation")
-        new_emergency_contact = st.text_input("Emergency Contact")
+        new_emergency_contact_name = st.text_input("Emergency Contact Name")
+        new_emergency_contact_number = st.text_input("Emergency Contact Number")
         new_email = st.text_input("Email")
         new_doctor_email = st.text_input("Doctor's Email")
         new_password = st.text_input("New Password", type="password")
@@ -175,7 +179,7 @@ def register_page():
             if new_username in st.session_state.df_users['username'].values:
                 st.error("Username already exists. Please choose a different one.")
             else:
-                new_user = pd.DataFrame([[new_username, new_name, new_birthday, hashed_password_hex, new_phone_number, new_address, new_occupation, new_emergency_contact, new_email, new_doctor_email]], columns=DATA_COLUMNS)
+                new_user = pd.DataFrame([[new_username, new_name, new_birthday, hashed_password_hex, new_phone_number, new_address, new_occupation, new_emergency_contact_name, new_emergency_contact_number, new_email, new_doctor_email]], columns=DATA_COLUMNS)
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
                 
                 st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
@@ -221,6 +225,9 @@ def main():
             register_page()
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
+        emergency_contact_number = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username'], 'emergency_contact_number'].iloc[0] if 'emergency_contact_number' in st.session_state.df_users.columns else ''
+        if emergency_contact_number:
+            st.sidebar.write(f"Emergency Contact: {emergency_contact_number}")
         main_page()
         anxiety_assessment()
         show_saved_entries()
