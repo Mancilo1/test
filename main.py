@@ -38,7 +38,6 @@ def main_page():
     # Display image with the responsive class
     st.markdown('<img src="Logo.jpeg" class="responsive-img">', unsafe_allow_html=True)
     st.title("Your Anxiety Tracker Journal")
-    st.subheader("Profile")
     st.write("""
         Welcome to FeelNow, your anxiety attack journal.
         This app helps you track and manage your anxiety by providing a platform to journal your thoughts 
