@@ -57,7 +57,7 @@ def anxiety_assessment():
     if st.session_state.step == 3:
         show_gif()
         st.button("Reasses your feelings")
-        st.experimental_rerun()
+        
 
 def show_gif():
     gif_url = "https://64.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
