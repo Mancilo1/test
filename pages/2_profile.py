@@ -30,7 +30,7 @@ def main_page():
     else:
         st.error("User not logged in.")
         if st.button("Login/Register"):
-            switch_page("pages/1_login.py")
+            set_page("login")
 
 def anxiety_assessment():
     st.subheader("Anxiety Assessment:")
@@ -49,6 +49,7 @@ def anxiety_assessment2():
         gif_html = f'<img src="{gif_url}" width="400" height="300">'
         st.markdown(gif_html, unsafe_allow_html=True)
         if st.button("Reassess your Feelings💫"):
+            st.session_state.assessment_step = "first_assessment"
             st.experimental_rerun()
 
 def init_github():
@@ -77,7 +78,7 @@ def login_page():
         if st.form_submit_button("Login"):
             authenticate(username, password)
             if st.session_state['authentication']:
-                switch_page("pages/2_profile.py")
+                set_page("profile")
 
 def register_page():
     """ Register a new user. """
@@ -118,9 +119,9 @@ def authenticate(username, password):
     else:
         st.error('Username not found')
 
-# Page switching function
-def switch_page(page_name):
-    st.experimental_set_query_params(page=page_name)
+def set_page(page_name):
+    """Set the current page and trigger rerun."""
+    st.session_state.current_page = page_name
     st.experimental_rerun()
 
 def main():
@@ -130,6 +131,12 @@ def main():
     if 'authentication' not in st.session_state:
         st.session_state['authentication'] = False
 
+    if 'current_page' not in st.session_state:
+        st.session_state.current_page = "login" if not st.session_state['authentication'] else "profile"
+
+    if 'assessment_step' not in st.session_state:
+        st.session_state.assessment_step = "first_assessment"
+
     if not st.session_state['authentication']:
         options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
         if options == "Login":
@@ -138,25 +145,29 @@ def main():
             register_page()
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        main_page()
+        page = st.sidebar.selectbox("Navigate to", ["Profile", "Assessment"])
+        if page == "Profile":
+            set_page("profile")
+        elif page == "Assessment":
+            set_page("assessment")
 
-        if 'assessment_step' not in st.session_state:
-            st.session_state.assessment_step = "first_assessment"
-        
-        if st.session_state.assessment_step == "first_assessment":
-            anxiety_assessment()
-        elif st.session_state.assessment_step == "anxiety_assessment2":
-            anxiety_assessment2()
-        elif st.session_state.assessment_step == "anxiety_attack_protocol":
-            st.switch_page("pages/4_anxiety_attack_protocol.py")
-        elif st.session_state.assessment_step == "anxiety_protocol":
-            st.switch_page("pages/5_anxiety_protocol.py")
+        if st.session_state.current_page == "profile":
+            main_page()
+        elif st.session_state.current_page == "assessment":
+            if st.session_state.assessment_step == "first_assessment":
+                anxiety_assessment()
+            elif st.session_state.assessment_step == "anxiety_assessment2":
+                anxiety_assessment2()
+            elif st.session_state.assessment_step == "anxiety_attack_protocol":
+                st.switch_page("pages/4_anxiety_attack_protocol.py")
+            elif st.session_state.assessment_step == "anxiety_protocol":
+                st.switch_page("pages/5_anxiety_protocol.py")
 
         if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
-            st.session_state.assessment_step = "first_assessment"  # Reset assessment step
-            switch_page("main.py")
+            st.session_state.current_page = "login"
+            st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
