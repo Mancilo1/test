@@ -168,6 +168,85 @@ def main_page():
         if st.button("Login/Register"):
             st.switch_page("pages/2_Login.py")
 
+def anxiety_assessment():
+    st.title("Anxiety Assessment")
+    
+    if "step" not in st.session_state:
+        st.session_state.step = 1
+
+    if st.session_state.step == 1:
+        st.write("### Do you feel like you're having an Anxiety Attack right now?")
+        if st.button("Yes"):
+            st.switch_page("pages/4_Anxiety_Attack_Protocol.py")
+        if st.button("No"):
+            st.session_state.step = 2
+            st.experimental_rerun()
+
+    if st.session_state.step == 2:
+        st.write("### Are you anxious right now?")
+        if st.button("Yes"):
+            st.switch_page("pages/5_Anxiety_Protocol.py")
+        if st.button("No"):
+            st.session_state.step = 3
+            st.experimental_rerun()
+
+    if st.session_state.step == 3:
+        show_gif()
+        if st.button("Reassess your feelings"):
+            st.session_state.step = 1
+            st.experimental_rerun()
+
+def show_gif():
+    gif_url = "https://64.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
+    gif_html = f'<img src="{gif_url}" style="width:100%;">'
+    st.markdown(gif_html, unsafe_allow_html=True)
+
+def show_saved_entries():
+    st.title("Saved Entries")
+    st.subheader("Saved Entries from Anxiety Attack Protocol")
+    username = st.session_state['username']
+    data_file_attack = f"{username}_data.csv"
+    data_file_anxiety = f"{username}_anxiety_protocol_data.csv"
+    
+    if st.session_state.github.file_exists(data_file_attack):
+        attack_data = st.session_state.github.read_df(data_file_attack)
+        st.write(attack_data)
+    else:
+        st.write("No saved entries from Anxiety Attack Protocol.")
+    st.write("---")
+    st.subheader("Saved Entries from Anxiety Protocol")
+    if st.session_state.github.file_exists(data_file_anxiety):
+        anxiety_data = st.session_state.github.read_df(data_file_anxiety)
+        st.write(anxiety_data)
+    else:
+        st.write("No saved entries from Anxiety Protocol.")
+
+def german_protocols():
+    st.title("German Protocols")
+    st.subheader("Anxiety Attack Protocol")
+    st.write("Click on the button to download the german version.")
+    st.write("Um die Deutsche PDF version des 'Anxiety Attack Protocol' herunterzuladen, auf 'Download Panickattacke Protokoll' klicken.")
+    with open("Panickattacke_Protokoll.pdf", "rb") as pdf_file:
+        pdf_bytes = pdf_file.read()
+        st.download_button(
+            label="Download Panickattacke Protokoll",
+            data=pdf_bytes,
+            file_name="Panickattacke_Protokoll.pdf",
+            mime="application/pdf",
+        )
+    st.write("---")
+    st.subheader("Anxiety Protocol")
+    st.write("Click on the button to download the german version.")
+    st.write("Um die Deutsche PDF version des 'Anxiety Protocol' herunterzuladen, auf 'Download Angstprotokoll' klicken.")
+    with open("Angstprotokoll.pdf", "rb") as pdf_file:
+        pdf_bytes = pdf_file.read()
+        st.download_button(
+            label="Download Angstprotokoll",
+            data=pdf_bytes,
+            file_name="Angstprotokoll.pdf",
+            mime="application/pdf",
+        )
+
 def main():
     init_github()
     init_credentials()
@@ -225,6 +304,12 @@ def format_phone_number(number):
             return None
     except phonenumbers.NumberParseException:
         return None
+
+def switch_page(page_name):
+    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
+    st.experimental_set_query_params(page=page_name)
+    time.sleep(3)
+    st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
