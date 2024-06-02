@@ -37,12 +37,9 @@ def register_page():
         new_birthday = st.date_input("Birthday", min_value=datetime.date(1900, 1, 1))
         new_password = st.text_input("Password", type="password")
         
-        # Hier fügst du den Submit-Button hinzu
         submit_button = st.form_submit_button("Register")
         
         if submit_button:
-            # Hier fügst du den Code hinzu, um das Formular abzusenden
-            # und die Benutzereingaben zu verarbeiten
             if new_username in st.session_state.df_users['username'].values:
                 st.error("Username already exists. Please choose a different one.")
                 return
@@ -52,7 +49,7 @@ def register_page():
                 hashed_password_hex = binascii.hexlify(hashed_password).decode()
                 
                 # Create a new user DataFrame
-                new_user_data = [[new_username, f"{new_first_name} {new_last_name}", new_birthday, hashed_password_hex]]
+                new_user_data = [[new_username, f"{new_first_name} {new_last_name}", new_birthday, hashed_password_hex, '', '', '', '', '', '', '']]
                 new_user = pd.DataFrame(new_user_data, columns=DATA_COLUMNS)
                 
                 # Concatenate the new user DataFrame with the existing one
@@ -146,16 +143,9 @@ def display_emergency_contact():
     if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
         emergency_contact_name = st.session_state['emergency_contact_name']
         emergency_contact_number = st.session_state['emergency_contact_number']
-
-        if emergency_contact_number:
-            formatted_emergency_contact_number = format_phone_number(emergency_contact_number)
-            st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
-            if formatted_emergency_contact_number:
-                st.sidebar.markdown(f"[{formatted_emergency_contact_number}](tel:{formatted_emergency_contact_number})")
-            else:
-                st.sidebar.write("No valid emergency contact number available.")
-        else:
-            st.sidebar.write("No emergency contact number available.")
+        
+        st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
+        st.sidebar.markdown(f"[{emergency_contact_number}](tel:{emergency_contact_number})")
     else:
         st.sidebar.write("No emergency contact information available.")
 
