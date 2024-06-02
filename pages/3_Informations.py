@@ -116,3 +116,6 @@ def switch_page(page_name):
     st.experimental_set_query_params(page=page_name)
     time.sleep(3)
     st.experimental_rerun()
+
+if __name__ == "__main__":
+    main()
