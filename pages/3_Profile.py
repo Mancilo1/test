@@ -166,7 +166,7 @@ def anxiety_assessment():
         st.session_state.step = 1
 
     if st.session_state.step == 1:
-        st.subheader("Do you feel like you're having an Anxiety Attack right now?")
+        st.write("### Do you feel like you're having an Anxiety Attack right now?")
         if st.button("Yes"):
             st.switch_page("pages/4_Anxiety_Attack_Protocol.py")
         if st.button("No"):
@@ -174,7 +174,7 @@ def anxiety_assessment():
             st.experimental_rerun()
 
     if st.session_state.step == 2:
-        st.subheader("Are you anxious right now?")
+        st.write("### Are you anxious right now?")
         if st.button("Yes"):
             st.switch_page("pages/5_Anxiety_Protocol.py")
         if st.button("No"):
