@@ -212,6 +212,11 @@ def show_saved_entries():
     else:
         st.write("No saved entries from Anxiety Protocol.")
 
+def german_protocols():
+    st.title("German Protocols")
+    st.subheader("Anxiety Attack Protocol")
+    
+
 def main():
     init_github()
     init_credentials()
