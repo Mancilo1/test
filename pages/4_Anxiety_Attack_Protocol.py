@@ -172,13 +172,6 @@ def anxiety_attack_protocol():
     if 'symptoms' not in st.session_state:
         st.session_state.symptoms = []
 
-     new_symptom = st.text_input("Add new symptom:")
-    if st.button("Add Symptom") and new_symptom:
-        st.session_state.symptoms.append(new_symptom)
-
-    for symptom in st.session_state.symptoms:
-        st.write(symptom)
-
     # Question 4: Triggers
     st.subheader("Triggers:")
     triggers = st.multiselect("Select Triggers", ["Stress", "Caffeine", "Lack of Sleep", "Social Event", "Reminder of traumatic event", "Alcohol", "Conflict", "Family problems"])
