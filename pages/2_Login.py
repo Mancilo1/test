@@ -62,7 +62,7 @@ def register_page():
                 try:
                     st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
                     st.success("Registration successful! You can now log in.")
-                    st.switch_page("pages/2_profile.py")
+                    st.switch_page("pages/3_Profile.py")
                 except GithubContents.UnknownError as e:
                     st.error(f"An unexpected error occurred: {e}")
                 except Exception as e:
@@ -78,7 +78,7 @@ def login_page():
         password = st.text_input("Password", type="password")
         if st.form_submit_button("Login"):
             authenticate(username, password)
-            st.switch_page("pages/2_profile.py")
+            st.switch_page("pages/3_Profile.py")
 
 def authenticate(username, password):
     """
@@ -99,7 +99,7 @@ def authenticate(username, password):
             st.session_state['authentication'] = True
             st.session_state['username'] = username
             st.success('Login successful')
-            st.switch_page("pages/2_profile.py")
+            st.switch_page("pages/3_Profile.py")
             st.experimental_rerun()
         else:
             st.error('Incorrect password')
