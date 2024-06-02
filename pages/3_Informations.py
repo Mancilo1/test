@@ -17,6 +17,24 @@ def main():
     st.image(logo_path, use_column_width=True)
     st.subheader("Inform yourselfe about Mental Health")
 
+    # Article 1
+    st.write("## Anxiety Disorder")
+    st.write("Anxiety is a normal part of life, but when it becomes overwhelming and affects your day-to-day activities, it might be time to seek help. This article explores the various causes of anxiety, common symptoms, and effective treatments to help you manage it.")
+    if st.button("Read more", key="article1"):
+        st.write("[Read more](https://www.nimh.nih.gov/health/topics/anxiety-disorders)")
+
+    # Article 2
+    st.write("## [Mental Health: Breaking the Stigma](https://www.example.com/article2)")
+    st.write("Mental health issues are often surrounded by stigma, preventing many people from seeking the help they need. This article discusses the importance of breaking the stigma around mental health and provides resources for those seeking support.")
+    if st.button("Read more", key="article2"):
+        st.write("[Read more](https://www.example.com/article2)")
+
+    # Article 3
+    st.write("## [Coping with Anxiety: Strategies and Tips](https://www.example.com/article3)")
+    st.write("Living with anxiety can be challenging, but there are strategies and tips that can help you cope. This article provides practical advice on how to manage anxiety in your everyday life and improve your overall well-being.")
+    if st.button("Read more", key="article3"):
+        st.write("[Read more](https://www.example.com/article3)")
+
     if 'username' in st.session_state:
         username = st.session_state['username']
         
