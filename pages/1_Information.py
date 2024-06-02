@@ -11,6 +11,20 @@ DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'address', 'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email']
 
 def main():
+    def main():
+    init_github()
+    init_credentials()
+
+    if 'authentication' not in st.session_state:
+        st.session_state['authentication'] = False
+
+    if not st.session_state['authentication']:
+        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
+        if options == "Login":
+            login_page()
+        elif options == "Register":
+            register_page()
+            
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
     st.write("---")
