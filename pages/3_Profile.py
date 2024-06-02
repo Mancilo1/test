@@ -148,7 +148,7 @@ def main_page():
                 col1, col2 = st.columns(2)
                 with col1:
                     name = st.text_input("Name:", value=user_data['name'].iloc[0])
-                    phone_number = st.text_input("Phone Number:", value=str(user_data['phone_number'].iloc[0]) if 'phone_number' in user_data.columns else '')
+                    phone_number = st.text_input("Phone Number:", value=user_data['phone_number'].iloc[0] if 'phone_number' in user_data.columns else '')
                     occupation = st.text_input("Occupation:", value=user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
                     emergency_contact_name = st.text_input("Emergency Contact Name:", value=user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
                     doctor_email = st.text_input("Doctor's Email:", value=user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
@@ -157,7 +157,7 @@ def main_page():
                     birthday = st.date_input("Birthday:", value=pd.to_datetime(user_data['birthday'].iloc[0]))
                     address = st.text_area("Address:", value=user_data['address'].iloc[0] if 'address' in user_data.columns else '')
                     email = st.text_input("Email:", value=user_data['email'].iloc[0] if 'email' in user_data.columns else '')
-                    emergency_contact_number = st.text_input("Emergency Contact Number:", value=str(user_data['emergency_contact_number'].iloc[0]) if 'emergency_contact_number' in user_data.columns else '')
+                    emergency_contact_number = st.text_input("Emergency Contact Number:", value=user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
 
                 if st.button("Save Changes"):
                     formatted_phone_number = format_phone_number(phone_number)
