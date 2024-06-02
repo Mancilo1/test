@@ -215,7 +215,23 @@ def show_saved_entries():
 def german_protocols():
     st.title("German Protocols")
     st.subheader("Anxiety Attack Protocol")
-    
+    with open("Panickattacke_Protokoll.pdf", "rb") as pdf_file:
+        pdf_bytes = pdf_file.read()
+        st.download_button(
+            label="Download PDF",
+            data=pdf_bytes,
+            file_name="Panickattacke_Protokoll.pdf",
+            mime="application/pdf",
+        )
+    st.subheader("Anxiety Protocol")
+    with open("Angstprotokoll.pdf", "rb") as pdf_file:
+        pdf_bytes = pdf_file.read()
+        st.download_button(
+            label="Download PDF",
+            data=pdf_bytes,
+            file_name="Angstprotokoll.pdf",
+            mime="application/pdf",
+        )
 
 def main():
     init_github()
@@ -238,6 +254,8 @@ def main():
         main_page()
         st.write("---")
         anxiety_assessment()
+        st.write("---")
+        german_protocols()
         st.write("---")
         show_saved_entries()
         if st.sidebar.button("Logout"):
