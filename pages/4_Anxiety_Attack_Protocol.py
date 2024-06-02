@@ -231,6 +231,10 @@ def anxiety_attack_protocol():
         st.session_state.github.write_df(data_file, st.session_state.anxiety_attack_data, "added new entry")
         st.success("Entry saved successfully!")
 
+        # Clear the symptoms list and rerun to refresh the state
+        st.session_state.symptoms = []
+        st.experimental_rerun()
+
 def add_time_severity():
     if 'time_severity_entries' not in st.session_state:
         st.session_state.time_severity_entries = []
