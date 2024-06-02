@@ -13,11 +13,8 @@ DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'add
 def main():
     init_github()
     init_credentials()
-    logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
-    st.image(logo_path, use_column_width=True)
-    st.title("Information about Mental Health")
-
-    if 'authentication' not in st.session_state:
+    
+     if 'authentication' not in st.session_state:
         st.session_state['authentication'] = False
 
     if not st.session_state['authentication']:
@@ -36,6 +33,11 @@ def main():
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
             st.switch_page("main.py")
+
+def main_page():
+    logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
+    st.image(logo_path, use_column_width=True)
+    st.title("Information about Mental Health")
 
     # Link to Article 1 about Mental Health
     st.write("## Anxiety Disorder")
