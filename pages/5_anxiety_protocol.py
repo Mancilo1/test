@@ -122,10 +122,6 @@ def anxiety_protocol():
         st.session_state.github.write_df(data_file, st.session_state.anxiety_data, "added new entry")
         st.success("Entry saved successfully!")
 
-    # Display saved entries
-    st.subheader("Saved Entries")
-    st.write(st.session_state.anxiety_data)
-
 def add_time_severity():
     if 'time_severity_entries' not in st.session_state:
         st.session_state.time_severity_entries = []
