@@ -57,7 +57,7 @@ def login_page():
                 st.switch_page("pages/2_profile.py")
 
                 def register_page():
-    """ Register a new user. """
+                    
     st.title("Register")
     with st.form(key='register_form'):
         new_username = st.text_input("New Username")
