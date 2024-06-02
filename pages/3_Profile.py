@@ -122,6 +122,17 @@ def main():
 
     display_emergency_contact()
 
+def display_emergency_contact():
+    """Display the emergency contact in the sidebar if it exists."""
+    if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
+        emergency_contact_name = st.session_state['emergency_contact_name']
+        emergency_contact_number = st.session_state['emergency_contact_number']
+        
+        st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
+        st.sidebar.markdown(f"[{emergency_contact_number}](tel:{emergency_contact_number})")
+    else:
+        st.sidebar.write("No emergency contact information available.")
+
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
@@ -281,17 +292,6 @@ def german_protocols():
             file_name="Angstprotokoll.pdf",
             mime="application/pdf",
         )
-
-def display_emergency_contact():
-    """Display the emergency contact in the sidebar if it exists."""
-    if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
-        emergency_contact_name = st.session_state['emergency_contact_name']
-        emergency_contact_number = st.session_state['emergency_contact_number']
-        
-        st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
-        st.sidebar.markdown(f"[{emergency_contact_number}](tel:{emergency_contact_number})")
-    else:
-        st.sidebar.write("No emergency contact information available.")
 
 def format_phone_number(number):
     """Format phone number using phonenumbers library."""
