@@ -212,8 +212,6 @@ def anxiety_attack_protocol():
         try:
             st.session_state.github.write_df(data_file, st.session_state.data, "added new entry")
             st.success("Entry saved successfully!")
-        except Exception as e:
-            st.error(f"Failed to save entry: {e}")
 
         # Clear the severity entries after saving
         st.session_state.time_severity_entries = []
