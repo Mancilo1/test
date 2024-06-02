@@ -31,7 +31,7 @@ def main():
         if logout_button:
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
-            st.switch_page("main.py")
+            st.switch_page("Main.py")
             st.experimental_rerun()
 
 def anxiety_attack_protocol():
