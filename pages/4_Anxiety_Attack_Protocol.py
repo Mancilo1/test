@@ -216,7 +216,6 @@ def anxiety_attack_protocol():
             'Triggers': triggers,
             'Help': help_response
         }
-        st.switch_page("pages/3_Profile.py")
         # Create a DataFrame from the new entry
         new_entry_df = pd.DataFrame([new_entry])
         
@@ -224,11 +223,17 @@ def anxiety_attack_protocol():
         st.session_state.data = pd.concat([st.session_state.data, new_entry_df], ignore_index=True)
         
         # Save the updated DataFrame to the user's specific CSV file on GitHub
-        st.session_state.github.write_df(data_file, st.session_state.data, "added new entry")
-        st.success("Entry saved successfully!")
+        try:
+            st.session_state.github.write_df(data_file, st.session_state.data, "added new entry")
+            st.success("Entry saved successfully!")
+        except Exception as e:
+            st.error(f"Failed to save entry: {e}")
 
         # Clear the severity entries after saving
         st.session_state.time_severity_entries = []
+        st.session_state.symptoms = []
+        st.session_state.triggers = []
+        st.experimental_rerun()
 
 def add_time_severity():
     if 'time_severity_entries' not in st.session_state:
