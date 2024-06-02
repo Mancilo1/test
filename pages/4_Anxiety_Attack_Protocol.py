@@ -208,10 +208,8 @@ def anxiety_attack_protocol():
         # Append the new entry to the existing data DataFrame
         st.session_state.data = pd.concat([st.session_state.data, new_entry_df], ignore_index=True)
         
-        # Save the updated DataFrame to the user's specific CSV file on GitHub
-        try:
-            st.session_state.github.write_df(data_file, st.session_state.data, "added new entry")
-            st.success("Entry saved successfully!")
+        st.session_state.github.write_df(data_file, st.session_state.data, "added new entry")
+        st.success("Entry saved successfully!")
 
         # Clear the severity entries after saving
         st.session_state.time_severity_entries = []
