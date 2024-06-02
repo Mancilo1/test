@@ -277,7 +277,7 @@ def show_saved_entries():
     st.title("Saved Entries")
     st.subheader("Saved Entries from Anxiety Attack Protocol")
     username = st.session_state['username']
-    data_file_attack = f"{username}_data.csv"
+    data_file_attack = f"{username}_anxiety_attack_data.csv"
     data_file_anxiety = f"{username}_anxiety_protocol_data.csv"
     
     if st.session_state.github.file_exists(data_file_attack):
