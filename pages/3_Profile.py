@@ -295,7 +295,7 @@ def german_protocols():
 
 def format_phone_number(number):
     """Format phone number using phonenumbers library."""
-    if not number or pd.isna(number):
+    if not number or pd.isna(number) or number == 'nan':
         st.write("Phone number is empty or NaN")  # Debug info
         return None
     st.write(f"Formatting phone number: {number}")  # Debug info
