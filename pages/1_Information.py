@@ -55,6 +55,9 @@ def main():
     st.markdown('<a href="https://www.helpguide.org/articles/anxiety/i-feel-anxious-tips-for-dealing-with-anxiety.htm" target="_blank"><button>Read more</button></a>', unsafe_allow_html=True)
 
     col1, col2 = st.columns([0.8, 0.2])
+    with col1:
+        if st.button("Go back to Mainpage"):
+            st.switch_page("Main.py")
     with col2:
         if st.button("Login/Register"):
             st.switch_page("pages/2_Login.py")
