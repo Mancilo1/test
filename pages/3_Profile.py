@@ -234,7 +234,7 @@ def main():
         if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
-            st.switch_page("main.py")
+            st.switch_page("Main.py")
 
 if __name__ == "__main__":
     main()
