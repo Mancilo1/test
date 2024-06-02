@@ -169,11 +169,17 @@ def main_page():
                     formatted_phone_number = format_phone_number(phone_number)
                     formatted_emergency_contact_number = format_phone_number(emergency_contact_number)
                     
-                    # Only save formatted numbers if they are not None
+                    # Save or clear phone number if empty
                     if formatted_phone_number is not None:
                         st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'phone_number'] = formatted_phone_number
+                    else:
+                        st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'phone_number'] = ''
+
+                    # Save or clear emergency contact number if empty
                     if formatted_emergency_contact_number is not None:
                         st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_number'] = formatted_emergency_contact_number
+                    else:
+                        st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_number'] = ''
 
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'name'] = name
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'birthday'] = birthday
