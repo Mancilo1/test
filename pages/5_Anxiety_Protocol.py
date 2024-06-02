@@ -8,7 +8,7 @@ from github_contents import GithubContents
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
-DATA_COLUMNS = ['username', 'name', 'password']
+DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'address', 'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email']
 
 def init_github():
     """Initialize the GithubContents object."""
