@@ -4,4 +4,4 @@ pandas
 googletrans==4.0.0-rc1
 translate
 deep-translator
-pip install phonenumbers
+phonenumbers
