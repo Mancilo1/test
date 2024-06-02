@@ -87,6 +87,41 @@ def authenticate(username, password):
     else:
         st.error('Username not found')
 
+def main():
+    init_github()
+    init_credentials()
+
+    if 'authentication' not in st.session_state:
+        st.session_state['authentication'] = False
+
+    if not st.session_state['authentication']:
+        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
+        if options == "Login":
+            login_page()
+        elif options == "Register":
+            register_page()
+    else:
+        st.sidebar.write(f"Logged in as {st.session_state['username']}")
+        # Retrieve the emergency contact information from the DataFrame
+        user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
+        if not user_data.empty:
+            st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
+            st.session_state['emergency_contact_number'] = str(user_data['emergency_contact_number'].iloc[0]) if 'emergency_contact_number' in user_data.columns else ''
+
+        main_page()
+        st.write("---")
+        anxiety_assessment()
+        st.write("---")
+        german_protocols()
+        st.write("---")
+        show_saved_entries()
+        if st.sidebar.button("Logout"):
+            st.session_state['authentication'] = False
+            st.session_state.pop('username', None)
+            st.switch_page("Main.py")
+
+    display_emergency_contact()
+
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
@@ -96,10 +131,10 @@ def main_page():
 
     if 'username' in st.session_state:
         username = st.session_state['username']
-        
+
         # Load user data
         user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == username]
-        
+
         if not user_data.empty:
             if 'edit_profile' not in st.session_state:
                 st.session_state.edit_profile = False
@@ -122,7 +157,7 @@ def main_page():
                 if st.button("Save Changes"):
                     formatted_phone_number = format_phone_number(phone_number)
                     formatted_emergency_contact_number = format_phone_number(emergency_contact_number)
-                    
+
                     if formatted_phone_number and formatted_emergency_contact_number:
                         st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'name'] = name
                         st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'birthday'] = birthday
@@ -139,7 +174,7 @@ def main_page():
                         st.experimental_rerun()
                     else:
                         st.error("Invalid phone number format.")
-                
+
                 if st.button("Cancel"):
                     st.session_state.edit_profile = False
                     st.experimental_rerun()
@@ -167,7 +202,7 @@ def main_page():
         st.error("User not logged in.")
         if st.button("Login/Register"):
             st.switch_page("pages/2_Login.py")
-
+            
 def anxiety_assessment():
     st.title("Anxiety Assessment")
     
@@ -247,41 +282,6 @@ def german_protocols():
             mime="application/pdf",
         )
 
-def main():
-    init_github()
-    init_credentials()
-
-    if 'authentication' not in st.session_state:
-        st.session_state['authentication'] = False
-
-    if not st.session_state['authentication']:
-        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
-        if options == "Login":
-            login_page()
-        elif options == "Register":
-            register_page()
-    else:
-        st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        # Retrieve the emergency contact information from the DataFrame
-        user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
-        if not user_data.empty:
-            st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
-            st.session_state['emergency_contact_number'] = str(user_data['emergency_contact_number'].iloc[0]) if 'emergency_contact_number' in user_data.columns else ''
-
-        main_page()
-        st.write("---")
-        anxiety_assessment()
-        st.write("---")
-        german_protocols()
-        st.write("---")
-        show_saved_entries()
-        if st.sidebar.button("Logout"):
-            st.session_state['authentication'] = False
-            st.session_state.pop('username', None)
-            st.switch_page("Main.py")
-
-    display_emergency_contact()
-
 def display_emergency_contact():
     """Display the emergency contact in the sidebar if it exists."""
     if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
@@ -295,15 +295,20 @@ def display_emergency_contact():
 
 def format_phone_number(number):
     """Format phone number using phonenumbers library."""
+    st.write(f"Formatting phone number: {number}")  # Debug info
     try:
         if not number.startswith('+'):
             number = '+41' + number.lstrip('0')  # Assume Swiss number if no country code
         phone_number = phonenumbers.parse(number, "CH")  # "CH" is for Switzerland
         if phonenumbers.is_valid_number(phone_number):
-            return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.E164)
+            formatted_number = phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.E164)
+            st.write(f"Formatted phone number: {formatted_number}")  # Debug info
+            return formatted_number
         else:
+            st.write("Invalid phone number detected")  # Debug info
             return None
-    except phonenumbers.NumberParseException:
+    except phonenumbers.NumberParseException as e:
+        st.write(f"Error parsing phone number: {e}")  # Debug info
         return None
 
 def switch_page(page_name):
