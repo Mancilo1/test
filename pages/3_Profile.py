@@ -295,6 +295,9 @@ def display_emergency_contact():
 
 def format_phone_number(number):
     """Format phone number using phonenumbers library."""
+    if not number or pd.isna(number):
+        st.write("Phone number is empty or NaN")  # Debug info
+        return None
     st.write(f"Formatting phone number: {number}")  # Debug info
     try:
         if not number.startswith('+'):
