@@ -15,7 +15,7 @@ def main():
     init_credentials()
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
-    st.subheader("Inform yourselfe about Mental Health")
+    st.title("Inform yourselfe about Mental Health")
 
     # Article 1
     st.write("## Anxiety Disorder")
