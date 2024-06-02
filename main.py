@@ -64,7 +64,7 @@ def main_page():
     col1, col2 = st.columns([0.8, 0.2])
     with col2:
         if st.button("Login/Register"):
-            st.switch_page("pages/1_login.py")
+            st.switch_page("pages/2_Login.py")
 
 def translate_text(text, target_language):
     translator = GoogleTranslator(target=target_language)  # Initialize the GoogleTranslator object
