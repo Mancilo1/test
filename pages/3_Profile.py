@@ -129,7 +129,7 @@ def show_saved_entries():
         st.write(attack_data)
     else:
         st.write("No saved entries from Anxiety Attack Protocol.")
-    
+    st.write("---")
     st.subheader("Saved Entries from Anxiety Protocol")
     if st.session_state.github.file_exists(data_file_anxiety):
         anxiety_data = st.session_state.github.read_df(data_file_anxiety)
