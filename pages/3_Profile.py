@@ -255,7 +255,8 @@ def main():
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
         emergency_contact_number = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username'], 'emergency_contact_number'].iloc[0] if 'emergency_contact_number' in st.session_state.df_users.columns else ''
         if emergency_contact_number:
-            st.sidebar.write(f"Emergency Contact: {emergency_contact_number}")
+            st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
+            st.sidebar.markdown(f"[{emergency_contact_number}](tel:{emergency_contact_number})")
         main_page()
         st.write("---")
         anxiety_assessment()
