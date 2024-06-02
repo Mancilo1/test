@@ -124,12 +124,18 @@ def main():
         st.image(logo_path, use_column_width=True)
         st.write("---")
         st.write("### You are already logged in")
+        show_gif()
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
         logout_button = st.button("Logout")
         if logout_button:
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
             st.experimental_rerun()
+
+def show_gif():
+    gif_url = "https://tenor.com/de/view/sad-crying-sorry-gif-26842137"
+    gif_html = f'<img src="{gif_url}" style="width:100%;">'
+    st.markdown(gif_html, unsafe_allow_html=True)
 
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
