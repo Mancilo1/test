@@ -137,7 +137,7 @@ def main_page():
                 col1, col2 = st.columns(2)
                 with col1:
                     name = st.text_input("Name:", value=user_data['name'].iloc[0])
-                    phone_number = st.text_input("Phone Number:", value=user_data['phone_number'].iloc[0] if 'phone_number' in user_data.columns else '')
+                    phone_number = st.text_input("Phone Number:", value=str(user_data['phone_number'].iloc[0]) if 'phone_number' in user_data.columns else '')
                     occupation = st.text_input("Occupation:", value=user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
                     emergency_contact_name = st.text_input("Emergency Contact Name:", value=user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
                     doctor_email = st.text_input("Doctor's Email:", value=user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
@@ -155,7 +155,7 @@ def main_page():
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'address'] = address
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'occupation'] = occupation
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_name'] = emergency_contact_name
-                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_number'] = str(emergency_contact_number)
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_number'] = emergency_contact_number
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'email'] = email
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'doctor_email'] = doctor_email
                     st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "updated user data")
@@ -179,7 +179,7 @@ def main_page():
                     st.write("Birthday:", user_data['birthday'].iloc[0])
                     st.write("Address:", user_data['address'].iloc[0] if 'address' in user_data.columns else '')
                     st.write("Email:", user_data['email'].iloc[0] if 'email' in user_data.columns else '')
-                    st.session_state['emergency_contact_number'] = str(user_data['emergency_contact_number'].iloc[0]) if 'emergency_contact_number' in user_data.columns else ''
+                    st.write("Emergency Contact Number:", user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
 
                 if st.button("Edit Profile"):
                     st.session_state.edit_profile = True
