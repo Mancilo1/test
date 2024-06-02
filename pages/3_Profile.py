@@ -230,7 +230,9 @@ def main():
         if emergency_contact_number:
             st.sidebar.write(f"Emergency Contact: {emergency_contact_number}")
         main_page()
+        st.write("---")
         anxiety_assessment()
+        st.write("---")
         show_saved_entries()
         if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
