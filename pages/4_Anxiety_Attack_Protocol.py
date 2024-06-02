@@ -216,6 +216,7 @@ def anxiety_attack_protocol():
             'Triggers': triggers,
             'Help': help_response
         }
+        st.switch_page("pages/3_Profile.py")
         # Create a DataFrame from the new entry
         new_entry_df = pd.DataFrame([new_entry])
         
