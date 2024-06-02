@@ -13,6 +13,7 @@ DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'add
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
+    st.write("---")
     st.title("Your Anxiety Tracker Journal")
     st.subheader("Profile")
 
