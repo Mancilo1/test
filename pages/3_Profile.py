@@ -123,7 +123,7 @@ def main_page():
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'address'] = address
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'occupation'] = occupation
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_name'] = emergency_contact_name
-                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_number'] = emergency_contact_number
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_number'] = str(emergency_contact_number)
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'email'] = email
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'doctor_email'] = doctor_email
                     st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "updated user data")
