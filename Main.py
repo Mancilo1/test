@@ -1,8 +1,8 @@
 import streamlit as st
+import pandas as pd
 import binascii
 import bcrypt
 import time
-import pandas as pd
 from github_contents import GithubContents
 from deep_translator import GoogleTranslator  # Import the GoogleTranslator class from the deep_translator library
 from PIL import Image
@@ -26,7 +26,7 @@ if 'df_users' not in st.session_state:
     else:
         st.session_state.df_users = pd.DataFrame(columns=['username', 'name', 'password'])
 
-def main_page():
+def main():
     # Display the logo image with responsive width
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
@@ -80,4 +80,4 @@ def switch_page(page_name):
     st.experimental_rerun()
 
 if __name__ == "__main__":
-    main_page()
+    main()
