@@ -75,6 +75,7 @@ def register_page():
                 st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
                 st.success("Registration successful! You can now log in.")
 
+
 def authenticate(username, password):
     """
     Authenticate the user.
@@ -114,13 +115,13 @@ def main():
             login_page()
         elif options == "Register":
             register_page()
+            
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
         user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
         if not user_data.empty:
             st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
             st.session_state['emergency_contact_number'] = user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else ''
-        
         anxiety_protocol()
 
         logout_button = st.sidebar.button("Logout")
@@ -210,36 +211,40 @@ def anxiety_protocol():
             'Symptoms': ", ".join(symptoms_list),
             'Help': help_response
         }
+        st.switch_page("pages/3_Profile.py")
         new_entry_df = pd.DataFrame([new_entry])
 
         st.session_state.anxiety_data = pd.concat([st.session_state.anxiety_data, new_entry_df], ignore_index=True)
 
-        try:
-            st.session_state.github.write_df(data_file, st.session_state.anxiety_data, "added new entry")
-            st.success("Entry saved successfully!")
-        except Exception as e:
-            st.error(f"Failed to save entry: {e}")
+        st.session_state.github.write_df(data_file, st.session_state.anxiety_data, "added new entry")
+        st.success("Entry saved successfully!")
 
-        # Clear the symptoms list and rerun to refresh the state
-        st.session_state.symptoms = []
-        st.experimental_rerun()
+def add_time_severity():
+    if 'time_severity_entries' not in st.session_state:
+        st.session_state.time_severity_entries = []
 
-def format_phone_number(number):
-    """Format phone number using phonenumbers library."""
-    if not number or pd.isna(number) or number == 'nan':
-        return None
-    number_str = str(number).strip()
-    if number_str.endswith('.0'):
-        number_str = number_str[:-2]  # Remove trailing '.0'
-    try:
-        phone_number = phonenumbers.parse(number_str, "CH")  # "CH" is for Switzerland
-        if phonenumbers.is_valid_number(phone_number):
-            return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.E164)
-        else:
-            return number_str  # Return the original number if invalid
-    except phonenumbers.NumberParseException:
-        return number_str  # Return the original number if parsing fails
+    st.subheader("Time & Severity")
 
+    # Display the current time
+    current_time = datetime.datetime.now(pytz.timezone('Europe/Zurich')).strftime('%H:%M')
+    st.write(f"Current Time: {current_time}")
+
+    # Button to add a new time-severity entry
+    with st.form(key='severity_form'):
+        severity = st.slider("Severity (1-10)", min_value=1, max_value=10, key=f"severity_slider")
+        if st.form_submit_button("Add Severity"):
+            new_entry = {
+                'time': current_time,
+                'severity': severity
+            }
+            st.switch_page("pages/2_profile.py")
+            st.session_state.time_severity_entries.append(new_entry)
+            st.success(f"Added entry: Time: {current_time}, Severity: {severity}")
+
+    # Display all time-severity entries
+    for entry in st.session_state.time_severity_entries:
+        st.write(f"Time: {entry['time']}, Severity: {entry['severity']}")
+        
 def display_emergency_contact():
     """Display the emergency contact in the sidebar if it exists."""
     if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
