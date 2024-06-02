@@ -126,7 +126,7 @@ def main():
             st.switch_page("Main.py")
 
     display_emergency_contact()
-    
+
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
@@ -134,7 +134,7 @@ def main_page():
     st.title("Your Anxiety Tracker Journal")
     st.subheader("Profile")
 
-    if 'username' in st.session_state:
+     if 'username' in st.session_state:
         username = st.session_state['username']
 
         # Load user data
@@ -148,7 +148,7 @@ def main_page():
                 col1, col2 = st.columns(2)
                 with col1:
                     name = st.text_input("Name:", value=user_data['name'].iloc[0])
-                    phone_number = st.text_input("Phone Number:", value=user_data['phone_number'].iloc[0] if 'phone_number' in user_data.columns else '')
+                    phone_number = st.text_input("Phone Number:", value=user_data['phone_number'].astype(str).iloc[0] if 'phone_number' in user_data.columns else '')
                     occupation = st.text_input("Occupation:", value=user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
                     emergency_contact_name = st.text_input("Emergency Contact Name:", value=user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
                     doctor_email = st.text_input("Doctor's Email:", value=user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
@@ -157,7 +157,7 @@ def main_page():
                     birthday = st.date_input("Birthday:", value=pd.to_datetime(user_data['birthday'].iloc[0]))
                     address = st.text_area("Address:", value=user_data['address'].iloc[0] if 'address' in user_data.columns else '')
                     email = st.text_input("Email:", value=user_data['email'].iloc[0] if 'email' in user_data.columns else '')
-                    emergency_contact_number = st.text_input("Emergency Contact Number:", value=user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
+                    emergency_contact_number = st.text_input("Emergency Contact Number:", value=user_data['emergency_contact_number'].astype(str).iloc[0] if 'emergency_contact_number' in user_data.columns else '')
 
                 if st.button("Save Changes"):
                     formatted_phone_number = format_phone_number(phone_number)
@@ -199,7 +199,7 @@ def main_page():
                 col1, col2 = st.columns(2)
                 with col1:
                     st.write("Name:", user_data['name'].iloc[0])
-                    st.write("Phone Number:", format_phone_number(user_data['phone_number'].iloc[0]) if 'phone_number' in user_data.columns else '')
+                    st.write("Phone Number:", format_phone_number(user_data['phone_number'].astype(str).iloc[0]) if 'phone_number' in user_data.columns else '')
                     st.write("Occupation:", user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
                     st.write("Emergency Contact Name:", user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
                     st.write("Doctor's Email:", user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
@@ -208,7 +208,7 @@ def main_page():
                     st.write("Birthday:", user_data['birthday'].iloc[0])
                     st.write("Address:", user_data['address'].iloc[0] if 'address' in user_data.columns else '')
                     st.write("Email:", user_data['email'].iloc[0] if 'email' in user_data.columns else '')
-                    st.write("Emergency Contact Number:", format_phone_number(user_data['emergency_contact_number'].iloc[0]) if 'emergency_contact_number' in user_data.columns else '')
+                    st.write("Emergency Contact Number:", format_phone_number(user_data['emergency_contact_number'].astype(str).iloc[0]) if 'emergency_contact_number' in user_data.columns else '')
 
                 if st.button("Edit Profile"):
                     st.session_state.edit_profile = True
@@ -307,16 +307,13 @@ def format_phone_number(number):
     if number_str.endswith('.0'):
         number_str = number_str[:-2]  # Remove trailing '.0'
     try:
-        if not number_str.startswith('+'):
-            number_str = '+41' + number_str.lstrip('0')  # Assume Swiss number if no country code
         phone_number = phonenumbers.parse(number_str, "CH")  # "CH" is for Switzerland
         if phonenumbers.is_valid_number(phone_number):
             return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.E164)
         else:
             return number_str  # Return the original number if invalid
-    except phonenumbers.NumberParseException as e:
+    except phonenumbers.NumberParseException:
         return number_str  # Return the original number if parsing fails
-
 
 def display_emergency_contact():
     """Display the emergency contact in the sidebar if it exists."""
