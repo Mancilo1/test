@@ -126,6 +126,7 @@ def main():
             st.switch_page("Main.py")
 
     display_emergency_contact()
+    
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
@@ -162,10 +163,6 @@ def main_page():
                     formatted_phone_number = format_phone_number(phone_number)
                     formatted_emergency_contact_number = format_phone_number(emergency_contact_number)
 
-                    # Debug information
-                    st.write(f"Formatted phone number: {formatted_phone_number}")
-                    st.write(f"Formatted emergency contact number: {formatted_emergency_contact_number}")
-                    
                     # Save or clear phone number if empty
                     if formatted_phone_number is not None:
                         st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'phone_number'] = formatted_phone_number
@@ -305,23 +302,21 @@ def german_protocols():
 def format_phone_number(number):
     """Format phone number using phonenumbers library."""
     if not number or pd.isna(number) or number == 'nan':
-        st.write("Phone number is empty or NaN")  # Debug info
         return None
-    st.write(f"Formatting phone number: {number}")  # Debug info
+    number_str = str(number).strip()
+    if number_str.endswith('.0'):
+        number_str = number_str[:-2]  # Remove trailing '.0'
     try:
-        if not number.startswith('+'):
-            number = '+41' + number.lstrip('0')  # Assume Swiss number if no country code
-        phone_number = phonenumbers.parse(number, "CH")  # "CH" is for Switzerland
+        if not number_str.startswith('+'):
+            number_str = '+41' + number_str.lstrip('0')  # Assume Swiss number if no country code
+        phone_number = phonenumbers.parse(number_str, "CH")  # "CH" is for Switzerland
         if phonenumbers.is_valid_number(phone_number):
-            formatted_number = phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.E164)
-            st.write(f"Formatted phone number: {formatted_number}")  # Debug info
-            return formatted_number
+            return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.E164)
         else:
-            st.write("Invalid phone number detected")  # Debug info
-            return number  # Return the original number if invalid
+            return number_str  # Return the original number if invalid
     except phonenumbers.NumberParseException as e:
-        st.write(f"Error parsing phone number: {e}")  # Debug info
-        return number  # Return the original number if parsing fails
+        return number_str  # Return the original number if parsing fails
+
 
 def display_emergency_contact():
     """Display the emergency contact in the sidebar if it exists."""
