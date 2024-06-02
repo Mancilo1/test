@@ -64,6 +64,9 @@ def main():
     st.write(translated_text)
 
     col1, col2 = st.columns([0.8, 0.2])
+    with col1:
+        if st.button("Go to Information page"):
+            st.switch_page("pages/1_Information.py")
     with col2:
         if st.button("Login/Register"):
             st.switch_page("pages/2_Login.py")
