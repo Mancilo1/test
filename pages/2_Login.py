@@ -133,7 +133,7 @@ def main():
             st.experimental_rerun()
 
 def show_gif():
-    gif_url = "https://tenor.com/de/view/sad-crying-sorry-gif-26842137"
+    gif_url = "https://media.tenor.com/NWXGiHI5A2IAAAAi/sad-crying.gif"
     gif_html = f'<img src="{gif_url}" style="width:100%;">'
     st.markdown(gif_html, unsafe_allow_html=True)
 
