@@ -27,6 +27,62 @@ def init_credentials():
         else:
             st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
 
+def login_page():
+    """ Login an existing user. """
+    logo_path = "Logo.jpeg"  
+    st.image(logo_path, use_column_width=True)
+    st.write("---")
+    st.title("Login")
+    with st.form(key='login_form'):
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if st.form_submit_button("Login"):
+            authenticate(username, password)
+            if st.session_state['authentication']:
+                st.switch_page("pages/3_Profile.py")
+
+def register_page():
+    """ Register a new user. """
+    logo_path = "Logo.jpeg"  
+    st.image(logo_path, use_column_width=True)
+    st.write("---")
+    st.title("Register")
+    with st.form(key='register_form'):
+        new_username = st.text_input("New Username")
+        new_name = st.text_input("Name")
+        new_birthday = st.date_input("Birthday", min_value=datetime.date(1900, 1, 1))
+        new_password = st.text_input("New Password", type="password")
+        if st.form_submit_button("Register"):
+            hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())
+            hashed_password_hex = binascii.hexlify(hashed_password).decode()
+            
+            if new_username in st.session_state.df_users['username'].values:
+                st.error("Username already exists. Please choose a different one.")
+            else:
+                new_user = pd.DataFrame([[new_username, new_name, new_birthday, hashed_password_hex, '', '', '', '', '', '', '']], columns=DATA_COLUMNS)
+                st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
+                
+                st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
+                st.success("Registration successful! You can now log in.")
+
+    """ Authenticate the user. """
+    login_df = st.session_state.df_users
+    login_df['username'] = login_df['username'].astype(str)
+
+    if username in login_df['username'].values:
+        stored_hashed_password = login_df.loc[login_df['username'] == username, 'password'].values[0]
+        stored_hashed_password_bytes = binascii.unhexlify(stored_hashed_password)
+        
+        if bcrypt.checkpw(password.encode('utf8'), stored_hashed_password_bytes): 
+            st.session_state['authentication'] = True
+            st.session_state['username'] = username
+            st.success('Login successful')
+            st.experimental_rerun()
+        else:
+            st.error('Incorrect password')
+    else:
+        st.error('Username not found')
+
 def main():
     init_github()
     init_credentials()
