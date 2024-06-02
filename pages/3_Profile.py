@@ -215,19 +215,24 @@ def show_saved_entries():
 def german_protocols():
     st.title("German Protocols")
     st.subheader("Anxiety Attack Protocol")
+    st.write("Click on the button to download the german version")
+    st.write("Um die Deutsche PDF version des 'Anxiety Attack Protocol' herunterzuladen, auf 'Download Panickattacke_Protokoll' klicken")
     with open("Panickattacke_Protokoll.pdf", "rb") as pdf_file:
         pdf_bytes = pdf_file.read()
         st.download_button(
-            label="Download PDF",
+            label="Download Panickattacke_Protokoll",
             data=pdf_bytes,
             file_name="Panickattacke_Protokoll.pdf",
             mime="application/pdf",
         )
+    st.write("---")
     st.subheader("Anxiety Protocol")
+    st.write("Click on the button to download the german version")
+    st.write("Um die Deutsche PDF version des 'Anxiety Protocol' herunterzuladen, auf 'Download Download Angstprotokoll' klicken")
     with open("Angstprotokoll.pdf", "rb") as pdf_file:
         pdf_bytes = pdf_file.read()
         st.download_button(
-            label="Download PDF",
+            label="Download Angstprotokoll",
             data=pdf_bytes,
             file_name="Angstprotokoll.pdf",
             mime="application/pdf",
