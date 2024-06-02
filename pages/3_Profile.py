@@ -293,10 +293,11 @@ def display_emergency_contact():
     else:
         st.sidebar.write("No emergency contact information available.")
 
-# Define a function to format the phone number
 def format_phone_number(number):
     """Format phone number using phonenumbers library."""
     try:
+        if not number.startswith('+'):
+            number = '+41' + number.lstrip('0')  # Assume Swiss number if no country code
         phone_number = phonenumbers.parse(number, "CH")  # "CH" is for Switzerland
         if phonenumbers.is_valid_number(phone_number):
             return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.E164)
