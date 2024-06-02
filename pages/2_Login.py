@@ -64,8 +64,8 @@ def register_page():
                 # Initialize the anxiety protocol CSV files for the new user
                 attack_protocol_file = f"{new_username}_anxiety_attack_data.csv"
                 anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
-                empty_attack_df = pd.DataFrame(columns=ATTACK_COLUMNS)
-                empty_anxiety_df = pd.DataFrame(columns=ANXIETY_COLUMNS)
+                new_attack_df = pd.DataFrame(columns=ATTACK_COLUMNS)
+                new_anxiety_df = pd.DataFrame(columns=ANXIETY_COLUMNS)
                 st.session_state.github.write_df(attack_protocol_file, empty_attack_df, "initialized attack protocol data file")
                 st.session_state.github.write_df(anxiety_protocol_file, empty_anxiety_df, "initialized anxiety protocol data file")
                 
