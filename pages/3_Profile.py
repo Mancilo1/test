@@ -76,7 +76,7 @@ def register_page():
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
                 
                 # Initialize the anxiety protocol CSV files for the new user
-                attack_protocol_file = f"{new_username}_data.csv"
+                attack_protocol_file = f"{new_username}_anxiety_attack_data.csv"
                 anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
                 empty_attack_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
                 empty_anxiety_df = pd.DataFrame(columns=['timestamp', 'entry'])
