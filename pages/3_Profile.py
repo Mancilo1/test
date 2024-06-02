@@ -20,7 +20,7 @@ def init_github():
             st.secrets["github"]["repo"],
             st.secrets["github"]["token"])
         print("github initialized")
-    
+
 def init_credentials():
     """Initialize or load the dataframe."""
     if 'df_users' not in st.session_state:
@@ -29,7 +29,8 @@ def init_credentials():
         else:
             st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
         # Ensure phone number columns are treated as strings
-        st.session_state.df_users = st.session_state.df_users.astype({'phone_number': 'str', 'emergency_contact_number': 'str'})
+        st.session_state.df_users['phone_number'] = st.session_state.df_users['phone_number'].astype(str)
+        st.session_state.df_users['emergency_contact_number'] = st.session_state.df_users['emergency_contact_number'].astype(str)
 
 def login_page():
     """ Login an existing user. """
@@ -67,7 +68,8 @@ def register_page():
                 new_user = pd.DataFrame([[new_username, new_name, new_birthday, hashed_password_hex, '', '', '', '', '', '', '']], columns=DATA_COLUMNS)
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
                 # Ensure phone number columns are treated as strings
-                st.session_state.df_users = st.session_state.df_users.astype({'phone_number': 'str', 'emergency_contact_number': 'str'})
+                st.session_state.df_users['phone_number'] = st.session_state.df_users['phone_number'].astype(str)
+                st.session_state.df_users['emergency_contact_number'] = st.session_state.df_users['emergency_contact_number'].astype(str)
                 st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
                 st.success("Registration successful! You can now log in.")
 
@@ -80,7 +82,7 @@ def authenticate(username, password):
         stored_hashed_password = login_df.loc[login_df['username'] == username, 'password'].values[0]
         stored_hashed_password_bytes = binascii.unhexlify(stored_hashed_password)
         
-        if bcrypt.checkpw(password.encode('utf8'), stored_hashed_password_bytes): 
+        if bcrypt.checkpw(password.encode('utf8'), stored_hashed_password_bytes):
             st.session_state['authentication'] = True
             st.session_state['username'] = username
             st.success('Login successful')
@@ -171,6 +173,10 @@ def main_page():
                 if st.button("Save Changes"):
                     formatted_phone_number = format_phone_number(phone_number)
                     formatted_emergency_contact_number = format_phone_number(emergency_contact_number)
+
+                    # Debug information
+                    st.write(f"Formatted phone number: {formatted_phone_number}")
+                    st.write(f"Formatted emergency contact number: {formatted_emergency_contact_number}")
                     
                     # Save or clear phone number if empty
                     if formatted_phone_number is not None:
@@ -191,6 +197,11 @@ def main_page():
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_name'] = emergency_contact_name
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'email'] = email
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'doctor_email'] = doctor_email
+
+                    # Ensure phone number columns are treated as strings
+                    st.session_state.df_users['phone_number'] = st.session_state.df_users['phone_number'].astype(str)
+                    st.session_state.df_users['emergency_contact_number'] = st.session_state.df_users['emergency_contact_number'].astype(str)
+
                     st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "updated user data")
                     st.success("Profile updated successfully!")
                     st.session_state.edit_profile = False
