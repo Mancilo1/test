@@ -76,7 +76,7 @@ def register_page():
                 attack_protocol_file = f"{new_username}_anxiety_attack_data.csv"
                 anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
                 empty_attack_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
-                empty_anxiety_df = pd.DataFrame(columns=['timestamp', 'entry'])
+                empty_anxiety_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
                 st.session_state.github.write_df(attack_protocol_file, empty_attack_df, "initialized attack protocol data file")
                 st.session_state.github.write_df(anxiety_protocol_file, empty_anxiety_df, "initialized anxiety protocol data file")
                 
@@ -225,7 +225,6 @@ def anxiety_protocol():
             'Symptoms': ", ".join(symptoms_list),
             'Help': help_response
         }
-        st.switch_page("pages/3_Profile.py")
         new_entry_df = pd.DataFrame([new_entry])
 
         st.session_state.anxiety_data = pd.concat([st.session_state.anxiety_data, new_entry_df], ignore_index=True)
@@ -236,6 +235,7 @@ def anxiety_protocol():
         # Clear the symptoms list and rerun to refresh the state
         st.session_state.symptoms = []
         st.experimental_rerun()
+
 
 def format_phone_number(number):
     """Format phone number using phonenumbers library."""
