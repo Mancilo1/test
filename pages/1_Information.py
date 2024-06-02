@@ -28,7 +28,6 @@ def init_credentials():
             st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
 
 def main():
-    def main():
     init_github()
     init_credentials()
 
