@@ -160,13 +160,13 @@ def main_page():
             st.switch_page("pages/2_Login.py")
 
 def anxiety_assessment():
-    st.title("Anxiety Assessment:")
+    st.title("Anxiety Assessment")
     
     if "step" not in st.session_state:
         st.session_state.step = 1
 
     if st.session_state.step == 1:
-        st.write("Do you feel like you're having an Anxiety Attack right now?")
+        st.subheader("Do you feel like you're having an Anxiety Attack right now?")
         if st.button("Yes"):
             st.switch_page("pages/4_Anxiety_Attack_Protocol.py")
         if st.button("No"):
@@ -174,7 +174,7 @@ def anxiety_assessment():
             st.experimental_rerun()
 
     if st.session_state.step == 2:
-        st.write("Are you anxious right now?")
+        st.subheader("Are you anxious right now?")
         if st.button("Yes"):
             st.switch_page("pages/5_Anxiety_Protocol.py")
         if st.button("No"):
