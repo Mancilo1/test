@@ -142,10 +142,10 @@ def main_page():
 
     if 'username' in st.session_state:
         username = st.session_state['username']
-
+        
         # Load user data
         user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == username]
-
+        
         if not user_data.empty:
             if 'edit_profile' not in st.session_state:
                 st.session_state.edit_profile = False
@@ -168,23 +168,24 @@ def main_page():
                 if st.button("Save Changes"):
                     formatted_phone_number = format_phone_number(phone_number)
                     formatted_emergency_contact_number = format_phone_number(emergency_contact_number)
-
-                    if formatted_phone_number and formatted_emergency_contact_number:
-                        st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'name'] = name
-                        st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'birthday'] = birthday
+                    
+                    # Only save formatted numbers if they are not None
+                    if formatted_phone_number is not None:
                         st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'phone_number'] = formatted_phone_number
-                        st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'address'] = address
-                        st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'occupation'] = occupation
-                        st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_name'] = emergency_contact_name
+                    if formatted_emergency_contact_number is not None:
                         st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_number'] = formatted_emergency_contact_number
-                        st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'email'] = email
-                        st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'doctor_email'] = doctor_email
-                        st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "updated user data")
-                        st.success("Profile updated successfully!")
-                        st.session_state.edit_profile = False
-                        st.experimental_rerun()
-                    else:
-                        st.error("Invalid phone number format.")
+
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'name'] = name
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'birthday'] = birthday
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'address'] = address
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'occupation'] = occupation
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'emergency_contact_name'] = emergency_contact_name
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'email'] = email
+                    st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'doctor_email'] = doctor_email
+                    st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "updated user data")
+                    st.success("Profile updated successfully!")
+                    st.session_state.edit_profile = False
+                    st.experimental_rerun()
 
                 if st.button("Cancel"):
                     st.session_state.edit_profile = False
