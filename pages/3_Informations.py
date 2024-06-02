@@ -19,15 +19,22 @@ def main():
 
     # Article 1
     st.write("## Anxiety Disorder")
-    st.write("Occasional anxiety is a normal part of life. Many people worry about things such as health, money, or family problems. But anxiety disorders involve more than temporary worry or fear. For people with an anxiety disorder, the anxiety does not go away and can get worse over time. The symptoms can interfere with daily activities such as job performance, schoolwork, and relationships.          There are several types of anxiety disorders, including generalized anxiety disorder, panic disorder, social anxiety disorder, and various phobia-related disorders.")
+    st.write("### National Institution of Mental Health")
+    st.markdown(""" 
+    What is anxiety?
+    Occasional anxiety is a normal part of life. Many people worry about things such as health, money, or family problems. But anxiety disorders involve more than temporary worry or fear. For people with an anxiety disorder, the anxiety does not go away and can get worse over time. The symptoms can interfere with daily activities such as job performance, schoolwork, and relationships.
+    
+    There are several types of anxiety disorders, including generalized anxiety disorder, panic disorder, social anxiety disorder, and various phobia-related disorders. 
+    """)
     if st.button("Read more", key="article1"):
         webbrowser.open_new_tab("https://www.nimh.nih.gov/health/topics/anxiety-disorders")
 
     # Article 2
-    st.write("## [Mental Health: Breaking the Stigma](https://www.example.com/article2)")
-    st.write("Mental health issues are often surrounded by stigma, preventing many people from seeking the help they need. This article discusses the importance of breaking the stigma around mental health and provides resources for those seeking support.")
+    st.write("## Anxiety Disorder")
+    st.write("### World Health Organisation")
+    st.write("Everyone can feel anxious sometimes, but people with anxiety disorders often experience fear and worry that is both intense and excessive. These feelings are typically accompanied by physical tension and other behavioural and cognitive symptoms. They are difficult to control, cause significant distress and can last a long time if untreated. Anxiety disorders interfere with daily activities and can impair a person’s family, social and school or working life. An estimated 4% of the global population currently experience an anxiety disorder (1). In 2019, 301 million people in the world had an anxiety disorder, making anxiety disorders the most common of all mental disorders (1). Although highly effective treatments for anxiety disorders exist, only about 1 in 4 people in need (27.6%) receive any treatment (2). Barriers to care include lack of awareness that this is a treatable health condition, lack of investment in mental health services, lack of trained health care providers, and social stigma.")
     if st.button("Read more", key="article2"):
-        st.write("[Read more](https://www.example.com/article2)")
+        webbrowser.open_new_tab("https://www.who.int/news-room/fact-sheets/detail/anxiety-disorders")
 
     # Article 3
     st.write("## [Coping with Anxiety: Strategies and Tips](https://www.example.com/article3)")
