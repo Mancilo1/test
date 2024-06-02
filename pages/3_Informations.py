@@ -25,14 +25,14 @@ def main():
             register_page()
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        emergency_contact_number = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username'], 'emergency_contact_number'].iloc[0] if 'emergency_contact_number' in st.session_state.df_users.columns else ''
-        if emergency_contact_number:
-            st.sidebar.write(f"Emergency Contact: {emergency_contact_number}")
+        anxiety_attack_protocol()
 
-        if st.sidebar.button("Logout"):
+        logout_button = st.sidebar.button("Logout")
+        if logout_button:
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
             st.switch_page("main.py")
+            st.experimental_rerun()
 
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
