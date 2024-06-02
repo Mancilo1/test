@@ -126,22 +126,6 @@ def main():
             st.switch_page("Main.py")
 
     display_emergency_contact()
-
-def display_emergency_contact():
-    """Display the emergency contact in the sidebar if it exists."""
-    if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
-        emergency_contact_name = st.session_state['emergency_contact_name']
-        emergency_contact_number = st.session_state['emergency_contact_number']
-
-        if emergency_contact_number:
-            formatted_emergency_contact_number = format_phone_number(emergency_contact_number)
-            st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
-            st.sidebar.markdown(f"[{formatted_emergency_contact_number}](tel:{formatted_emergency_contact_number})")
-        else:
-            st.sidebar.write("No valid emergency contact number available.")
-    else:
-        st.sidebar.write("No emergency contact information available.")
-
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
@@ -218,7 +202,7 @@ def main_page():
                 col1, col2 = st.columns(2)
                 with col1:
                     st.write("Name:", user_data['name'].iloc[0])
-                    st.write("Phone Number:", user_data['phone_number'].iloc[0] if 'phone_number' in user_data.columns else '')
+                    st.write("Phone Number:", format_phone_number(user_data['phone_number'].iloc[0]) if 'phone_number' in user_data.columns else '')
                     st.write("Occupation:", user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
                     st.write("Emergency Contact Name:", user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
                     st.write("Doctor's Email:", user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
@@ -227,7 +211,7 @@ def main_page():
                     st.write("Birthday:", user_data['birthday'].iloc[0])
                     st.write("Address:", user_data['address'].iloc[0] if 'address' in user_data.columns else '')
                     st.write("Email:", user_data['email'].iloc[0] if 'email' in user_data.columns else '')
-                    st.write("Emergency Contact Number:", user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
+                    st.write("Emergency Contact Number:", format_phone_number(user_data['emergency_contact_number'].iloc[0]) if 'emergency_contact_number' in user_data.columns else '')
 
                 if st.button("Edit Profile"):
                     st.session_state.edit_profile = True
@@ -338,6 +322,24 @@ def format_phone_number(number):
     except phonenumbers.NumberParseException as e:
         st.write(f"Error parsing phone number: {e}")  # Debug info
         return number  # Return the original number if parsing fails
+
+def display_emergency_contact():
+    """Display the emergency contact in the sidebar if it exists."""
+    if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
+        emergency_contact_name = st.session_state['emergency_contact_name']
+        emergency_contact_number = st.session_state['emergency_contact_number']
+
+        if emergency_contact_number:
+            formatted_emergency_contact_number = format_phone_number(emergency_contact_number)
+            st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
+            if formatted_emergency_contact_number:
+                st.sidebar.markdown(f"[{formatted_emergency_contact_number}](tel:{formatted_emergency_contact_number})")
+            else:
+                st.sidebar.write("No valid emergency contact number available.")
+        else:
+            st.sidebar.write("No emergency contact number available.")
+    else:
+        st.sidebar.write("No emergency contact information available.")
 
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
