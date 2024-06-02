@@ -67,7 +67,7 @@ def register_page():
                 st.session_state.github.write_df(attack_protocol_file, empty_attack_df, "initialized attack protocol data file")
                 st.session_state.github.write_df(anxiety_protocol_file, empty_anxiety_df, "initialized anxiety protocol data file")
                 
-                # Write the updated dataframe to GitHub data repository
+                 # Write the updated dataframe to GitHub data repository
                 try:
                     st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
                     st.success("Registration successful! You can now log in.")
