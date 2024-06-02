@@ -26,8 +26,7 @@ def main():
     
     There are several types of anxiety disorders, including generalized anxiety disorder, panic disorder, social anxiety disorder, and various phobia-related disorders. 
     """)
-    if st.button("Read more", key="article1"):
-        webbrowser.open_new_tab("https://www.nimh.nih.gov/health/topics/anxiety-disorders")
+    st.write("[Read more]("https://www.nimh.nih.gov/health/topics/anxiety-disorders")
 
     # Article 2
     st.write("## Anxiety Disorder")
