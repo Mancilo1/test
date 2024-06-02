@@ -78,8 +78,8 @@ def register_page():
                     st.error(f"An unexpected error occurred: {e}")
 
 def login_page():
-    logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
-    st.image(logo_path, use_column_width=True)
+    """ Login an existing user. """
+    st.image("Logo.jpeg", width=600)
     st.write("---")
     st.title("Login")
     with st.form(key='login_form'):
@@ -87,6 +87,7 @@ def login_page():
         password = st.text_input("Password", type="password")
         if st.form_submit_button("Login"):
             authenticate(username, password)
+            st.switch_page("pages/3_Profile.py")
 
 def authenticate(username, password):
     """
@@ -134,10 +135,6 @@ def main():
         st.write("### You are already logged in")
         show_gif()
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
-        if not user_data.empty:
-            st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
-            st.session_state['emergency_contact_number'] = user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else ''
         logout_button = st.button("Logout")
         if logout_button:
             st.session_state['authentication'] = False
