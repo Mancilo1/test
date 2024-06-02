@@ -3,14 +3,16 @@ import binascii
 import bcrypt
 import time
 import pandas as pd
-import phonenumbers
+import phonenumbers  # Import the phonenumbers library
 from github_contents import GithubContents
 from PIL import Image
+import datetime
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'address', 'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email']
 
+# Define a function to format the phone number
 def format_phone_number(number):
     """Format phone number using phonenumbers library."""
     try:
@@ -211,6 +213,18 @@ def main():
             st.session_state.pop('username', None)
             st.switch_page("Main.py")
 
+    display_emergency_contact()
+
+def display_emergency_contact():
+    """Display the emergency contact in the sidebar if it exists."""
+    if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
+        emergency_contact_name = st.session_state['emergency_contact_name']
+        emergency_contact_number = st.session_state['emergency_contact_number']
+        
+        st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
+        st.sidebar.markdown(f"[{emergency_contact_number}](tel:{emergency_contact_number})")
+    else:
+        st.sidebar.write("No emergency contact information available.")
+
 if __name__ == "__main__":
     main()
-    display_emergency_contact()
