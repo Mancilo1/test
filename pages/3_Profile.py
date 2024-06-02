@@ -84,6 +84,38 @@ def authenticate(username, password):
     else:
         st.error('Username not found')
 
+def main():
+    init_github()
+    init_credentials()
+
+    if 'authentication' not in st.session_state:
+        st.session_state['authentication'] = False
+
+    if not st.session_state['authentication']:
+        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
+        if options == "Login":
+            login_page()
+        elif options == "Register":
+            register_page()
+    else:
+        st.sidebar.write(f"Logged in as {st.session_state['username']}")
+
+        user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
+        if not user_data.empty:
+            st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
+            st.session_state['emergency_contact_number'] = user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else ''
+        main_page()
+        st.write("---")
+        anxiety_assessment()
+        st.write("---")
+        german_protocols()
+        st.write("---")
+        show_saved_entries()
+        if st.sidebar.button("Logout"):
+            st.session_state['authentication'] = False
+            st.session_state.pop('username', None)
+            st.switch_page("Main.py")
+
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
@@ -248,38 +280,6 @@ def display_emergency_contact():
         st.sidebar.markdown(f"[{emergency_contact_number}](tel:{emergency_contact_number})")
     else:
         st.sidebar.write("No emergency contact information available.")
-
-def main():
-    init_github()
-    init_credentials()
-
-    if 'authentication' not in st.session_state:
-        st.session_state['authentication'] = False
-
-    if not st.session_state['authentication']:
-        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
-        if options == "Login":
-            login_page()
-        elif options == "Register":
-            register_page()
-    else:
-        st.sidebar.write(f"Logged in as {st.session_state['username']}")
-
-        user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
-        if not user_data.empty:
-            st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
-            st.session_state['emergency_contact_number'] = user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else ''
-        main_page()
-        st.write("---")
-        anxiety_assessment()
-        st.write("---")
-        german_protocols()
-        st.write("---")
-        show_saved_entries()
-        if st.sidebar.button("Logout"):
-            st.session_state['authentication'] = False
-            st.session_state.pop('username', None)
-            st.switch_page("Main.py")
 
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
