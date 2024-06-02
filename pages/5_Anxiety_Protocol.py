@@ -26,6 +26,9 @@ def init_credentials():
             st.session_state.df_users = st.session_state.github.read_df(DATA_FILE)
         else:
             st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
+        # Ensure phone number columns are treated as strings
+        st.session_state.df_users['phone_number'] = st.session_state.df_users['phone_number'].astype(str)
+        st.session_state.df_users['emergency_contact_number'] = st.session_state.df_users['emergency_contact_number'].astype(str)
 
 def login_page():
     """Login an existing user."""
