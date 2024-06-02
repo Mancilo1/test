@@ -15,8 +15,7 @@ def main():
     init_credentials()
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
-    st.title("Your Anxiety Tracker Journal")
-    st.subheader("Profile")
+    st.title("Inform yourselfe about Mental Health")
 
     if 'username' in st.session_state:
         username = st.session_state['username']
