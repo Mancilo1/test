@@ -107,6 +107,11 @@ def main():
             register_page()
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
+        user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
+        if not user_data.empty:
+            st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
+            st.session_state['emergency_contact_number'] = user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else ''
+        
         anxiety_attack_protocol()
 
         logout_button = st.sidebar.button("Logout")
@@ -118,13 +123,13 @@ def main():
 
 def anxiety_attack_protocol():
     username = st.session_state['username']
-    data_file = f"{username}_data.csv"
+    data_file = f"{username}_anxiety_attack_data.csv"
     
-    if 'data' not in st.session_state:
+    if 'anxiety_attack_data' not in st.session_state:
         if st.session_state.github.file_exists(data_file):
-            st.session_state.data = st.session_state.github.read_df(data_file)
+            st.session_state.anxiety_attack_data = st.session_state.github.read_df(data_file)
         else:
-            st.session_state.data = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
+            st.session_state.anxiety_attack_data = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
 
     st.title("Anxiety Attack Protocol")
 
@@ -167,7 +172,7 @@ def anxiety_attack_protocol():
     if 'symptoms' not in st.session_state:
         st.session_state.symptoms = []
 
-    new_symptom = st.text_input("Add new symptom:")
+     new_symptom = st.text_input("Add new symptom:")
     if st.button("Add Symptom") and new_symptom:
         st.session_state.symptoms.append(new_symptom)
 
@@ -202,20 +207,12 @@ def anxiety_attack_protocol():
             'Help': help_response
         }
         st.switch_page("pages/3_Profile.py")
-        # Create a DataFrame from the new entry
         new_entry_df = pd.DataFrame([new_entry])
-        
-        # Append the new entry to the existing data DataFrame
-        st.session_state.data = pd.concat([st.session_state.data, new_entry_df], ignore_index=True)
-        
-        st.session_state.github.write_df(data_file, st.session_state.data, "added new entry")
-        st.success("Entry saved successfully!")
 
-        # Clear the severity entries after saving
-        st.session_state.time_severity_entries = []
-        st.session_state.symptoms = []
-        st.session_state.triggers = []
-        st.experimental_rerun()
+        st.session_state.anxiety_attack_data = pd.concat([st.session_state.anxiety_attack_data, new_entry_df], ignore_index=True)
+
+        st.session_state.github.write_df(data_file, st.session_state.anxiety_attack_data, "added new entry")
+        st.success("Entry saved successfully!")
 
 def add_time_severity():
     if 'time_severity_entries' not in st.session_state:
