@@ -55,6 +55,13 @@ def register_page():
                 # Concatenate the new user DataFrame with the existing one
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
                 
+                # Initialize the anxiety protocol CSV files for the new user
+                attack_protocol_file = f"{new_username}_data.csv"
+                anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
+                empty_df = pd.DataFrame(columns=['timestamp', 'entry'])
+                st.session_state.github.write_df(attack_protocol_file, empty_df, "initialized attack protocol data file")
+                st.session_state.github.write_df(anxiety_protocol_file, empty_df, "initialized anxiety protocol data file")
+                
                 # Write the updated dataframe to GitHub data repository
                 try:
                     st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
