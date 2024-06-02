@@ -12,18 +12,6 @@ import datetime
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'address', 'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email']
 
-# Define a function to format the phone number
-def format_phone_number(number):
-    """Format phone number using phonenumbers library."""
-    try:
-        phone_number = phonenumbers.parse(number, "CH")  # "CH" is for Switzerland
-        if phonenumbers.is_valid_number(phone_number):
-            return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.E164)
-        else:
-            return None
-    except phonenumbers.NumberParseException:
-        return None
-
 def init_github():
     """Initialize the GithubContents object."""
     if 'github' not in st.session_state:
@@ -225,6 +213,18 @@ def display_emergency_contact():
         st.sidebar.markdown(f"[{emergency_contact_number}](tel:{emergency_contact_number})")
     else:
         st.sidebar.write("No emergency contact information available.")
+
+# Define a function to format the phone number
+def format_phone_number(number):
+    """Format phone number using phonenumbers library."""
+    try:
+        phone_number = phonenumbers.parse(number, "CH")  # "CH" is for Switzerland
+        if phonenumbers.is_valid_number(phone_number):
+            return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.E164)
+        else:
+            return None
+    except phonenumbers.NumberParseException:
+        return None
 
 if __name__ == "__main__":
     main()
