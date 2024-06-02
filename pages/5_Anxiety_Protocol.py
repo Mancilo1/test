@@ -61,12 +61,20 @@ def register_page():
                 st.error("Username already exists. Please choose a different one.")
                 return
             else:
-                new_user = pd.DataFrame([[new_username, new_name, hashed_password_hex]], columns=DATA_COLUMNS)
+                new_user = pd.DataFrame([[new_username, new_name, '', hashed_password_hex, '', '', '', '', '', '', '']], columns=DATA_COLUMNS)
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
+                
+                # Initialize the anxiety protocol CSV files for the new user
+                attack_protocol_file = f"{new_username}_data.csv"
+                anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
+                empty_df = pd.DataFrame(columns=['timestamp', 'entry'])
+                st.session_state.github.write_df(attack_protocol_file, empty_df, "initialized attack protocol data file")
+                st.session_state.github.write_df(anxiety_protocol_file, empty_df, "initialized anxiety protocol data file")
                 
                 # Writes the updated dataframe to GitHub data repository
                 st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
                 st.success("Registration successful! You can now log in.")
+
 
 def authenticate(username, password):
     """
