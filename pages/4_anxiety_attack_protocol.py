@@ -133,10 +133,6 @@ def anxiety_attack_protocol():
         # Clear the severity entries after saving
         st.session_state.time_severity_entries = []
 
-    # Display saved entries
-    st.subheader("Saved Entries")
-    st.write(st.session_state.data)
-
 def add_time_severity():
     if 'time_severity_entries' not in st.session_state:
         st.session_state.time_severity_entries = []
