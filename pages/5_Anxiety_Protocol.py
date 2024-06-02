@@ -107,6 +107,10 @@ def main():
             
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
+        user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
+        if not user_data.empty:
+            st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
+            st.session_state['emergency_contact_number'] = user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else ''
         anxiety_protocol()
 
         logout_button = st.sidebar.button("Logout")
@@ -238,3 +242,4 @@ def switch_page(page_name):
 
 if __name__ == "__main__":
     main()
+    display_emergency_contact()
