@@ -45,9 +45,6 @@ def login_page():
 
 def register_page():
     """Register a new user."""
-    logo_path = "Logo.jpeg"  
-    st.image(logo_path, use_column_width=True)
-    st.write("---")
     st.title("Register")
     with st.form(key='register_form'):
         new_username = st.text_input("New Username")
@@ -68,9 +65,10 @@ def register_page():
                 # Initialize the anxiety protocol CSV files for the new user
                 attack_protocol_file = f"{new_username}_data.csv"
                 anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
-                empty_df = pd.DataFrame(columns=['timestamp', 'entry'])
-                st.session_state.github.write_df(attack_protocol_file, empty_df, "initialized attack protocol data file")
-                st.session_state.github.write_df(anxiety_protocol_file, empty_df, "initialized anxiety protocol data file")
+                empty_attack_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
+                empty_anxiety_df = pd.DataFrame(columns=['timestamp', 'entry'])
+                st.session_state.github.write_df(attack_protocol_file, empty_attack_df, "initialized attack protocol data file")
+                st.session_state.github.write_df(anxiety_protocol_file, empty_anxiety_df, "initialized anxiety protocol data file")
                 
                 # Writes the updated dataframe to GitHub data repository
                 st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
