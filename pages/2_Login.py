@@ -106,6 +106,22 @@ def authenticate(username, password):
     else:
         st.error('Username not found')
 
+def show_gif():
+    gif_url = "https://media.tenor.com/5SMdPfjBuXwAAAAi/tomrobinson-tylastephens.gif"
+    gif_html = f'<img src="{gif_url}" style="width:100%;">'
+    st.markdown(gif_html, unsafe_allow_html=True)
+
+def display_emergency_contact():
+    """Display the emergency contact in the sidebar if it exists."""
+    if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
+        emergency_contact_name = st.session_state['emergency_contact_name']
+        emergency_contact_number = st.session_state['emergency_contact_number']
+        
+        st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
+        st.sidebar.markdown(f"[{emergency_contact_number}](tel:{emergency_contact_number})")
+    else:
+        st.sidebar.write("No emergency contact information available.")
+
 def main():
     init_github()
     init_credentials()
@@ -126,16 +142,12 @@ def main():
         st.write("### You are already logged in")
         show_gif()
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
+        
         logout_button = st.button("Logout")
         if logout_button:
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
             st.experimental_rerun()
-
-def show_gif():
-    gif_url = "https://media.tenor.com/5SMdPfjBuXwAAAAi/tomrobinson-tylastephens.gif"
-    gif_html = f'<img src="{gif_url}" style="width:100%;">'
-    st.markdown(gif_html, unsafe_allow_html=True)
 
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
