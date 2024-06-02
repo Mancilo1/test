@@ -134,7 +134,7 @@ def main_page():
     st.title("Your Anxiety Tracker Journal")
     st.subheader("Profile")
 
-     if 'username' in st.session_state:
+    if 'username' in st.session_state:
         username = st.session_state['username']
 
         # Load user data
