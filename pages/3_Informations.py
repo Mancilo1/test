@@ -17,17 +17,29 @@ def main():
     st.image(logo_path, use_column_width=True)
     st.title("Information about Mental Health")
 
-    if 'username' in st.session_state:
-        username = st.session_state['username']
-        
-        # Load user data
-        user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == username]
-        
-        if not user_data.empty:
-            if 'edit_profile' not in st.session_state:
-                st.session_state.edit_profile = False
+    if 'authentication' not in st.session_state:
+        st.session_state['authentication'] = False
 
-    # Article 1
+    if not st.session_state['authentication']:
+        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
+        if options == "Login":
+            login_page()
+        elif options == "Register":
+            register_page()
+    else:
+        st.sidebar.write(f"Logged in as {st.session_state['username']}")
+        emergency_contact_number = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username'], 'emergency_contact_number'].iloc[0] if 'emergency_contact_number' in st.session_state.df_users.columns else ''
+        if emergency_contact_number:
+            st.sidebar.write(f"Emergency Contact: {emergency_contact_number}")
+        main_page()
+        anxiety_assessment()
+        show_saved_entries()
+        if st.sidebar.button("Logout"):
+            st.session_state['authentication'] = False
+            st.session_state.pop('username', None)
+            st.switch_page("main.py")
+
+    # Link to Article 1 about Mental Health
     st.write("## Anxiety Disorder")
     st.write("### National Institution of Mental Health")
     st.markdown(""" 
@@ -38,7 +50,7 @@ def main():
     """)
     st.markdown('<a href="https://www.nimh.nih.gov/health/topics/anxiety-disorders" target="_blank"><button>Read more</button></a>', unsafe_allow_html=True)
 
-    # Article 2
+    # Link to Article 2 about Mental Health
     st.write("## Anxiety Disorder")
     st.write("### World Health Organisation")
     st.markdown("""
@@ -50,7 +62,7 @@ def main():
     """)
     st.markdown('<a href="https://www.who.int/news-room/fact-sheets/detail/anxiety-disorders" target="_blank"><button>Read more</button></a>', unsafe_allow_html=True)
 
-    # Article 3
+    # Link to Article 3 about Mental Health
     st.write("## 11 tips for coping with an anxiety disorder")
     st.markdown("""
     Keep physically active.
@@ -62,7 +74,7 @@ def main():
     """)
     st.markdown('<a href="https://www.mayoclinichealthsystem.org/hometown-health/speaking-of-health/11-tips-for-coping-with-an-anxiety-disorder" target="_blank"><button>Read more</button></a>', unsafe_allow_html=True)
         
-    # Article 4
+    # Link to Article 4 about Mental Health
     st.write("## I Feel Anxious: Tips for Dealing with Anxiety")
     st.write("Feeling tense, restless, or fearful? Anxiety can make you feel trapped in your own head, but these tools can help you ease tension, stay present, and manage anxiety.")
     st.markdown(""" 
