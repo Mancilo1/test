@@ -44,7 +44,7 @@ def main_page():
     selected_language = st.sidebar.selectbox("Choose your language", list(languages.keys()), index=list(languages.keys()).index(st.session_state.language))
     st.session_state.language = selected_language
     target_language = languages[selected_language]
-    st.subheader("Anxiety Tracker Journal")
+    st.title("Anxiety Tracker Journal")
 
     original_text = (
         "Welcome to FeelNow, your anxiety attack journal. "
