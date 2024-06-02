@@ -26,6 +26,9 @@ def init_credentials():
             st.session_state.df_users = st.session_state.github.read_df(DATA_FILE)
         else:
             st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
+        # Ensure phone number columns are treated as strings
+        st.session_state.df_users['phone_number'] = st.session_state.df_users['phone_number'].astype(str)
+        st.session_state.df_users['emergency_contact_number'] = st.session_state.df_users['emergency_contact_number'].astype(str)
 
 def register_page():
     """ Register a new user. """
@@ -59,9 +62,10 @@ def register_page():
                 # Initialize the anxiety protocol CSV files for the new user
                 attack_protocol_file = f"{new_username}_data.csv"
                 anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
-                empty_df = pd.DataFrame(columns=['timestamp', 'entry'])
-                st.session_state.github.write_df(attack_protocol_file, empty_df, "initialized attack protocol data file")
-                st.session_state.github.write_df(anxiety_protocol_file, empty_df, "initialized anxiety protocol data file")
+                empty_attack_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
+                empty_anxiety_df = pd.DataFrame(columns=['timestamp', 'entry'])
+                st.session_state.github.write_df(attack_protocol_file, empty_attack_df, "initialized attack protocol data file")
+                st.session_state.github.write_df(anxiety_protocol_file, empty_anxiety_df, "initialized anxiety protocol data file")
                 
                 # Write the updated dataframe to GitHub data repository
                 try:
@@ -83,7 +87,6 @@ def login_page():
         password = st.text_input("Password", type="password")
         if st.form_submit_button("Login"):
             authenticate(username, password)
-            st.switch_page("pages/3_Profile.py")
 
 def authenticate(username, password):
     """
