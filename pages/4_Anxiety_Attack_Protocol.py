@@ -4,6 +4,7 @@ import binascii
 import pytz
 import datetime
 import pandas as pd
+import phonenumbers
 from github_contents import GithubContents
 
 # Constants
@@ -61,8 +62,15 @@ def register_page():
                 st.error("Username already exists. Please choose a different one.")
                 return
             else:
-                new_user = pd.DataFrame([[new_username, new_name, hashed_password_hex]], columns=DATA_COLUMNS)
+                new_user = pd.DataFrame([[new_username, new_name, '', hashed_password_hex, '', '', '', '', '', '', '']], columns=DATA_COLUMNS)
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
+                
+                # Initialize the anxiety protocol CSV files for the new user
+                attack_protocol_file = f"{new_username}_data.csv"
+                anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
+                empty_df = pd.DataFrame(columns=['timestamp', 'entry'])
+                st.session_state.github.write_df(attack_protocol_file, empty_df, "initialized attack protocol data file")
+                st.session_state.github.write_df(anxiety_protocol_file, empty_df, "initialized anxiety protocol data file")
                 
                 # Writes the updated dataframe to GitHub data repository
                 st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
@@ -246,6 +254,22 @@ def add_time_severity():
     # Display all time-severity entries
     for entry in st.session_state.time_severity_entries:
         st.write(f"Time: {entry['time']}, Severity: {entry['severity']}")
+
+def format_phone_number(number):
+    """Format phone number using phonenumbers library."""
+    if not number or pd.isna(number) or number == 'nan':
+        return None
+    number_str = str(number).strip()
+    if number_str.endswith('.0'):
+        number_str = number_str[:-2]  # Remove trailing '.0'
+    try:
+        phone_number = phonenumbers.parse(number_str, "CH")  # "CH" is for Switzerland
+        if phonenumbers.is_valid_number(phone_number):
+            return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.E164)
+        else:
+            return number_str  # Return the original number if invalid
+    except phonenumbers.NumberParseException:
+        return number_str  # Return the original number if parsing fails
 
 def display_emergency_contact():
     """Display the emergency contact in the sidebar if it exists."""
