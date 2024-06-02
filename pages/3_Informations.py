@@ -36,8 +36,7 @@ def main():
     
     There are several types of anxiety disorders, including generalized anxiety disorder, panic disorder, social anxiety disorder, and various phobia-related disorders. 
     """)
-    if st.button("Read more", key="article1"):
-        webbrowser.open_new_tab("https://www.nimh.nih.gov/health/topics/anxiety-disorders")
+    st.markdown('<a href="https://www.nimh.nih.gov/health/topics/anxiety-disorders" target="_blank"><button>Read more</button></a>', unsafe_allow_html=True)
 
     # Article 2
     st.write("## Anxiety Disorder")
@@ -49,8 +48,7 @@ def main():
 
     Although highly effective treatments for anxiety disorders exist, only about 1 in 4 people in need (27.6%) receive any treatment (2). Barriers to care include lack of awareness that this is a treatable health condition, lack of investment in mental health services, lack of trained health care providers, and social stigma.
     """)
-    if st.button("Read more", key="article2"):
-        webbrowser.open_new_tab("https://www.who.int/news-room/fact-sheets/detail/anxiety-disorders")
+    st.markdown('<a href="https://www.who.int/news-room/fact-sheets/detail/anxiety-disorders" target="_blank"><button>Read more</button></a>', unsafe_allow_html=True)
 
     # Article 3
     st.write("## 11 tips for coping with an anxiety disorder")
@@ -62,8 +60,7 @@ def main():
     Quit smoking, and cut back or quit drinking caffeinated beverages.
     Nicotine and caffeine can worsen anxiety.
     """)
-    if st.button("Read more", key="article3"):
-        webbrowser.open_new_tab("https://www.mayoclinichealthsystem.org/hometown-health/speaking-of-health/11-tips-for-coping-with-an-anxiety-disorder")
+    st.markdown('<a href="https://www.mayoclinichealthsystem.org/hometown-health/speaking-of-health/11-tips-for-coping-with-an-anxiety-disorder" target="_blank"><button>Read more</button></a>', unsafe_allow_html=True)
         
     # Article 4
     st.write("## I Feel Anxious: Tips for Dealing with Anxiety")
@@ -74,8 +71,7 @@ def main():
 
     Sometimes it can seem that you feel nervous, panicky, and on-edge for no reason at all. However, there’s usually a trigger to feelings of anxiety and panic, even if it’s not immediately obvious.
     """)
-    if st.button("Read more", key="article1"):
-        webbrowser.open_new_tab("https://www.helpguide.org/articles/anxiety/i-feel-anxious-tips-for-dealing-with-anxiety.htm")
+    st.markdown('<a href="https://www.helpguide.org/articles/anxiety/i-feel-anxious-tips-for-dealing-with-anxiety.htm" target="_blank"><button>Read more</button></a>', unsafe_allow_html=True)
 
 def init_github():
     """Initialize the GithubContents object."""
