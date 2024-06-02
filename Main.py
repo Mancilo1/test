@@ -30,6 +30,7 @@ def main_page():
     # Display the logo image with responsive width
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
+    st.write("---")
 
     languages = {
         "English": "en",
