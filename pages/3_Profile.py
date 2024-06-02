@@ -82,7 +82,7 @@ def main_page():
     else:
         st.error("User not logged in.")
         if st.button("Login/Register"):
-            st.switch_page("pages/1_login.py")
+            st.switch_page("pages/2_Login.py")
 
 def anxiety_assessment():
     st.subheader("Anxiety Assessment:")
@@ -93,7 +93,7 @@ def anxiety_assessment():
     if st.session_state.step == 1:
         st.write("Do you feel like you're having an Anxiety Attack right now?")
         if st.button("Yes"):
-            st.switch_page("pages/4_anxiety_attack_protocol.py")
+            st.switch_page("pages/4_Anxiety_Attack_Protocol.py")
         if st.button("No"):
             st.session_state.step = 2
             st.experimental_rerun()
@@ -101,7 +101,7 @@ def anxiety_assessment():
     if st.session_state.step == 2:
         st.write("Are you anxious right now?")
         if st.button("Yes"):
-            st.switch_page("pages/5_anxiety_protocol.py")
+            st.switch_page("pages/5_Anxiety_Protocol.py")
         if st.button("No"):
             st.session_state.step = 3
             st.experimental_rerun()
@@ -162,7 +162,7 @@ def login_page():
         if st.form_submit_button("Login"):
             authenticate(username, password)
             if st.session_state['authentication']:
-                st.switch_page("pages/2_profile.py")
+                st.switch_page("pages/3_Profile.py")
 
 def register_page():
     """ Register a new user. """
