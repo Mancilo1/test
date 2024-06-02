@@ -189,6 +189,9 @@ def login_page():
 
 def register_page():
     """Register a new user."""
+    logo_path = "Logo.jpeg"  
+    st.image(logo_path, use_column_width=True)
+    st.write("---")
     st.title("Register")
     with st.form(key='register_form'):
         new_username = st.text_input("New Username")
