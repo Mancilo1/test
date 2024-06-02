@@ -233,6 +233,17 @@ def add_time_severity():
     # Display all time-severity entries
     for entry in st.session_state.time_severity_entries:
         st.write(f"Time: {entry['time']}, Severity: {entry['severity']}")
+        
+def display_emergency_contact():
+    """Display the emergency contact in the sidebar if it exists."""
+    if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
+        emergency_contact_name = st.session_state['emergency_contact_name']
+        emergency_contact_number = st.session_state['emergency_contact_number']
+        
+        st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
+        st.sidebar.markdown(f"[{emergency_contact_number}](tel:{emergency_contact_number})")
+    else:
+        st.sidebar.write("No emergency contact information available.")
 
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
