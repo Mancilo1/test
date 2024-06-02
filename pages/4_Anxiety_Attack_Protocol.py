@@ -76,7 +76,7 @@ def register_page():
                 attack_protocol_file = f"{new_username}_anxiety_attack_data.csv"
                 anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
                 empty_attack_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
-                empty_anxiety_df = pd.DataFrame(columns=['timestamp', 'entry'])
+                empty_anxiety_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
                 st.session_state.github.write_df(attack_protocol_file, empty_attack_df, "initialized attack protocol data file")
                 st.session_state.github.write_df(anxiety_protocol_file, empty_anxiety_df, "initialized anxiety protocol data file")
                 
