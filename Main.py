@@ -54,7 +54,8 @@ def main_page():
         "## How do I use it\n"
         "You can create your own login by registering. You will then have a list of important points to assess during an acute attack, such as symptoms, possible triggers, who helped you at that moment or how strongly you felt them. If you do not feel like you're having a panic attack but you do feel anxious, you can do the same in the simpler version.\n\n"
         "## About this App\n"
-        "This app is mainly used in English. If needed, there are files available for download after you have successfully logged in, which display the anxiety assessment protocols in German. You can use them as a reference and to help use the app, even if it is not in German. If you are not registered or logged in, you will not have access to the profile page and the anxiety assessment protocols. Once you are logged in, you will be redirected to your profile, where you will have access to your entries, personal data, and the anxiety assessment questions. You can use these questions or go directly to the anxiety assessment protocols if needed. You can log out anytime using the sidebar.\n\n"
+        "This app is mainly used in English. If needed, there are files available for download after you have successfully logged in, which display the anxiety assessment protocols in German. You can use them as a reference and to help use the app, even if it is not in German.\n"
+        "If you are not registered or logged in, you will not have access to the profile page and the anxiety assessment protocols. Once you are logged in, you will be redirected to your profile, where you will have access to your entries, personal data, and the anxiety assessment questions. You can use these questions or go directly to the anxiety assessment protocols if needed. You can log out anytime using the sidebar.\n\n"
     )
     
     # Translate the text
