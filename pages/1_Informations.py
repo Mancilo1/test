@@ -61,5 +61,16 @@ def main():
     """)
     st.markdown('<a href="https://www.helpguide.org/articles/anxiety/i-feel-anxious-tips-for-dealing-with-anxiety.htm" target="_blank"><button>Read more</button></a>', unsafe_allow_html=True)
 
+    col1, col2 = st.columns([0.8, 0.2])
+    with col2:
+        if st.button("Login/Register"):
+            st.switch_page("pages/2_Login.py")
+            
+def switch_page(page_name):
+    st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
+    time.sleep(3)
+    st.experimental_set_query_params(page=page_name)
+    st.experimental_rerun()
+
 if __name__ == "__main__":
     main()
