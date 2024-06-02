@@ -206,11 +206,8 @@ def anxiety_protocol():
 
         st.session_state.anxiety_data = pd.concat([st.session_state.anxiety_data, new_entry_df], ignore_index=True)
 
-        try:
-            st.session_state.github.write_df(data_file, st.session_state.anxiety_data, "added new entry")
-            st.success("Entry saved successfully!")
-        except Exception as e:
-            st.error(f"Failed to save entry: {e}")
+        st.session_state.github.write_df(data_file, st.session_state.anxiety_data, "added new entry")
+        st.success("Entry saved successfully!")
 
         # Clear the symptoms list and rerun to refresh the state
         st.session_state.symptoms = []
