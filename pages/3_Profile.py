@@ -146,7 +146,7 @@ def main_page():
                     birthday = st.date_input("Birthday:", value=pd.to_datetime(user_data['birthday'].iloc[0]))
                     address = st.text_area("Address:", value=user_data['address'].iloc[0] if 'address' in user_data.columns else '')
                     email = st.text_input("Email:", value=user_data['email'].iloc[0] if 'email' in user_data.columns else '')
-                    emergency_contact_number = st.text_input("Emergency Contact Number:", value=user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
+                    emergency_contact_number = st.text_input("Emergency Contact Number:", value=str(user_data['emergency_contact_number'].iloc[0]) if 'emergency_contact_number' in user_data.columns else '')
 
                 if st.button("Save Changes"):
                     st.session_state.df_users.loc[st.session_state.df_users['username'] == username, 'name'] = name
