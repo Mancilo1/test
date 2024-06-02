@@ -19,9 +19,11 @@ def main():
 
     # Article 1
     st.write("## Anxiety Disorder")
-    st.write("Anxiety is a normal part of life, but when it becomes overwhelming and affects your day-to-day activities, it might be time to seek help. This article explores the various causes of anxiety, common symptoms, and effective treatments to help you manage it.")
+    st.write("Occasional anxiety is a normal part of life. Many people worry about things such as health, money, or family problems. But anxiety disorders involve more than temporary worry or fear. For people with an anxiety disorder, the anxiety does not go away and can get worse over time. The symptoms can interfere with daily activities such as job performance, schoolwork, and relationships.
+
+There are several types of anxiety disorders, including generalized anxiety disorder, panic disorder, social anxiety disorder, and various phobia-related disorders.")
     if st.button("Read more", key="article1"):
-        st.write("[Read more](https://www.nimh.nih.gov/health/topics/anxiety-disorders)")
+        webbrowser.open_new_tab("https://www.nimh.nih.gov/health/topics/anxiety-disorders")
 
     # Article 2
     st.write("## [Mental Health: Breaking the Stigma](https://www.example.com/article2)")
