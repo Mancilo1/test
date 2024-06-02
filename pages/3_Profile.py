@@ -208,7 +208,7 @@ def main_page():
                 with col2:
                     st.write("Birthday:", user_data['birthday'].iloc[0])
                     st.write("Address:", user_data['address'].iloc[0] if 'address' in user_data.columns else '')
-                    st.write("Email:", user_data['email'].iloc[0] if 'email' in user data.columns else '')
+                    st.write("Email:", user_data['email'].iloc[0] if 'email' in user_data.columns else '')
                     st.write("Emergency Contact Number:", user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else '')
 
                 if st.button("Edit Profile"):
