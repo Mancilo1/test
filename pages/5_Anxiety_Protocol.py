@@ -31,119 +31,25 @@ def init_credentials():
         st.session_state.df_users['phone_number'] = st.session_state.df_users['phone_number'].astype(str)
         st.session_state.df_users['emergency_contact_number'] = st.session_state.df_users['emergency_contact_number'].astype(str)
 
-def login_page():
-    """Login an existing user."""
-    logo_path = "Logo.jpeg"  
-    st.image(logo_path, use_column_width=True)
-    st.write("---")
-    st.title("Login")
-    with st.form(key='login_form'):
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
-        if st.form_submit_button("Login"):
-            authenticate(username, password)
-
-def register_page():
-    """ Register a new user. """
-    st.title("Register")
-    with st.form(key='register_form'):
-        st.write("Please fill in the following details:")
-        new_first_name = st.text_input("First Name")
-        new_last_name = st.text_input("Last Name")
-        new_username = st.text_input("Username")
-        new_birthday = st.date_input("Birthday", min_value=datetime.date(1900, 1, 1))
-        new_password = st.text_input("Password", type="password")
-        
-        submit_button = st.form_submit_button("Register")
-        
-        if submit_button:
-            if new_username in st.session_state.df_users['username'].values:
-                st.error("Username already exists. Please choose a different one.")
-                return
-            else:
-                # Hash the password
-                hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())
-                hashed_password_hex = binascii.hexlify(hashed_password).decode()
-                
-                # Create a new user DataFrame
-                new_user_data = [[new_username, f"{new_first_name} {new_last_name}", new_birthday, hashed_password_hex, '', '', '', '', '', '', '']]
-                new_user = pd.DataFrame(new_user_data, columns=DATA_COLUMNS)
-                
-                # Concatenate the new user DataFrame with the existing one
-                st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
-                
-                # Initialize the anxiety protocol CSV files for the new user
-                attack_protocol_file = f"{new_username}_data.csv"
-                anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
-                empty_attack_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
-                empty_anxiety_df = pd.DataFrame(columns=['timestamp', 'entry'])
-                st.session_state.github.write_df(attack_protocol_file, empty_attack_df, "initialized attack protocol data file")
-                st.session_state.github.write_df(anxiety_protocol_file, empty_anxiety_df, "initialized anxiety protocol data file")
-                
-                # Write the updated dataframe to GitHub data repository
-                try:
-                    st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
-                    st.success("Registration successful! You can now log in.")
-                    st.switch_page("pages/3_Profile.py")
-                except GithubContents.UnknownError as e:
-                    st.error(f"An unexpected error occurred: {e}")
-                except Exception as e:
-                    st.error(f"An unexpected error occurred: {e}")
-
-def authenticate(username, password):
-    """
-    Authenticate the user.
-
-    Parameters:
-    username (str): The username to authenticate.
-    password (str): The password to authenticate.
-    """
-    login_df = st.session_state.df_users
-    login_df['username'] = login_df['username'].astype(str)
-
-    if username in login_df['username'].values:
-        stored_hashed_password = login_df.loc[login_df['username'] == username, 'password'].values[0]
-        stored_hashed_password_bytes = binascii.unhexlify(stored_hashed_password)  # Convert hex to bytes
-        
-        # Check the input password
-        if bcrypt.checkpw(password.encode('utf8'), stored_hashed_password_bytes): 
-            st.session_state['authentication'] = True
-            st.session_state['username'] = username
-            st.success('Login successful')
-            st.experimental_rerun()
-        else:
-            st.error('Incorrect password')
-    else:
-        st.error('Username not found')
-
 def main():
     init_github()
     init_credentials()
 
-    if 'authentication' not in st.session_state:
+    if 'authentication' not in st.session_state or not st.session_state['authentication']:
+        st.error("You must log in first.")
+        return
+
+    user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
+    if not user_data.empty:
+        st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
+        st.session_state['emergency_contact_number'] = user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else ''
+
+    anxiety_protocol()
+
+    if st.sidebar.button("Logout"):
         st.session_state['authentication'] = False
-
-    if not st.session_state['authentication']:
-        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
-        if options == "Login":
-            login_page()
-        elif options == "Register":
-            register_page()
-    else:
-        st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
-        if not user_data.empty:
-            st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
-            st.session_state['emergency_contact_number'] = user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else ''
-        
-        anxiety_protocol()
-
-        logout_button = st.sidebar.button("Logout")
-        if logout_button:
-            st.session_state['authentication'] = False
-            st.session_state.pop('username', None)
-            st.switch_page("Main.py")
-            st.experimental_rerun()
+        st.session_state.pop('username', None)
+        st.experimental_rerun()
 
 def anxiety_protocol():
     username = st.session_state['username']
@@ -225,13 +131,12 @@ def anxiety_protocol():
             'Symptoms': ", ".join(symptoms_list),
             'Help': help_response
         }
-        st.switch_page("pages/3_Profile.py")
         new_entry_df = pd.DataFrame([new_entry])
 
         st.session_state.anxiety_data = pd.concat([st.session_state.anxiety_data, new_entry_df], ignore_index=True)
-
         st.session_state.github.write_df(data_file, st.session_state.anxiety_data, "added new entry")
         st.success("Entry saved successfully!")
+        st.experimental_rerun()
 
 def format_phone_number(number):
     """Format phone number using phonenumbers library."""
@@ -252,8 +157,8 @@ def format_phone_number(number):
 def display_emergency_contact():
     """Display the emergency contact in the sidebar if it exists."""
     if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
-        emergency_contact_name = st.session_state['emergency_contact_name']
-        emergency_contact_number = st.session_state['emergency_contact_number']
+        emergency_contact_name = st.session_state.emergency_contact_name
+        emergency_contact_number = st.session_state.emergency_contact_number
 
         if emergency_contact_number:
             formatted_emergency_contact_number = format_phone_number(emergency_contact_number)
@@ -269,7 +174,6 @@ def display_emergency_contact():
 
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
-    time.sleep(3)
     st.experimental_set_query_params(page=page_name)
     st.experimental_rerun()
 
