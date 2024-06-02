@@ -160,7 +160,7 @@ def main_page():
             st.switch_page("pages/2_Login.py")
 
 def anxiety_assessment():
-    st.subheader("Anxiety Assessment:")
+    st.title("Anxiety Assessment:")
     
     if "step" not in st.session_state:
         st.session_state.step = 1
@@ -193,6 +193,7 @@ def show_gif():
     st.markdown(gif_html, unsafe_allow_html=True)
 
 def show_saved_entries():
+    st.title("Saved Entries")
     st.subheader("Saved Entries from Anxiety Attack Protocol")
     username = st.session_state['username']
     data_file_attack = f"{username}_data.csv"
