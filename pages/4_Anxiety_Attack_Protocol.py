@@ -10,6 +10,8 @@ from github_contents import GithubContents
 # Constants
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'address', 'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email']
+ANXIETY_COLUMNS = ['Date', 'Location', 'Anxiety Description', 'Cause', 'Triggers', 'Symptoms', 'Help']
+ATTACK_COLUMNS = ['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help']
 
 def init_github():
     """Initialize the GithubContents object."""
@@ -75,8 +77,8 @@ def register_page():
                 # Initialize the anxiety protocol CSV files for the new user
                 attack_protocol_file = f"{new_username}_anxiety_attack_data.csv"
                 anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
-                empty_attack_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
-                empty_anxiety_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
+                empty_attack_df = pd.DataFrame(columns=ATTACK_COLUMNS)
+                empty_anxiety_df = pd.DataFrame(columns=ANXIETY_COLUMNS)
                 st.session_state.github.write_df(attack_protocol_file, empty_attack_df, "initialized attack protocol data file")
                 st.session_state.github.write_df(anxiety_protocol_file, empty_anxiety_df, "initialized anxiety protocol data file")
                 
@@ -153,7 +155,7 @@ def anxiety_attack_protocol():
         if st.session_state.github.file_exists(data_file):
             st.session_state.anxiety_attack_data = st.session_state.github.read_df(data_file)
         else:
-            st.session_state.anxiety_attack_data = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
+            st.session_state.anxiety_attack_data = pd.DataFrame(columns=ATTACK_COLUMNS)
 
     st.title("Anxiety Attack Protocol")
 
