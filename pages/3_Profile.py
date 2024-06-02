@@ -28,10 +28,12 @@ def init_credentials():
             st.session_state.df_users = st.session_state.github.read_df(DATA_FILE)
         else:
             st.session_state.df_users = pd.DataFrame(columns=DATA_COLUMNS)
+        # Ensure phone number columns are treated as strings
+        st.session_state.df_users = st.session_state.df_users.astype({'phone_number': 'str', 'emergency_contact_number': 'str'})
 
 def login_page():
     """ Login an existing user. """
-    logo_path = "Logo.jpeg"  
+    logo_path = "Logo.jpeg"
     st.image(logo_path, use_column_width=True)
     st.write("---")
     st.title("Login")
@@ -45,7 +47,7 @@ def login_page():
 
 def register_page():
     """ Register a new user. """
-    logo_path = "Logo.jpeg"  
+    logo_path = "Logo.jpeg"
     st.image(logo_path, use_column_width=True)
     st.write("---")
     st.title("Register")
@@ -64,7 +66,8 @@ def register_page():
             else:
                 new_user = pd.DataFrame([[new_username, new_name, new_birthday, hashed_password_hex, '', '', '', '', '', '', '']], columns=DATA_COLUMNS)
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
-                
+                # Ensure phone number columns are treated as strings
+                st.session_state.df_users = st.session_state.df_users.astype({'phone_number': 'str', 'emergency_contact_number': 'str'})
                 st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
                 st.success("Registration successful! You can now log in.")
 
@@ -106,7 +109,7 @@ def main():
         user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
         if not user_data.empty:
             st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
-            st.session_state['emergency_contact_number'] = str(user_data['emergency_contact_number'].iloc[0]) if 'emergency_contact_number' in user_data.columns else ''
+            st.session_state['emergency_contact_number'] = user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else ''
 
         main_page()
         st.write("---")
@@ -220,7 +223,7 @@ def main_page():
         st.error("User not logged in.")
         if st.button("Login/Register"):
             st.switch_page("pages/2_Login.py")
-            
+
 def anxiety_assessment():
     st.title("Anxiety Assessment")
     
