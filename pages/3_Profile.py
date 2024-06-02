@@ -115,7 +115,7 @@ def anxiety_assessment():
 
 def show_gif():
     gif_url = "https://64.media.tumblr.com/28fad0005f6861c08f2c07697ff74aa4/tumblr_n4y0patw7Q1rn953bo1_500.gif"
-    gif_html = f'<img src="{gif_url}" width="400" height="300">'
+    gif_html = f'<img src="{gif_url}" style="width:100%;">'
     st.markdown(gif_html, unsafe_allow_html=True)
 
 def show_saved_entries():
