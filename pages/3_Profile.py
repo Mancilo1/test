@@ -132,9 +132,13 @@ def display_emergency_contact():
     if 'emergency_contact_name' in st.session_state and 'emergency_contact_number' in st.session_state:
         emergency_contact_name = st.session_state['emergency_contact_name']
         emergency_contact_number = st.session_state['emergency_contact_number']
-        
-        st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
-        st.sidebar.markdown(f"[{emergency_contact_number}](tel:{emergency_contact_number})")
+
+        if emergency_contact_number:
+            formatted_emergency_contact_number = format_phone_number(emergency_contact_number)
+            st.sidebar.write(f"Emergency Contact: {emergency_contact_name}")
+            st.sidebar.markdown(f"[{formatted_emergency_contact_number}](tel:{formatted_emergency_contact_number})")
+        else:
+            st.sidebar.write("No valid emergency contact number available.")
     else:
         st.sidebar.write("No emergency contact information available.")
 
@@ -330,10 +334,10 @@ def format_phone_number(number):
             return formatted_number
         else:
             st.write("Invalid phone number detected")  # Debug info
-            return None
+            return number  # Return the original number if invalid
     except phonenumbers.NumberParseException as e:
         st.write(f"Error parsing phone number: {e}")  # Debug info
-        return None
+        return number  # Return the original number if parsing fails
 
 def switch_page(page_name):
     st.success(f"Redirecting to {page_name.replace('_', ' ')} page...")
