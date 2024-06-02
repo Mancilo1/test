@@ -31,9 +31,7 @@ def main():
         emergency_contact_number = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username'], 'emergency_contact_number'].iloc[0] if 'emergency_contact_number' in st.session_state.df_users.columns else ''
         if emergency_contact_number:
             st.sidebar.write(f"Emergency Contact: {emergency_contact_number}")
-        main_page()
-        anxiety_assessment()
-        show_saved_entries()
+
         if st.sidebar.button("Logout"):
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
