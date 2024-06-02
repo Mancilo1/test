@@ -5,7 +5,3 @@ googletrans==4.0.0-rc1
 translate
 deep-translator
 phonenumbers
-
-git add requirements.txt app.py
-git commit -m "Add phonenumbers library and format phone numbers"
-git push
