@@ -263,3 +263,4 @@ def switch_page(page_name):
 
 if __name__ == "__main__":
     main()
+    display_emergency_contact()
