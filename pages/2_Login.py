@@ -9,8 +9,6 @@ import pandas as pd
 # Constants
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'address', 'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email']
-ANXIETY_COLUMNS = ['Date', 'Location', 'Anxiety Description', 'Cause', 'Triggers', 'Symptoms', 'Help']
-ATTACK_COLUMNS = ['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help']
 
 def init_github():
     """Initialize the GithubContents object."""
