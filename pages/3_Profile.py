@@ -126,9 +126,9 @@ def main():
             st.session_state.pop('username', None)
             st.switch_page("Main.py")
 
-    display_emergency_contact()
+        display_emergency_contact()
 
-    logout_button = st.sidebar.button("Logout")
+        logout_button = st.sidebar.button("Logout")
         if logout_button:
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
