@@ -77,8 +77,8 @@ def register_page():
                 anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
                 new_attack_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
                 new_anxiety_df = pd.DataFrame(columns=['Date', 'Location', 'Anxiety Description', 'Cause', 'Triggers', 'Symptoms', 'Help'])
-                st.session_state.github.write_df(attack_protocol_file, empty_attack_df, "initialized attack protocol data file")
-                st.session_state.github.write_df(anxiety_protocol_file, empty_anxiety_df, "initialized anxiety protocol data file")
+                st.session_state.github.write_df(attack_protocol_file, new_attack_df, "initialized attack protocol data file")
+                st.session_state.github.write_df(anxiety_protocol_file, new_anxiety_df, "initialized anxiety protocol data file")
                 
                 # Write the updated dataframe to GitHub data repository
                 try:
