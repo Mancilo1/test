@@ -43,41 +43,21 @@ def register_page():
         new_birthday = st.date_input("Birthday", min_value=datetime.date(1900, 1, 1))
         new_password = st.text_input("Password", type="password")
         
-        submit_button = st.form_submit_button("Register")
-        
-        if submit_button:
+        if st.form_submit_button("Register"):
+            hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())  # Hash the password
+            hashed_password_hex = binascii.hexlify(hashed_password).decode()  # Convert hash to hexadecimal string
+            
+            # Check if the username already exists
             if new_username in st.session_state.df_users['username'].values:
                 st.error("Username already exists. Please choose a different one.")
                 return
             else:
-                # Hash the password
-                hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())
-                hashed_password_hex = binascii.hexlify(hashed_password).decode()
-                
-                # Create a new user DataFrame
-                new_user_data = [[new_username, f"{new_first_name} {new_last_name}", new_birthday, hashed_password_hex, '', '', '', '', '', '', '']]
-                new_user = pd.DataFrame(new_user_data, columns=DATA_COLUMNS)
-                
-                # Concatenate the new user DataFrame with the existing one
+                new_user = pd.DataFrame([[new_username, new_name, hashed_password_hex]], columns=DATA_COLUMNS)
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
                 
-                # Initialize the anxiety protocol CSV files for the new user
-                attack_protocol_file = f"{new_username}_anxiety_attack_data.csv"
-                anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
-                new_attack_df = pd.DataFrame(columns=ATTACK_COLUMNS)
-                new_anxiety_df = pd.DataFrame(columns=ANXIETY_COLUMNS)
-                st.session_state.github.write_df(attack_protocol_file, empty_attack_df, "initialized attack protocol data file")
-                st.session_state.github.write_df(anxiety_protocol_file, empty_anxiety_df, "initialized anxiety protocol data file")
-                
-                # Write the updated dataframe to GitHub data repository
-                try:
-                    st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
-                    st.success("Registration successful! You can now log in.")
-                    st.switch_page("pages/3_Profile.py")
-                except GithubContents.UnknownError as e:
-                    st.error(f"An unexpected error occurred: {e}")
-                except Exception as e:
-                    st.error(f"An unexpected error occurred: {e}")
+                # Writes the updated dataframe to GitHub data repository
+                st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
+                st.success("Registration successful! You can now log in.")
 
 def login_page():
     """ Login an existing user. """
