@@ -235,7 +235,7 @@ def anxiety_attack_protocol():
             'Help': help_response
         }
         st.switch_page("pages/3_Profile.py")
-        new_attack_df = pd.DataFrame([new_entry])
+        new_attack_df = pd.ATTACK_COLUMNS([new_entry])
 
         st.session_state.anxiety_attack_data = pd.concat([st.session_state.anxiety_attack_data, new_entry_df], ignore_index=True)
 
