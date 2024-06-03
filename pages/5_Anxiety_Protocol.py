@@ -128,7 +128,7 @@ def main():
 
 def anxiety_protocol():
     username = st.session_state['username']
-    data_file = f"{username}_anxiety_protocol_data.csv"
+    data_file = f"{username}_anxiety_data.csv"
     
     if 'anxiety_data' not in st.session_state:
         if st.session_state.github.file_exists(data_file):
