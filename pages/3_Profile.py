@@ -128,6 +128,13 @@ def main():
 
     display_emergency_contact()
 
+    logout_button = st.sidebar.button("Logout")
+        if logout_button:
+            st.session_state['authentication'] = False
+            st.session_state.pop('username', None)
+            st.switch_page("Main.py")
+            st.experimental_rerun()
+
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
     st.image(logo_path, use_column_width=True)
