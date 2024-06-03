@@ -12,6 +12,8 @@ DATA_COLUMNS = [
     'username', 'name', 'birthday', 'password', 'phone_number', 'address',
     'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email'
 ]
+ANXIETY_ATTACK_DATA_FILE = "AnxietyAttackEntries.csv"
+ANXIETY_DATA_FILE = "AnxietyEntries.csv"
 
 def init_github():
     """Initialize the GithubContents object."""
