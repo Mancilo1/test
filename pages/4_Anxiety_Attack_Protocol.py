@@ -54,41 +54,21 @@ def register_page():
         new_birthday = st.date_input("Birthday", min_value=datetime.date(1900, 1, 1))
         new_password = st.text_input("Password", type="password")
         
-        submit_button = st.form_submit_button("Register")
-        
-        if submit_button:
+        if st.form_submit_button("Register"):
+            hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())  # Hash the password
+            hashed_password_hex = binascii.hexlify(hashed_password).decode()  # Convert hash to hexadecimal string
+            
+            # Check if the username already exists
             if new_username in st.session_state.df_users['username'].values:
                 st.error("Username already exists. Please choose a different one.")
                 return
             else:
-                # Hash the password
-                hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())
-                hashed_password_hex = binascii.hexlify(hashed_password).decode()
-                
-                # Create a new user DataFrame
-                new_user_data = [[new_username, f"{new_first_name} {new_last_name}", new_birthday, hashed_password_hex, '', '', '', '', '', '', '']]
-                new_user = pd.DataFrame(new_user_data, columns=DATA_COLUMNS)
-                
-                # Concatenate the new user DataFrame with the existing one
+                new_user = pd.DataFrame([[new_username, new_name, hashed_password_hex]], columns=DATA_COLUMNS)
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
                 
-                # Initialize the anxiety protocol CSV files for the new user
-                attack_protocol_file = f"{new_username}_anxiety_attack_data.csv"
-                anxiety_protocol_file = f"{new_username}_anxiety_protocol_data.csv"
-                new_attack_df = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
-                new_anxiety_df = pd.DataFrame(columns=['Date', 'Location', 'Anxiety Description', 'Cause', 'Triggers', 'Symptoms', 'Help'])
-                st.session_state.github.write_df(attack_protocol_file, new_attack_df, "initialized attack protocol data file")
-                st.session_state.github.write_df(anxiety_protocol_file, new_anxiety_df, "initialized anxiety protocol data file")
-                
-                # Write the updated dataframe to GitHub data repository
-                try:
-                    st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
-                    st.success("Registration successful! You can now log in.")
-                    st.switch_page("pages/3_Profile.py")
-                except GithubContents.UnknownError as e:
-                    st.error(f"An unexpected error occurred: {e}")
-                except Exception as e:
-                    st.error(f"An unexpected error occurred: {e}")
+                # Writes the updated dataframe to GitHub data repository
+                st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
+                st.success("Registration successful! You can now log in.")
 
 def authenticate(username, password):
     """
@@ -147,13 +127,13 @@ def main():
 
 def anxiety_attack_protocol():
     username = st.session_state['username']
-    data_file = f"{username}_anxiety_attack_data.csv"
+    data_file = f"{username}_data.csv"
     
-    if 'anxiety_attack_data' not in st.session_state:
+    if 'data' not in st.session_state:
         if st.session_state.github.file_exists(data_file):
-            st.session_state.anxiety_attack_data = st.session_state.github.read_df(data_file)
+            st.session_state.data = st.session_state.github.read_df(data_file)
         else:
-            st.session_state.anxiety_attack_data = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
+            st.session_state.data = pd.DataFrame(columns=['Date', 'Time', 'Severity', 'Symptoms', 'Triggers', 'Help'])
 
     st.title("Anxiety Attack Protocol")
 
@@ -233,16 +213,17 @@ def anxiety_attack_protocol():
             'Help': help_response
         }
         st.switch_page("pages/3_Profile.py")
-        new_attack_df = pd.DataFrame([new_entry])
-
-        st.session_state.anxiety_attack_data = pd.concat([st.session_state.anxiety_attack_data, new_entry_df], ignore_index=True)
-
-        st.session_state.github.write_df(data_file, st.session_state.anxiety_attack_data, "added new entry")
+        new_entry_df = pd.DataFrame([new_entry])
+        
+        # Append the new entry to the existing data DataFrame
+        st.session_state.data = pd.concat([st.session_state.data, new_entry_df], ignore_index=True)
+        
+        # Save the updated DataFrame to the user's specific CSV file on GitHub
+        st.session_state.github.write_df(data_file, st.session_state.data, "added new entry")
         st.success("Entry saved successfully!")
 
-        # Clear the symptoms list and rerun to refresh the state
-        st.session_state.symptoms = []
-        st.experimental_rerun()
+        # Clear the severity entries after saving
+        st.session_state.time_severity_entries = []
 
 def add_time_severity():
     if 'time_severity_entries' not in st.session_state:
