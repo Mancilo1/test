@@ -10,6 +10,7 @@ from github_contents import GithubContents
 # Constants
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'address', 'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email']
+ANXIETY_DATA_FILE = "AnxietyEntries.csv"
 
 def init_github():
     """Initialize the GithubContents object."""
@@ -19,7 +20,7 @@ def init_github():
             st.secrets["github"]["repo"],
             st.secrets["github"]["token"])
         print("github initialized")
-    
+
 def init_credentials():
     """Initialize or load the dataframe."""
     if 'df_users' not in st.session_state:
@@ -33,7 +34,7 @@ def init_credentials():
 
 def login_page():
     """Login an existing user."""
-    logo_path = "Logo.jpeg"  
+    logo_path = "Logo.jpeg"
     st.image(logo_path, use_column_width=True)
     st.write("---")
     st.title("Login")
@@ -53,12 +54,12 @@ def register_page():
         new_username = st.text_input("Username")
         new_birthday = st.date_input("Birthday", min_value=datetime.date(1900, 1, 1))
         new_password = st.text_input("Password", type="password")
-        
+
         if st.form_submit_button("Register"):
             hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())  # Hash the password
             hashed_password_hex = binascii.hexlify(hashed_password).decode()  # Convert hash to hexadecimal string
             new_name = f"{new_first_name} {new_last_name}"
-            
+
             # Check if the username already exists
             if new_username in st.session_state.df_users['username'].values:
                 st.error("Username already exists. Please choose a different one.")
@@ -66,7 +67,7 @@ def register_page():
             else:
                 new_user = pd.DataFrame([[new_username, new_name, new_birthday, hashed_password_hex, "", "", "", "", "", "", ""]], columns=DATA_COLUMNS)
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
-                
+
                 # Writes the updated dataframe to GitHub data repository
                 st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
                 st.success("Registration successful! You can now log in.")
@@ -85,9 +86,9 @@ def authenticate(username, password):
     if username in login_df['username'].values:
         stored_hashed_password = login_df.loc[login_df['username'] == username, 'password'].values[0]
         stored_hashed_password_bytes = binascii.unhexlify(stored_hashed_password)  # Convert hex to bytes
-        
+
         # Check the input password
-        if bcrypt.checkpw(password.encode('utf8'), stored_hashed_password_bytes): 
+        if bcrypt.checkpw(password.encode('utf8'), stored_hashed_password_bytes):
             st.session_state['authentication'] = True
             st.session_state['username'] = username
             st.success('Login successful')
@@ -116,7 +117,7 @@ def main():
         if not user_data.empty:
             st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
             st.session_state['emergency_contact_number'] = user_data['emergency_contact_number'].iloc[0] if 'emergency_contact_number' in user_data.columns else ''
-        
+
         anxiety_protocol()
 
         logout_button = st.sidebar.button("Logout")
@@ -129,7 +130,7 @@ def main():
 def anxiety_protocol():
     username = st.session_state['username']
     data_file = f"{username}_anxiety_data.csv"
-    
+
     if 'anxiety_data' not in st.session_state:
         if st.session_state.github.file_exists(data_file):
             st.session_state.anxiety_data = st.session_state.github.read_df(data_file)
@@ -144,13 +145,13 @@ def anxiety_protocol():
     # Question 2: Where are you
     st.subheader("Where are you and what is the environment?")
     location = st.text_area("Write your response here", key="location", height=100)
-    
+
     st.subheader("Try to describe your anxiety right now?")
     anxiety_description = st.text_area("Write your response here", key="anxiety_description", height=100)
 
     st.subheader("What do you think could be the cause?")
     cause = st.text_area("Write your response here", key="cause", height=100)
-    
+
     st.subheader("Any specific triggers? For example Stress, Caffeine, Lack of Sleep, Social Event, Reminder of traumatic event")
     triggers = st.text_area("Write your response here", key="triggers", height=100)
 
@@ -216,7 +217,6 @@ def anxiety_protocol():
         # Clear the symptoms list and rerun to refresh the state
         st.session_state.symptoms = []
         st.experimental_rerun()
-
 
 def format_phone_number(number):
     """Format phone number using phonenumbers library."""
