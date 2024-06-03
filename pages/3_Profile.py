@@ -1,18 +1,17 @@
 import streamlit as st
+import pandas as pd
+import datetime
 import binascii
 import bcrypt
-import time
-import phonenumbers  # Import the phonenumbers library
-import pandas as pd
+import phonenumbers
 from github_contents import GithubContents
-from PIL import Image
-import datetime
 
 # Constants
 DATA_FILE = "MyLoginTable.csv"
-DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'address', 'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email']
-ANXIETY_ATTACK_DATA_FILE = "AnxietyAttackEntries.csv"
-ANXIETY_DATA_FILE = "AnxietyEntries.csv"
+DATA_COLUMNS = [
+    'username', 'name', 'birthday', 'password', 'phone_number', 'address',
+    'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email'
+]
 
 def init_github():
     """Initialize the GithubContents object."""
@@ -34,67 +33,6 @@ def init_credentials():
         st.session_state.df_users['phone_number'] = st.session_state.df_users['phone_number'].astype(str)
         st.session_state.df_users['emergency_contact_number'] = st.session_state.df_users['emergency_contact_number'].astype(str)
 
-def login_page():
-    """ Login an existing user. """
-    logo_path = "Logo.jpeg"
-    st.image(logo_path, use_column_width=True)
-    st.write("---")
-    st.title("Login")
-    with st.form(key='login_form'):
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
-        if st.form_submit_button("Login"):
-            authenticate(username, password)
-            if st.session_state['authentication']:
-                st.switch_page("pages/3_Profile.py")
-
-def register_page():
-    """ Register a new user. """
-    st.title("Register")
-    with st.form(key='register_form'):
-        st.write("Please fill in the following details:")
-        new_first_name = st.text_input("First Name")
-        new_last_name = st.text_input("Last Name")
-        new_username = st.text_input("Username")
-        new_birthday = st.date_input("Birthday", min_value=datetime.date(1900, 1, 1))
-        new_password = st.text_input("Password", type="password")
-        
-        if st.form_submit_button("Register"):
-            hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())  # Hash the password
-            hashed_password_hex = binascii.hexlify(hashed_password).decode()  # Convert hash to hexadecimal string
-            new_name = f"{new_first_name} {new_last_name}"
-            
-            # Check if the username already exists
-            if new_username in st.session_state.df_users['username'].values:
-                st.error("Username already exists. Please choose a different one.")
-                return
-            else:
-                new_user = pd.DataFrame([[new_username, new_name, new_birthday, hashed_password_hex, "", "", "", "", "", "", ""]], columns=DATA_COLUMNS)
-                st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
-                
-                # Writes the updated dataframe to GitHub data repository
-                st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
-                st.success("Registration successful! You can now log in.")
-
-def authenticate(username, password):
-    """ Authenticate the user. """
-    login_df = st.session_state.df_users
-    login_df['username'] = login_df['username'].astype(str)
-
-    if username in login_df['username'].values:
-        stored_hashed_password = login_df.loc[login_df['username'] == username, 'password'].values[0]
-        stored_hashed_password_bytes = binascii.unhexlify(stored_hashed_password)
-        
-        if bcrypt.checkpw(password.encode('utf8'), stored_hashed_password_bytes):
-            st.session_state['authentication'] = True
-            st.session_state['username'] = username
-            st.success('Login successful')
-            st.experimental_rerun()
-        else:
-            st.error('Incorrect password')
-    else:
-        st.error('Username not found')
-
 def main():
     init_github()
     init_credentials()
@@ -103,14 +41,9 @@ def main():
         st.session_state['authentication'] = False
 
     if not st.session_state['authentication']:
-        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
-        if options == "Login":
-            login_page()
-        elif options == "Register":
-            register_page()
+        st.sidebar.write("Please log in")
     else:
         st.sidebar.write(f"Logged in as {st.session_state['username']}")
-        # Retrieve the emergency contact information from the DataFrame
         user_data = st.session_state.df_users.loc[st.session_state.df_users['username'] == st.session_state['username']]
         if not user_data.empty:
             st.session_state['emergency_contact_name'] = user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else ''
@@ -123,19 +56,14 @@ def main():
         german_protocols()
         st.write("---")
         show_saved_entries()
-        if st.sidebar.button("Logout"):
-            st.session_state['authentication'] = False
-            st.session_state.pop('username', None)
-            st.switch_page("Main.py")
-
-        display_emergency_contact()
-
-        logout_button = st.sidebar.button("Logout")
-        if logout_button:
+        
+        if st.sidebar.button("Logout", key="logout_button_sidebar"):
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
             st.switch_page("Main.py")
             st.experimental_rerun()
+
+        display_emergency_contact()
 
 def main_page():
     logo_path = "Logo.jpeg"  # Ensure this path is correct relative to your script location
@@ -157,19 +85,19 @@ def main_page():
             if st.session_state.edit_profile:
                 col1, col2 = st.columns(2)
                 with col1:
-                    name = st.text_input("Name:", value=user_data['name'].iloc[0])
-                    phone_number = st.text_input("Phone Number:", value=user_data['phone_number'].astype(str).iloc[0] if 'phone_number' in user_data.columns else '')
-                    occupation = st.text_input("Occupation:", value=user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '')
-                    emergency_contact_name = st.text_input("Emergency Contact Name:", value=user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '')
-                    doctor_email = st.text_input("Doctor's Email:", value=user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '')
+                    name = st.text_input("Name:", value=user_data['name'].iloc[0], key="name")
+                    phone_number = st.text_input("Phone Number:", value=user_data['phone_number'].astype(str).iloc[0] if 'phone_number' in user_data.columns else '', key="phone_number")
+                    occupation = st.text_input("Occupation:", value=user_data['occupation'].iloc[0] if 'occupation' in user_data.columns else '', key="occupation")
+                    emergency_contact_name = st.text_input("Emergency Contact Name:", value=user_data['emergency_contact_name'].iloc[0] if 'emergency_contact_name' in user_data.columns else '', key="emergency_contact_name")
+                    doctor_email = st.text_input("Doctor's Email:", value=user_data['doctor_email'].iloc[0] if 'doctor_email' in user_data.columns else '', key="doctor_email")
 
                 with col2:
-                    birthday = st.date_input("Birthday:", value=pd.to_datetime(user_data['birthday'].iloc[0]))
-                    address = st.text_area("Address:", value=user_data['address'].iloc[0] if 'address' in user_data.columns else '')
-                    email = st.text_input("Email:", value=user_data['email'].iloc[0] if 'email' in user_data.columns else '')
-                    emergency_contact_number = st.text_input("Emergency Contact Number:", value=user_data['emergency_contact_number'].astype(str).iloc[0] if 'emergency_contact_number' in user_data.columns else '')
+                    birthday = st.date_input("Birthday:", value=pd.to_datetime(user_data['birthday'].iloc[0]), key="birthday")
+                    address = st.text_area("Address:", value=user_data['address'].iloc[0] if 'address' in user_data.columns else '', key="address")
+                    email = st.text_input("Email:", value=user_data['email'].iloc[0] if 'email' in user_data.columns else '', key="email")
+                    emergency_contact_number = st.text_input("Emergency Contact Number:", value=user_data['emergency_contact_number'].astype(str).iloc[0] if 'emergency_contact_number' in user_data.columns else '', key="emergency_contact_number")
 
-                if st.button("Save Changes"):
+                if st.button("Save Changes", key="save_changes"):
                     formatted_phone_number = format_phone_number(phone_number)
                     formatted_emergency_contact_number = format_phone_number(emergency_contact_number)
 
@@ -202,7 +130,7 @@ def main_page():
                     st.session_state.edit_profile = False
                     st.experimental_rerun()
 
-                if st.button("Cancel"):
+                if st.button("Cancel", key="cancel_changes"):
                     st.session_state.edit_profile = False
                     st.experimental_rerun()
             else:
@@ -220,41 +148,41 @@ def main_page():
                     st.write("Email:", user_data['email'].iloc[0] if 'email' in user_data.columns else '')
                     st.write("Emergency Contact Number:", format_phone_number(user_data['emergency_contact_number'].astype(str).iloc[0]) if 'emergency_contact_number' in user_data.columns else '')
 
-                if st.button("Edit Profile"):
+                if st.button("Edit Profile", key="edit_profile"):
                     st.session_state.edit_profile = True
                     st.experimental_rerun()
         else:
             st.error("User data not found.")
     else:
         st.error("User not logged in.")
-        if st.button("Login/Register"):
+        if st.button("Login/Register", key="login_register"):
             st.switch_page("pages/2_Login.py")
 
 def anxiety_assessment():
     st.title("Anxiety Assessment")
-    
+
     if "step" not in st.session_state:
         st.session_state.step = 1
 
     if st.session_state.step == 1:
         st.write("### Do you feel like you're having an Anxiety Attack right now?")
-        if st.button("Yes"):
+        if st.button("Yes", key="anxiety_attack_yes"):
             st.switch_page("pages/4_Anxiety_Attack_Protocol.py")
-        if st.button("No"):
+        if st.button("No", key="anxiety_attack_no"):
             st.session_state.step = 2
             st.experimental_rerun()
 
     if st.session_state.step == 2:
         st.write("### Are you anxious right now?")
-        if st.button("Yes"):
+        if st.button("Yes", key="anxious_yes"):
             st.switch_page("pages/5_Anxiety_Protocol.py")
-        if st.button("No"):
+        if st.button("No", key="anxious_no"):
             st.session_state.step = 3
             st.experimental_rerun()
 
     if st.session_state.step == 3:
         show_gif()
-        if st.button("Reassess your feelings"):
+        if st.button("Reassess your feelings", key="reassess"):
             st.session_state.step = 1
             st.experimental_rerun()
 
@@ -267,17 +195,17 @@ def show_saved_entries():
     st.title("Saved Entries")
     st.subheader("Saved Entries from Anxiety Attack Protocol")
     username = st.session_state['username']
-    
+
     if st.session_state.github.file_exists(ANXIETY_ATTACK_DATA_FILE):
         anxiety_attack_entries = st.session_state.github.read_df(ANXIETY_ATTACK_DATA_FILE)
         user_entries = anxiety_attack_entries[anxiety_attack_entries['username'] == username]
         st.write(user_entries)
     else:
         st.write("No saved entries from Anxiety Attack Protocol.")
-    
+
     st.write("---")
     st.subheader("Saved Entries from Anxiety Protocol")
-    
+
     if st.session_state.github.file_exists(ANXIETY_DATA_FILE):
         anxiety_entries = st.session_state.github.read_df(ANXIETY_DATA_FILE)
         user_entries = anxiety_entries[anxiety_entries['username'] == username]
@@ -297,6 +225,7 @@ def german_protocols():
             data=pdf_bytes,
             file_name="Panickattacke_Protokoll.pdf",
             mime="application/pdf",
+            key="download_panic_protocol"
         )
     st.write("---")
     st.subheader("Anxiety Protocol")
@@ -309,6 +238,7 @@ def german_protocols():
             data=pdf_bytes,
             file_name="Angstprotokoll.pdf",
             mime="application/pdf",
+            key="download_anxiety_protocol"
         )
 
 def format_phone_number(number):
@@ -353,3 +283,4 @@ def switch_page(page_name):
 
 if __name__ == "__main__":
     main()
+    display_emergency_contact()
