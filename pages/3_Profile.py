@@ -267,13 +267,13 @@ def show_saved_entries():
     username = st.session_state['username']
     
     if st.session_state.github.file_exists(data):
-        st.write(data)
+        st.write(st.session_state.data)
     else:
         st.write("No saved entries from Anxiety Attack Protocol.")
     st.write("---")
     st.subheader("Saved Entries from Anxiety Protocol")
     if st.session_state.github.file_exists(anxiety_data):
-        st.write(anxiety_data)
+        st.write(st.session_state.anxiety_data)
     else:
         st.write("No saved entries from Anxiety Protocol.")
 
