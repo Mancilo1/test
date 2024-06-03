@@ -11,6 +11,8 @@ import datetime
 # Constants
 DATA_FILE = "MyLoginTable.csv"
 DATA_COLUMNS = ['username', 'name', 'birthday', 'password', 'phone_number', 'address', 'occupation', 'emergency_contact_name', 'emergency_contact_number', 'email', 'doctor_email']
+ANXIETY_ATTACK_DATA_FILE = "AnxietyAttackEntries.csv"
+ANXIETY_DATA_FILE = "AnxietyEntries.csv"
 
 def init_github():
     """Initialize the GithubContents object."""
@@ -266,14 +268,20 @@ def show_saved_entries():
     st.subheader("Saved Entries from Anxiety Attack Protocol")
     username = st.session_state['username']
     
-    if st.session_state.github.file_exists(data):
-        st.write(st.session_state.data)
+    if st.session_state.github.file_exists(ANXIETY_ATTACK_DATA_FILE):
+        anxiety_attack_entries = st.session_state.github.read_df(ANXIETY_ATTACK_DATA_FILE)
+        user_entries = anxiety_attack_entries[anxiety_attack_entries['username'] == username]
+        st.write(user_entries)
     else:
         st.write("No saved entries from Anxiety Attack Protocol.")
+    
     st.write("---")
     st.subheader("Saved Entries from Anxiety Protocol")
-    if st.session_state.github.file_exists(anxiety_data):
-        st.write(st.session_state.anxiety_data)
+    
+    if st.session_state.github.file_exists(ANXIETY_DATA_FILE):
+        anxiety_entries = st.session_state.github.read_df(ANXIETY_DATA_FILE)
+        user_entries = anxiety_entries[anxiety_entries['username'] == username]
+        st.write(user_entries)
     else:
         st.write("No saved entries from Anxiety Protocol.")
 
