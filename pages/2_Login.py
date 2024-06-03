@@ -44,13 +44,14 @@ def register_page():
         if st.form_submit_button("Register"):
             hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())  # Hash the password
             hashed_password_hex = binascii.hexlify(hashed_password).decode()  # Convert hash to hexadecimal string
+            new_name = f"{new_first_name} {new_last_name}"
             
             # Check if the username already exists
             if new_username in st.session_state.df_users['username'].values:
                 st.error("Username already exists. Please choose a different one.")
                 return
             else:
-                new_user = pd.DataFrame([[new_username, new_name, hashed_password_hex]], columns=DATA_COLUMNS)
+                new_user = pd.DataFrame([[new_username, new_name, new_birthday, hashed_password_hex, "", "", "", "", "", "", ""]], columns=DATA_COLUMNS)
                 st.session_state.df_users = pd.concat([st.session_state.df_users, new_user], ignore_index=True)
                 
                 # Writes the updated dataframe to GitHub data repository
