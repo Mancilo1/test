@@ -39,9 +39,9 @@ def login_page():
     st.write("---")
     st.title("Login")
     with st.form(key='login_form'):
-        username = st.text_input("Username")
-        password = st.text_input("Password", type="password")
-        if st.form_submit_button("Login"):
+        username = st.text_input("Username", key="login_username")
+        password = st.text_input("Password", type="password", key="login_password")
+        if st.form_submit_button("Login", key="login_submit"):
             authenticate(username, password)
 
 def register_page():
@@ -49,13 +49,13 @@ def register_page():
     st.title("Register")
     with st.form(key='register_form'):
         st.write("Please fill in the following details:")
-        new_first_name = st.text_input("First Name")
-        new_last_name = st.text_input("Last Name")
-        new_username = st.text_input("Username")
-        new_birthday = st.date_input("Birthday", min_value=datetime.date(1900, 1, 1))
-        new_password = st.text_input("Password", type="password")
+        new_first_name = st.text_input("First Name", key="register_first_name")
+        new_last_name = st.text_input("Last Name", key="register_last_name")
+        new_username = st.text_input("Username", key="register_username")
+        new_birthday = st.date_input("Birthday", min_value=datetime.date(1900, 1, 1), key="register_birthday")
+        new_password = st.text_input("Password", type="password", key="register_password")
 
-        if st.form_submit_button("Register"):
+        if st.form_submit_button("Register", key="register_submit"):
             hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())  # Hash the password
             hashed_password_hex = binascii.hexlify(hashed_password).decode()  # Convert hash to hexadecimal string
             new_name = f"{new_first_name} {new_last_name}"
@@ -106,7 +106,7 @@ def main():
         st.session_state['authentication'] = False
 
     if not st.session_state['authentication']:
-        options = st.sidebar.selectbox("Select a page", ["Login", "Register"])
+        options = st.sidebar.selectbox("Select a page", ["Login", "Register"], key="select_page")
         if options == "Login":
             login_page()
         elif options == "Register":
@@ -120,7 +120,7 @@ def main():
 
         anxiety_protocol()
 
-        logout_button = st.sidebar.button("Logout")
+        logout_button = st.sidebar.button("Logout", key="logout_button")
         if logout_button:
             st.session_state['authentication'] = False
             st.session_state.pop('username', None)
@@ -140,7 +140,7 @@ def anxiety_protocol():
     st.title("Anxiety Protocol")
 
     # Question 1: Date
-    date_selected = st.date_input("Date", value=datetime.date.today())
+    date_selected = st.date_input("Date", value=datetime.date.today(), key="protocol_date")
 
     # Question 2: Where are you
     st.subheader("Where are you and what is the environment?")
@@ -152,8 +152,7 @@ def anxiety_protocol():
     st.subheader("What do you think could be the cause?")
     cause = st.text_area("Write your response here", key="cause", height=100)
 
-    st.subheader("Any specific triggers?")
-    st.write("For example Stress, Caffeine, Lack of Sleep, Social Event, Reminder of traumatic event.")
+    st.subheader("Any specific triggers? For example Stress, Caffeine, Lack of Sleep, Social Event, Reminder of traumatic event")
     triggers = st.text_area("Write your response here", key="triggers", height=100)
 
     # Question 3: Symptoms
@@ -161,26 +160,26 @@ def anxiety_protocol():
     symptoms_list = []
     col1, col2 = st.columns(2)
     with col1:
-        if st.checkbox("Chest Pain"): symptoms_list.append("Chest Pain")
-        if st.checkbox("Chills"): symptoms_list.append("Chills")
-        if st.checkbox("Cold"): symptoms_list.append("Cold")
-        if st.checkbox("Cold Hands"): symptoms_list.append("Cold Hands")
-        if st.checkbox("Dizziness"): symptoms_list.append("Dizziness")
-        if st.checkbox("Feeling of danger"): symptoms_list.append("Feeling of danger")
-        if st.checkbox("Heart racing"): symptoms_list.append("Heart racing")
-        if st.checkbox("Hot flushes"): symptoms_list.append("Hot flushes")
-        if st.checkbox("Nausea"): symptoms_list.append("Nausea")
-        if st.checkbox("Nervousness"): symptoms_list.append("Nervousness")
+        if st.checkbox("Chest Pain", key="symptom_chestpain"): symptoms_list.append("Chest Pain")
+        if st.checkbox("Chills", key="symptom_chills"): symptoms_list.append("Chills")
+        if st.checkbox("Cold", key="symptom_cold"): symptoms_list.append("Cold")
+        if st.checkbox("Cold Hands", key="symptom_coldhands"): symptoms_list.append("Cold Hands")
+        if st.checkbox("Dizziness", key="symptom_dizziness"): symptoms_list.append("Dizziness")
+        if st.checkbox("Feeling of danger", key="symptom_feelingdanger"): symptoms_list.append("Feeling of danger")
+        if st.checkbox("Heart racing", key="symptom_heartracing"): symptoms_list.append("Heart racing")
+        if st.checkbox("Hot flushes", key="symptom_hotflushes"): symptoms_list.append("Hot flushes")
+        if st.checkbox("Nausea", key="symptom_nausea"): symptoms_list.append("Nausea")
+        if st.checkbox("Nervousness", key="symptom_nervousness"): symptoms_list.append("Nervousness")
     with col2:
-        if st.checkbox("Numb Hands"): symptoms_list.append("Numb Hands")
-        if st.checkbox("Numbness"): symptoms_list.append("Numbness")
-        if st.checkbox("Shortness of Breath"): symptoms_list.append("Shortness of Breath")
-        if st.checkbox("Sweating"): symptoms_list.append("Sweating")
-        if st.checkbox("Tense Muscles"): symptoms_list.append("Tense Muscles")
-        if st.checkbox("Tingly Hands"): symptoms_list.append("Tingly Hands")
-        if st.checkbox("Trembling"): symptoms_list.append("Trembling")
-        if st.checkbox("Tremor"): symptoms_list.append("Tremor")
-        if st.checkbox("Weakness"): symptoms_list.append("Weakness")
+        if st.checkbox("Numb Hands", key="symptom_numbhands"): symptoms_list.append("Numb Hands")
+        if st.checkbox("Numbness", key="symptom_numbness"): symptoms_list.append("Numbness")
+        if st.checkbox("Shortness of Breath", key="symptom_shortbreath"): symptoms_list.append("Shortness of Breath")
+        if st.checkbox("Sweating", key="symptom_sweating"): symptoms_list.append("Sweating")
+        if st.checkbox("Tense Muscles", key="symptom_tensemuscles"): symptoms_list.append("Tense Muscles")
+        if st.checkbox("Tingly Hands", key="symptom_tinglyhands"): symptoms_list.append("Tingly Hands")
+        if st.checkbox("Trembling", key="symptom_trembling"): symptoms_list.append("Trembling")
+        if st.checkbox("Tremor", key="symptom_tremor"): symptoms_list.append("Tremor")
+        if st.checkbox("Weakness", key="symptom_weakness"): symptoms_list.append("Weakness")
 
     # Display existing symptoms
     if 'symptoms' not in st.session_state:
@@ -190,14 +189,14 @@ def anxiety_protocol():
         st.write(symptom)
 
     new_symptom = st.text_input("Add new symptom:", key="new_symptom")
-    if st.button("Add Symptom") and new_symptom:
+    if st.button("Add Symptom", key="add_symptom_button") and new_symptom:
         st.session_state.symptoms.append(new_symptom)
 
     # Question 5: Did something Help against the attack?
     st.subheader("Did something Help against the Anxiety?")
     help_response = st.text_area("Write your response here", key="help_response", height=100)
 
-    if st.button("Save Entry"):
+    if st.button("Save Entry", key="save_entry_button"):
         new_entry = {
             'Date': date_selected,
             'Location': location,
