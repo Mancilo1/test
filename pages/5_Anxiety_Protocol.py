@@ -70,7 +70,6 @@ def register_page():
                 # Writes the updated dataframe to GitHub data repository
                 st.session_state.github.write_df(DATA_FILE, st.session_state.df_users, "added new user")
                 st.success("Registration successful! You can now log in.")
-                login_page()
 
 def authenticate(username, password):
     """
